@@ -35,6 +35,8 @@ async def on_message(message):
                 for i in players:
                     if i.split(",")[0] != "name":
                         playerSend += "\n" + i.split(",")[0]
+                if playerSend == "Players currently online:":
+                    playerSend = "There are currently no players online"
                 await message.channel.send(playerSend)
 
 client.run(TOKEN)
