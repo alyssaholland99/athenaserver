@@ -29,6 +29,6 @@ async def on_message(message):
 
         if msg.split(" ")[0] == "palworld":
             if msg.split(" ")[1] == "players":
-                await message.channel.send(os.system("/bin/docker exec palworld-dedicated-server rcon showPlayers"))
+                await message.channel.send(os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers").read())
 
 client.run(TOKEN)
