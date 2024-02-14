@@ -33,7 +33,7 @@ async def on_message(message):
                 players = players.splitlines()
                 playerSend = ""
                 for i in players:
-                    playerSend += i.split()[0]
+                    playerSend += i.split(",")[0]
                 await message.channel.send(playerSend)
 
 client.run(TOKEN)
