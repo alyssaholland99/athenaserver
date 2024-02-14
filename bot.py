@@ -31,7 +31,6 @@ async def on_message(message):
             if msg.split(" ")[1] == "players":
                 players = os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers").read()
                 players = players.splitlines()
-                print players
                 playerSend = ""
                 for i in players:
                     playerSend += i.split()[0]
