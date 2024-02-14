@@ -31,9 +31,11 @@ async def on_message(message):
             if msg.split(" ")[1] == "players":
                 players = os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers").read()
                 players = players.splitlines()
-                playerSend = ""
+                playerSend = "Players currently online:"
                 for i in players:
-                    playerSend += i.split(",")[0]
+                    if i == "name":
+                        break
+                    playerSend += i.split(",")[0] + "\n"
                 await message.channel.send(playerSend)
 
 client.run(TOKEN)
