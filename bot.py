@@ -19,6 +19,8 @@ async def on_message(self, message):
         if message.author == self.user:
             return
 
+        print(message.content)
+
         if not message.content.startswith('.'):
             return
         msg = message.content[1:]
