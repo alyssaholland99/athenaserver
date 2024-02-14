@@ -20,13 +20,15 @@ async def on_message(message):
         if message.author == client.user:
             return
 
-        print(message.content)
-
         if not message.content.startswith('.'):
             return
         msg = message.content[1:]
 
         if msg == 'ping':
             await message.channel.send('pong')
+
+        if msg.split("")[0] == "palworld":
+            if msg.split("")[1] == "players"
+                await message.channel.send(os.system("/bin/docker exec palworld-dedicated-server rcon showPlayers"))
 
 client.run(TOKEN)
