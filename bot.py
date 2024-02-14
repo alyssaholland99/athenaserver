@@ -29,6 +29,6 @@ async def on_message(message):
 
         if msg.split(" ")[0] == "palworld":
             if msg.split(" ")[1] == "players":
-                await message.channel.send(os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers | awk 'NR > 1 {print \"FILE :[\" $1 \"]\"}'").read())
+                await message.channel.send(os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers | aawk '{ print $1 }'").read())
 
 client.run(TOKEN)
