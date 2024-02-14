@@ -33,7 +33,7 @@ async def on_message(message):
                 players = players.splitlines()
                 playerSend = "Players currently online:"
                 for i in players:
-                    if i != "name":
+                    if i.split(",")[0] != "name":
                         playerSend += "\n" + i.split(",")[0]
                 await message.channel.send(playerSend)
 
