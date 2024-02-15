@@ -33,7 +33,8 @@ async def on_message(message):
             sendMessage += "\n.[game] [game_command]"
             sendMessage += "\n- minecraft"
             sendMessage += "\n    - players"
-            sendMessage += "\n- minecraft"
+            sendMessage += "\n  - start"
+            sendMessage += "\n- palworld"
             sendMessage += "\n    - players"
             sendMessage += "\n  - restart"
             sendMessage += "\nExample: .palworld players"
@@ -53,6 +54,7 @@ async def on_message(message):
             if msg.split(" ")[1] == "restart":
                 restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/update_restart.sh").read()
                 await message.channel.send(restartStatus)
+
         if msg.split(" ")[0] == "minecraft":
             minecraft = JavaServer.lookup("192.168.0.120:25565")
             if msg.split(" ")[1] == "players":
