@@ -30,8 +30,6 @@ async def on_message(message):
             await message.channel.send("Invalid command, use '.help' to see options")
 
         match (msg.split(" ")[0]):
-            case 'ping':
-                await message.channel.send('pong')
 
             case 'help':
                 sendMessage = "HELP:"
@@ -46,32 +44,34 @@ async def on_message(message):
                 await message.channel.send(sendMessage)
 
             case "palworld":
-                if msg.split(" ")[1] == "players":
-                    players = os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers").read()
-                    players = players.splitlines()
-                    playerSend = "Players currently online:"
-                    for i in players:
-                        if i.split(",")[0] != "name":
-                            playerSend += "\n" + i.split(",")[0]
-                    if playerSend == "Players currently online:":
-                        playerSend = "There are currently no players online"
-                    await message.channel.send(playerSend)
-                if msg.split(" ")[1] == "restart":
-                    restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/update_restart.sh").read()
-                    await message.channel.send(restartStatus)
+                match (msg.split(" ")[1]):
+                    case "players":
+                        players = os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers").read()
+                        players = players.splitlines()
+                        playerSend = "Players currently online:"
+                        for i in players:
+                            if i.split(",")[0] != "name":
+                                playerSend += "\n" + i.split(",")[0]
+                        if playerSend == "Players currently online:":
+                            playerSend = "There are currently no players online"
+                        await message.channel.send(playerSend)
+                    case "restart":
+                        restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/update_restart.sh").read()
+                        await message.channel.send(restartStatus)
 
             case "minecraft":
                 minecraft = JavaServer.lookup("192.168.0.120:25565")
-                if msg.split(" ")[1] == "players":
-                    query = minecraft.query()
-                    status = minecraft.status()
-                    if status.players.online > 0:
-                        await message.channel.send("The server has the following players online: \n{}".format("\n".join(query.players.names)))
-                    else:
-                        await message.channel.send("There are currently no players online")
-                if msg.split(" ")[1] == "start":
-                    os.system("/bin/systemctl start minecraft")
-                    await message.channel.send("Starting Minecraft server")
+                match (msg.split(" ")[1]):
+                    case "players":
+                        query = minecraft.query()
+                        status = minecraft.status()
+                        if status.players.online > 0:
+                            await message.channel.send("The server has the following players online: \n{}".format("\n".join(query.players.names)))
+                        else:
+                            await message.channel.send("There are currently no players online")
+                    case "start":
+                        os.system("/bin/systemctl start minecraft")
+                        await message.channel.send("Starting Minecraft server")
 
 
 client.run(TOKEN)
