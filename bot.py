@@ -35,16 +35,20 @@ async def on_message(message):
                 sendMessage = "HELP:"
                 sendMessage += "\n.[game] [game_command]"
                 sendMessage += "\n- minecraft"
-                sendMessage += "\n    - players"
+                sendMessage += "\n  - info"
+                sendMessage += "\n  - players"
                 sendMessage += "\n  - start"
                 sendMessage += "\n- palworld"
-                sendMessage += "\n    - players"
+                sendMessage += "\n  - info"
+                sendMessage += "\n  - players"
                 sendMessage += "\n  - restart"
                 sendMessage += "\nExample: .palworld players"
                 await message.channel.send(sendMessage)
 
             case "palworld":
                 match (msg.split(" ")[1]):
+                    case "info":
+                        await message.channel.send("server.alyssaserver.co.uk:8211")
                     case "players":
                         players = os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers").read()
                         players = players.splitlines()
@@ -62,6 +66,8 @@ async def on_message(message):
             case "minecraft":
                 minecraft = JavaServer.lookup("192.168.0.120:25565")
                 match (msg.split(" ")[1]):
+                    case "info":
+                        await message.channel.send("server.alyssaserver.co.uk:25565")
                     case "players":
                         query = minecraft.query()
                         status = minecraft.status()
