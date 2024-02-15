@@ -13,6 +13,7 @@ client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
+    client.Activity(name="for .help", type=2)
     print(f'{client.user} has connected to Discord!')
 
 @client.event
@@ -23,7 +24,7 @@ async def on_message(message):
 
         if not message.content.startswith('.'):
             return
-        msg = message.content[1:]
+        msg = message.content[1:].toLower()
 
         if msg == 'ping':
             await message.channel.send('pong')
