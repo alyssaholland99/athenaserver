@@ -28,6 +28,17 @@ async def on_message(message):
         if msg == 'ping':
             await message.channel.send('pong')
 
+        if msg.split(" ")[0] == 'help':
+            sendMessage = "HELP:"
+            sendMessage += "\n.[game] [game_command]"
+            sendMessage += "\n- minecraft"
+            sendMessage += "\n    - players"
+            sendMessage += "\n- minecraft"
+            sendMessage += "\n    - players"
+            sendMessage += "\n    - restart"
+            sendMessage += "\nExample: .palworld players"
+            await message.channel.send(sendMessage)
+
         if msg.split(" ")[0] == "palworld":
             if msg.split(" ")[1] == "players":
                 players = os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers").read()
