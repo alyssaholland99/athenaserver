@@ -26,6 +26,9 @@ async def on_message(message):
             return
         msg = message.content[1:].lower()
 
+        if msg.split(" ").size == 1:
+            await message.channel.send("Invalid command, use '.help' to see options")
+
         match (msg.split(" ")[0]):
             case 'ping':
                 await message.channel.send('pong')
