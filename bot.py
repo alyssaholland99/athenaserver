@@ -24,7 +24,7 @@ async def on_message(message):
 
         if not message.content.startswith('.'):
             return
-        msg = message.content[1:].toLower()
+        msg = message.content[1:].lower()
 
         if msg == 'ping':
             await message.channel.send('pong')
