@@ -3,7 +3,7 @@ import os
 
 import discord
 from dotenv import load_dotenv
-from mcstatus import MinecraftServer
+from mcstatus import JavaServer
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -43,10 +43,10 @@ async def on_message(message):
                 restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/update_restart.sh").read()
                 await message.channel.send(restartStatus)
         if msg.split(" ")[0] == "minecraft":
-            minecraft = MinecraftServer(os.environ['MINECRAFT_SERVER'], int(os.environ['MINECRAFT_PORT']))
+            minecraft = JavaServer.lookup("server.alyssaserver.co.uk:25565")
             if msg.split(" ")[1] == "players":
                 query = minecraft.query()
-                await message.channel.send(query)
+                await message.channel.send(f"The server has the following players online: {', '.join(query.players.names)}")
 
 
 client.run(TOKEN)
