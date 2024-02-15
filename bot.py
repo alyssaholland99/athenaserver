@@ -48,7 +48,7 @@ async def on_message(message):
                 query = minecraft.query()
                 status = server.status()
                 if status.players.online > 0:
-                    await message.channel.send(f"The server has the following players online: {'\n'.join(query.players.names)}")
+                    await message.channel.send(f"The server has the following players online: {'\\n'.join(query.players.names)}")
                 else:
                     await message.channel.send("There are currently no players online")
 
