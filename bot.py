@@ -26,8 +26,9 @@ async def on_message(message):
             return
         msg = message.content[1:].lower()
 
-        if len(msg.split(" ")) == 1:
+        if len(msg.split(" ")) == 1 and msg.split(" ")[0] != 'help':
             await message.channel.send("Invalid command, use '.help' to see options")
+            return
 
         match (msg.split(" ")[0]):
 
