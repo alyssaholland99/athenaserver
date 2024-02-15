@@ -62,6 +62,9 @@ async def on_message(message):
                     await message.channel.send("The server has the following players online: \n{}".format("\n".join(query.players.names)))
                 else:
                     await message.channel.send("There are currently no players online")
+            if msg.split(" ")[1] == "start":
+                os.system("/bin/systemctl start minecraft")
+                await message.channel.send("Starting Minecraft server")
 
 
 client.run(TOKEN)
