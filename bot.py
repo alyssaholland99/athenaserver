@@ -13,7 +13,7 @@ client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
-    client.Activity(name="for .help", type=2)
+    client.change_presence(status=discord.Status.Online, activity=discord.ActivityType.watching('for .help'))
     print(f'{client.user} has connected to Discord!')
 
 @client.event
