@@ -46,7 +46,11 @@ async def on_message(message):
             minecraft = JavaServer.lookup("192.168.0.120:25565")
             if msg.split(" ")[1] == "players":
                 query = minecraft.query()
-                await message.channel.send(f"The server has the following players online: {', '.join(query.players.names)}")
+                status = server.status()
+                if status.players.online > 0:
+                    await message.channel.send(f"The server has the following players online: {', '.join("\n" + query.players.names)}")
+                else:
+                    await message.channel.send("There are currently no players online")
 
 
 client.run(TOKEN)
