@@ -35,7 +35,7 @@ async def on_message(message):
             sendMessage += "\n    - players"
             sendMessage += "\n- minecraft"
             sendMessage += "\n    - players"
-            sendMessage += "\n- restart"
+            sendMessage += "\n  - restart"
             sendMessage += "\nExample: .palworld players"
             await message.channel.send(sendMessage)
 
