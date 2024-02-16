@@ -105,27 +105,22 @@ async def on_message(message):
                         else:
                             await message.channel.send("There are currently no players online")
                     case "start":
-                        os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
-                        await message.channel.send("Starting Valheim server")
+                        os.system("/bin/systemctl start minecraft")
+                        await message.channel.send("Starting Minecraft server")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
 
-            case "palworld":
-                minecraft = JavaServer.lookup("192.168.0.120:25565")
+            case "valheim":
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address: server.alyssaserver.co.uk:25565")
+                        await message.channel.send("Server address: server.alyssaserver.co.uk:2456")
                     case "players":
-                        query = minecraft.query()
-                        status = minecraft.status()
-                        if status.players.online > 0:
-                            await message.channel.send("The server has the following players online: \n{}".format("\n".join(query.players.names)))
-                        else:
-                            await message.channel.send("There are currently no players online")
+                        #TODO
+                        await message.channel.send("This command is currently WIP")
                     case "start":
-                        os.system("/bin/systemctl start minecraft")
-                        await message.channel.send("Starting Minecraft server")
+                        os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
+                        await message.channel.send("Starting Valheim server")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
