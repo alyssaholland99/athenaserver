@@ -15,7 +15,7 @@ palworldCommands = ["info", "players", "restart"]
 minecraftCommands = ["info", "players", "start"]
 valheimCommands = ["info", "start"]
 serverCommands = ["uptime", "load"]
-trustCommands = ["add*", "remove*"]
+trustCommands = ["add*", "remove*", "list"]
 helpCommands = {
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
@@ -141,6 +141,12 @@ async def on_message(message):
                         #TODO
                         print(message.author)
                         await message.channel.send(message.author)
+                    case "list":
+                        trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
+                        trustedUsers = ""
+                        for u in trustedFile:
+                            trustedUsers += "- {}".format(trustedUsers)
+                        await message.channel.send(trustedUsers)
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
