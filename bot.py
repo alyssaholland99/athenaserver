@@ -13,7 +13,7 @@ client = discord.Client(intents=intents)
 
 palworldCommands = ["info", 'players', 'restart']
 minecraftCommands = ["info", 'players', 'start']
-serverCommands = ["info", 'players', 'restart']
+serverCommands = ["uptime", 'load']
 helpCommands = {
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
