@@ -152,12 +152,11 @@ def getInsufficentPermissionMessage():
     return "You do not have permission to run this command"
 
 def isTrusted(user):
+    print(user)
     trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
     trustedUsers = trustedFile.read()
     trustedFile.close()
     for u in trustedUsers.splitlines():
-        print(u)
-        print(user)
         if user == u:
             return True
     return False
