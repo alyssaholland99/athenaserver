@@ -130,10 +130,13 @@ async def on_message(message):
             case "trust":
                 match (msg.split(" ")[1]):
                     case "add":
-                        trustedFile = open("/root/athenaserver/trustedUsers.txt", "w")
-                        trustedFile.write("{}\n".format(msg.split(" ")[2]))
-                        trustedFile.close()
-                        await message.channel.send("Added {} to trusted users".format(msg.split(" ")[2]))
+                        if isTrusted(message.author):
+                            trustedFile = open("/root/athenaserver/trustedUsers.txt", "w")
+                            trustedFile.write("{}\n".format(msg.split(" ")[2]))
+                            trustedFile.close()
+                            await message.channel.send("Added {} to trusted users".format(msg.split(" ")[2]))
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
                     case "remove":
                         #TODO
                         print(message.author)
@@ -144,6 +147,18 @@ async def on_message(message):
             
             case _:
                 await message.channel.send(getInvalidServiceMessage())
+
+def getInsufficentPermissionMessage():
+    return "You do not have permission to run this command"
+
+def isTrusted(user)
+    trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
+    trustedUsers = trustedFile.read()
+    trustedFile.close()
+    for u in trustedUsers.splitlines():
+        if user == u:
+            return true
+    return false
 
 def getHelpForService(service):
 
