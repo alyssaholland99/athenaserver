@@ -120,7 +120,7 @@ def getCommands(service):
     returnOptions = "This is not a valid selection for {}, please pick from the following:".format(service)
 
     for commands in validCommands:
-        returnOptions += "\n - " + validCommands
+        returnOptions += "\n - " + commands
 
     return returnOptions
 
