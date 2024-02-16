@@ -154,13 +154,12 @@ def getInsufficentPermissionMessage():
 def isTrusted(user):
     print(user)
     trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
-    trustedUsers = trustedFile.read()
-    trustedFile.close()
-    print(trustedUsers)
-    for u in trustedUsers.splitlines():
+    for u in trustedFile:
         print(u)
         if user == u:
+            trustedFile.close()
             return True
+    trustedFile.close()
     return False
 
 def getHelpForService(service):
