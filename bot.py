@@ -47,6 +47,9 @@ async def on_message(message):
         match (msg.split(" ")[0]):
 
             case 'help':
+                if len(msg.split(" ")) == 2:
+                    await message.channel.send(getCommands(msg.split(" ")[1]))
+                    return
                 sendMessage = "\nSyntax: `.[service] [command]`"
                 for key, value in helpCommands.items():
                     sendMessage += "\n- " + key
@@ -66,7 +69,7 @@ async def on_message(message):
                         load = str(round(load, 2)) +"%"
                         await message.channel.send("CPU usage: " + load)
                     case _:
-                        await message.channel.send(getCommands("server"))
+                        await message.channel.send(getCommands(msg.split(" ")[0]))
 
             case "palworld":
                 match (msg.split(" ")[1]):
@@ -85,6 +88,8 @@ async def on_message(message):
                     case "restart":
                         restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/update_restart.sh").read()
                         await message.channel.send(restartStatus)
+                    case _:
+                        await message.channel.send(getCommands(msg.split(" ")[0]))
                 return
 
             case "minecraft":
@@ -102,6 +107,8 @@ async def on_message(message):
                     case "start":
                         os.system("/bin/systemctl start minecraft")
                         await message.channel.send("Starting Minecraft server")
+                    case _:
+                        await message.channel.send(getCommands(msg.split(" ")[0]))
                 return
             
             case _:
