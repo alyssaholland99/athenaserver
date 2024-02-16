@@ -48,7 +48,7 @@ async def on_message(message):
 
             case 'help':
                 if len(msg.split(" ")) == 2:
-                    await message.channel.send("Available commands for service {}:\n{}".format(msg.split(" ")[1], getCommands(msg.split(" ")[1])))
+                    await message.channel.send(getHelpForService(msg.split(" ")[1]))
                     return
                 sendMessage = "\nSyntax: `.[service] [command]`"
                 for key, value in helpCommands.items():
@@ -114,6 +114,14 @@ async def on_message(message):
             case _:
                 await message.channel.send("Invalid command, use '.help' to see options")
 
+def getHelpForService(service):
+
+    global helpCommands
+
+    if service not in helpCommands:
+        return "This is not a valid service, please use '.help' to see valid commands"
+    
+    await message.channel.send("Available commands for service {}:\n{}".format(msg.split(" ")[1], getCommands(msg.split(" ")[1])))
 
 def commandError(service):
 
