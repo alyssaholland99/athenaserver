@@ -157,8 +157,8 @@ def isTrusted(user):
     trustedFile.close()
     for u in trustedUsers.splitlines():
         if user == u:
-            return true
-    return false
+            return True
+    return False
 
 def getHelpForService(service):
 
