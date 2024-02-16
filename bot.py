@@ -121,7 +121,7 @@ def getHelpForService(service):
     if service not in helpCommands:
         return "This is not a valid service, please use '.help' to see valid commands"
     
-    await message.channel.send("Available commands for service {}:\n{}".format(msg.split(" ")[1], getCommands(msg.split(" ")[1])))
+    return message.channel.send("Available commands for service {}:\n{}".format(msg.split(" ")[1], getCommands(msg.split(" ")[1])))
 
 def commandError(service):
 
