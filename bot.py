@@ -11,12 +11,14 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
-palworldCommands = ["info", 'players', 'restart']
-minecraftCommands = ["info", 'players', 'start']
-serverCommands = ["uptime", 'load']
+palworldCommands = ["info", "players", "restart"]
+minecraftCommands = ["info", "players", "start"]
+valheimCommands = ["info", "players", "start"]
+serverCommands = ["uptime", "load"]
 helpCommands = {
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
+    "valheim (WIP)" : valheimCommands,
     "server" : serverCommands
 }
 
@@ -38,7 +40,7 @@ async def on_message(message):
             return
         msg = message.content[1:].lower()
 
-        if len(msg.split(" ")) == 1 and msg.split(" ")[0] != 'help':
+        if len(msg.split(" ")) == 1 and msg.split(" ")[0] != "help":
             await message.channel.send("Invalid command, use '.help' to see options")
             return
 
