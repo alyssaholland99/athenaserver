@@ -41,7 +41,7 @@ async def on_message(message):
         msg = message.content[1:].lower()
 
         if len(msg.split(" ")) == 1 and msg.split(" ")[0] != "help":
-            await message.channel.send("Invalid command, use '.help' to see options")
+            await message.channel.send(msg.split(" ")[0])
             return
 
         match (msg.split(" ")[0]):
@@ -113,7 +113,7 @@ def getCommands(service):
     global helpCommands
 
     if service not in helpCommands:
-        return
+        return "This is not a valid service, please use '.help' to see valid commands"
     
     validCommands = helpCommands[service]
 
