@@ -11,6 +11,15 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
+palworldCommands = ["info", 'players', 'restart']
+minecraftCommands = ["info", 'players', 'start']
+serverCommands = ["info", 'players', 'restart']
+helpCommands = {
+    "minecraft" : minecraftCommands,
+    "palworld" : palworldCommands,.
+    "server" : serverCommands
+}
+
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for .help"))
@@ -18,6 +27,9 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+
+        global helpCommands
+
         # don't respond to ourselves
         if message.author == client.user:
             return
@@ -33,19 +45,11 @@ async def on_message(message):
         match (msg.split(" ")[0]):
 
             case 'help':
-                sendMessage = "HELP:"
-                sendMessage += "\n.[game] [game_command]"
-                sendMessage += "\n- minecraft"
-                sendMessage += "\n  - info"
-                sendMessage += "\n  - players"
-                sendMessage += "\n  - start"
-                sendMessage += "\n- palworld"
-                sendMessage += "\n  - info"
-                sendMessage += "\n  - players"
-                sendMessage += "\n  - restart"
-                sendMessage += "\n- server"
-                sendMessage += "\n  - uptime"
-                sendMessage += "\n  - load"
+                sendMessage = "Help:"
+                for key, value in helpCommands.items():
+                    sendMessage += "- " + key
+                    for command in value:
+                        sendMessage += "  - " + command
                 sendMessage += "\nExample: .palworld players"
                 await message.channel.send(sendMessage)
 
