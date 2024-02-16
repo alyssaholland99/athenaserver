@@ -54,7 +54,7 @@ async def on_message(message):
                         initload = (os.popen("uptime").read()).split(",")[3]
                         load = initload.split(":")[1]
                         load = (float(load)/12)*100
-                        load = " (" + str(round(load), 2) +"%)"
+                        load = " (" + str(round(load, 2)) +"%)"
                         await message.channel.send(initload + load)
 
             case "palworld":
