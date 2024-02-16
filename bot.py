@@ -145,7 +145,8 @@ async def on_message(message):
                         trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
                         trustedUsers = ""
                         for u in trustedFile:
-                            trustedUsers += "- {}".format(trustedUsers)
+                            trustedUsers += "- {}".format(u)
+                        trustedFile.close()
                         await message.channel.send(trustedUsers)
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
