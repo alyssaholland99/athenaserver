@@ -152,7 +152,7 @@ async def on_message(message):
                                 newTrustedUsers = ""
                                 for line in trustedUsers.splitlines():
                                     if line.replace("\n", "") != msg.split(" ")[2]:
-                                        newTrustedUsers += line
+                                        newTrustedUsers += line + "\n"
                                 trustedFile = open(trustedPath, "w")
                                 trustedFile.write(newTrustedUsers)
                                 trustedFile.close()
