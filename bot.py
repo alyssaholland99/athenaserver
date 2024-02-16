@@ -49,7 +49,7 @@ async def on_message(message):
             case "server":
                 match (msg.split(" ")[1]):
                     case "uptime":
-                        await message.channel.send((os.popen("uptime").read()).split(",")[0])
+                        await message.channel.send((os.popen("uptime").read()).split(",")[0].split("up")[1])
                     case "load":
                         initload = (os.popen("uptime").read()).split(",")[3]
                         load = initload.split(":")[1]
