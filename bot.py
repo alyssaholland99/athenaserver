@@ -48,7 +48,7 @@ async def on_message(message):
 
             case 'help':
                 if len(msg.split(" ")) == 2:
-                    await message.channel.send(getCommands(msg.split(" ")[1]))
+                    await message.channel.send("Available commands for service {}:\n{}".format(msg.split(" ")[1], getCommands(msg.split(" ")[1])))
                     return
                 sendMessage = "\nSyntax: `.[service] [command]`"
                 for key, value in helpCommands.items():
@@ -69,7 +69,7 @@ async def on_message(message):
                         load = str(round(load, 2)) +"%"
                         await message.channel.send("CPU usage: " + load)
                     case _:
-                        await message.channel.send(getCommands(msg.split(" ")[0]))
+                        await message.channel.send(commandError(msg.split(" ")[0]))
 
             case "palworld":
                 match (msg.split(" ")[1]):
@@ -89,7 +89,7 @@ async def on_message(message):
                         restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/update_restart.sh").read()
                         await message.channel.send(restartStatus)
                     case _:
-                        await message.channel.send(getCommands(msg.split(" ")[0]))
+                        await message.channel.send(commandError(msg.split(" ")[0]))
                 return
 
             case "minecraft":
@@ -108,12 +108,15 @@ async def on_message(message):
                         os.system("/bin/systemctl start minecraft")
                         await message.channel.send("Starting Minecraft server")
                     case _:
-                        await message.channel.send(getCommands(msg.split(" ")[0]))
+                        await message.channel.send(commandError(msg.split(" ")[0]))
                 return
             
             case _:
                 await message.channel.send("Invalid command, use '.help' to see options")
 
+
+def commandError(service):
+    return "This is not a valid selection for {}, please pick from the following:\n{}".format(service, getCommands(service))
             
 def getCommands(service):
 
@@ -124,7 +127,7 @@ def getCommands(service):
     
     validCommands = helpCommands[service]
 
-    returnOptions = "This is not a valid selection for {}, please pick from the following:\n".format(service)
+    returnOptions = ""
 
     for commands in validCommands:
         returnOptions += "- " + commands + "\n"
