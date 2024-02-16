@@ -15,7 +15,7 @@ palworldCommands = ["info", "players", "restart"]
 minecraftCommands = ["info", "players", "start"]
 valheimCommands = ["info", "start"]
 serverCommands = ["uptime", "load"]
-trustCommands = ["add", "remove"]
+trustCommands = ["add*", "remove*"]
 helpCommands = {
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
@@ -57,7 +57,7 @@ async def on_message(message):
                     sendMessage += "\n- " + key
                     for command in value:
                         sendMessage += "\n  - " + command
-                sendMessage += "\nExample: `.palworld players`"
+                sendMessage += "\n*Trusted users only\nExample: `.palworld players`"
                 await message.channel.send(sendMessage)
 
             case "server":
@@ -152,10 +152,8 @@ def getInsufficentPermissionMessage():
     return "You do not have permission to run this command"
 
 def isTrusted(user):
-    print(user)
     trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
     for u in trustedFile:
-        print(u)
         if str(user) == u.replace("\n", ""):
             trustedFile.close()
             return True
