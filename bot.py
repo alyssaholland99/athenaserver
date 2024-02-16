@@ -130,8 +130,10 @@ async def on_message(message):
             case "trust":
                 match (msg.split(" ")[1]):
                     case "add":
-                        print(message.author)
-                        await message.channel.send(message.author)
+                        trustedFile = open("/root/athenaserver/trustedUsers.txt", "w")
+                        trustedFile.write("{}\n".format(msg.split(" ")[2]))
+                        trustedWrite.close()
+                        await message.channel.send("Added {} to trusted users".format(msg.split(" ")[2]))
                     case "remove":
                         #TODO
                         print(message.author)
