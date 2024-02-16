@@ -13,14 +13,14 @@ client = discord.Client(intents=intents)
 
 palworldCommands = ["info", "players", "restart"]
 minecraftCommands = ["info", "players", "start"]
-valheimCommands = ["start"]
+valheimCommands = ["info", "start"]
 serverCommands = ["uptime", "load"]
 helpCommands = {
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
     "valheim" : valheimCommands,
     "server" : serverCommands
-}dw
+}
 
 @client.event
 async def on_ready():
