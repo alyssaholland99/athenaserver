@@ -55,7 +55,7 @@ async def on_message(message):
                         load = initload.split(":")[1]
                         load = (float(load)/12)*100
                         load = str(round(load, 2)) +"%"
-                        await message.channel.send("CPU usage: ") + load)
+                        await message.channel.send("CPU usage: " + load)
 
             case "palworld":
                 match (msg.split(" ")[1]):
