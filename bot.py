@@ -119,9 +119,9 @@ def commandError(service):
 
     global helpCommands
 
-     if service not in helpCommands:
+    if service not in helpCommands:
         return "This is not a valid service, please use '.help' to see valid commands"
-        
+
     return "This is not a valid selection for {}, please pick from the following:\n{}".format(service, getCommands(service))
             
 def getCommands(service):
