@@ -30,7 +30,7 @@ async def on_message(message):
             await message.channel.send("Invalid command, use '.help' to see options")
             return
 
-        match (msg.split(" ")[0]):
+        match (msg.split(" ")[0]):#
 
             case 'help':
                 sendMessage = "HELP:"
