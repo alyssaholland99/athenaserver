@@ -51,7 +51,10 @@ async def on_message(message):
                     case "uptime":
                         await message.channel.send((os.popen("uptime").read()).split(",")[0])
                     case "load":
-                        await message.channel.send((os.popen("uptime").read()).split(",")[3])
+                        initload = (os.popen("uptime").read()).split(",")[3]
+                        load = initload.split(":")[1]
+                        load = " (" + string((float(load)/12)*100) +"%)"
+                        await message.channel.send(init + load)
 
             case "palworld":
                 match (msg.split(" ")[1]):
