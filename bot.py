@@ -131,11 +131,11 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "add":
                         print(message.author)
-                        await message.channel.send("test")
+                        await message.channel.send(message.author)
                     case "remove":
                         #TODO
                         print(message.author)
-                        await message.channel.send("test")
+                        await message.channel.send(message.author)
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
