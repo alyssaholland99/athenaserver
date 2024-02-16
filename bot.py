@@ -47,9 +47,9 @@ async def on_message(message):
             case 'help':
                 sendMessage = "Help:"
                 for key, value in helpCommands.items():
-                    sendMessage += "- " + key
+                    sendMessage += "\n- " + key
                     for command in value:
-                        sendMessage += "  - " + command
+                        sendMessage += "\n  - " + command
                 sendMessage += "\nExample: .palworld players"
                 await message.channel.send(sendMessage)
 
