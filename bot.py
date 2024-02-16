@@ -13,14 +13,14 @@ client = discord.Client(intents=intents)
 
 palworldCommands = ["info", "players", "restart"]
 minecraftCommands = ["info", "players", "start"]
-valheimCommands = ["info", "players", "start"]
+valheimCommands = ["start"]
 serverCommands = ["uptime", "load"]
 helpCommands = {
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
-    #"valheim (WIP)" : valheimCommands,
+    "valheim" : valheimCommands,
     "server" : serverCommands
-}
+}dw
 
 @client.event
 async def on_ready():
@@ -93,6 +93,25 @@ async def on_message(message):
                 return
 
             case "minecraft":
+                minecraft = JavaServer.lookup("192.168.0.120:25565")
+                match (msg.split(" ")[1]):
+                    case "info":
+                        await message.channel.send("Server address: server.alyssaserver.co.uk:25565")
+                    case "players":
+                        query = minecraft.query()
+                        status = minecraft.status()
+                        if status.players.online > 0:
+                            await message.channel.send("The server has the following players online: \n{}".format("\n".join(query.players.names)))
+                        else:
+                            await message.channel.send("There are currently no players online")
+                    case "start":
+                        os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
+                        await message.channel.send("Starting Valheim server")
+                    case _:
+                        await message.channel.send(commandError(msg.split(" ")[0]))
+                return
+
+            case "palworld":
                 minecraft = JavaServer.lookup("192.168.0.120:25565")
                 match (msg.split(" ")[1]):
                     case "info":
