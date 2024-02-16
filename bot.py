@@ -46,6 +46,11 @@ async def on_message(message):
                 sendMessage += "\nExample: .palworld players"
                 await message.channel.send(sendMessage)
 
+            case "server":
+                match (msg.split(" ")[1]):
+                    case "uptime":
+                        await message.channel.send(os.popen("uptime").read())
+
             case "palworld":
                 match (msg.split(" ")[1]):
                     case "info":
