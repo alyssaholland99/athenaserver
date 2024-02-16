@@ -77,6 +77,7 @@ async def on_message(message):
                     case "restart":
                         restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/update_restart.sh").read()
                         await message.channel.send(restartStatus)
+                return
 
             case "minecraft":
                 minecraft = JavaServer.lookup("192.168.0.120:25565")
@@ -93,6 +94,12 @@ async def on_message(message):
                     case "start":
                         os.system("/bin/systemctl start minecraft")
                         await message.channel.send("Starting Minecraft server")
+                return
+            
+            case _:
+                await message.channel.send("Invalid command, use '.help' to see options")
+
+            
 
 
 client.run(TOKEN)
