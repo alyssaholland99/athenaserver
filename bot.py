@@ -65,6 +65,8 @@ async def on_message(message):
                         load = (float(load)/12)*100
                         load = str(round(load, 2)) +"%"
                         await message.channel.send("CPU usage: " + load)
+                    case _:
+                        await message.channel.send(getCommands("server"))
 
             case "palworld":
                 match (msg.split(" ")[1]):
@@ -106,6 +108,20 @@ async def on_message(message):
                 await message.channel.send("Invalid command, use '.help' to see options")
 
             
+def getCommands(service):
 
+    global helpCommands
+
+    if service not in helpCommands:
+        return
+    
+    validCommands = helpCommands[service]
+
+    returnOptions = "This is not a valid selection for {}, please pick from the following:".format(service)
+
+    for commands in validCommands:
+        returnOptions += "\n - validCommands
+
+    return returnOptions
 
 client.run(TOKEN)
