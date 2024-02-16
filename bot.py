@@ -15,11 +15,13 @@ palworldCommands = ["info", "players", "restart"]
 minecraftCommands = ["info", "players", "start"]
 valheimCommands = ["info", "start"]
 serverCommands = ["uptime", "load"]
+trustCommands = ["add", "remove"]
 helpCommands = {
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
     "valheim" : valheimCommands,
-    "server" : serverCommands
+    "server" : serverCommands,
+    "trust" : trustCommands
 }
 
 @client.event
@@ -81,7 +83,7 @@ async def on_message(message):
                         playerSend = "Players currently online:"
                         for i in players:
                             if i.split(",")[0] != "name":
-                                playerSend += "\n" + i.split(",")[0]
+                                playerSend += "\n- " + i.split(",")[0]
                         if playerSend == "Players currently online:":
                             playerSend = "There are currently no players online"
                         await message.channel.send(playerSend)
@@ -101,7 +103,7 @@ async def on_message(message):
                         query = minecraft.query()
                         status = minecraft.status()
                         if status.players.online > 0:
-                            await message.channel.send("The server has the following players online: \n{}".format("\n".join(query.players.names)))
+                            await message.channel.send("The server has the following players online: \n{}".format("\n- ".join(query.players.names)))
                         else:
                             await message.channel.send("There are currently no players online")
                     case "start":
@@ -121,6 +123,19 @@ async def on_message(message):
                     case "start":
                         os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Starting Valheim server")
+                    case _:
+                        await message.channel.send(commandError(msg.split(" ")[0]))
+                return
+            
+            case "trust":
+                match (msg.split(" ")[1]):
+                    case "add":
+                        print(message.author)
+                        await message.channel.send("test")
+                    case "remove":
+                        #TODO
+                        print(message.author)
+                        await message.channel.send("test")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
