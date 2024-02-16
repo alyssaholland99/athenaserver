@@ -157,6 +157,7 @@ def isTrusted(user):
     trustedUsers = trustedFile.read()
     trustedFile.close()
     for u in trustedUsers.splitlines():
+        print(u)
         if user == u:
             return True
     return False
