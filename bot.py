@@ -45,12 +45,12 @@ async def on_message(message):
         match (msg.split(" ")[0]):
 
             case 'help':
-                sendMessage = "Help:"
+                sendMessage = "AthenaServer bot help:\nSyntax: `.[service] [command]`"
                 for key, value in helpCommands.items():
                     sendMessage += "\n- " + key
                     for command in value:
                         sendMessage += "\n  - " + command
-                sendMessage += "\nExample: .palworld players"
+                sendMessage += "\nExample: `.palworld players`"
                 await message.channel.send(sendMessage)
 
             case "server":
