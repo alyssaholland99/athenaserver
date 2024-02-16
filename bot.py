@@ -24,6 +24,8 @@ helpCommands = {
     "trust" : trustCommands
 }
 
+trustedPath = "/root/athenaserver/trustedUsers.txt"
+
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for .help"))
@@ -33,6 +35,7 @@ async def on_ready():
 async def on_message(message):
 
         global helpCommands
+        global trustedPath
 
         # don't respond to ourselves
         if message.author == client.user:
@@ -134,18 +137,32 @@ async def on_message(message):
                             if isTrusted(msg.split(" ")[2]):
                                 await message.channel.send("{} is already a trusted user of this bot".format(msg.split(" ")[2]))
                                 return
-                            trustedFile = open("/root/athenaserver/trustedUsers.txt", "a")
+                            trustedFile = open(trustedPath, "a")
                             trustedFile.write("{}\n".format(msg.split(" ")[2]))
                             trustedFile.close()
                             await message.channel.send("Added {} to trusted users".format(msg.split(" ")[2]))
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "remove":
-                        #TODO
-                        print(message.author)
-                        await message.channel.send(message.author)
+                        if isTrusted(message.author):
+                            if isTrusted(msg.split(" ")[2]):
+                                trustedFile = open(trustedPath, "r")
+                                trustedUsers = trustedFile.read()
+                                trustedFile.close()
+                                newTrustedUsers = ""
+                                for line in trustedUsers:
+                                    if line.replace("\n", "") != msg.split(" ")[2]:
+                                        newTrustedUsers += line
+                                trustedFile = open(trustedPath, "r")
+                                trustedFile.write(newTrustedUsers)
+                                trustedFile.close()
+                                await message.channel.send("Removed {} from trusted users".format(msg.split(" ")[2]))
+                            else:
+                                await message.channel.send("{} is not a trusted user".format(msg.split(" ")[2]))
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
                     case "list":
-                        trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
+                        trustedFile = open(trustedPath, "r")
                         trustedUsers = "Trusted users:\n"
                         for u in trustedFile:
                             trustedUsers += "- {}".format(u)
@@ -162,7 +179,8 @@ def getInsufficentPermissionMessage():
     return "You do not have permission to run this command"
 
 def isTrusted(user):
-    trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
+    global trustedPath
+    trustedFile = open(trustedPath, "r")
     for u in trustedFile:
         if str(user) == u.replace("\n", ""):
             trustedFile.close()
