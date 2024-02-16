@@ -16,7 +16,7 @@ minecraftCommands = ["info", 'players', 'start']
 serverCommands = ["info", 'players', 'restart']
 helpCommands = {
     "minecraft" : minecraftCommands,
-    "palworld" : palworldCommands,.
+    "palworld" : palworldCommands,
     "server" : serverCommands
 }
 
