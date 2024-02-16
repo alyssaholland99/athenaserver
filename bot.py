@@ -151,7 +151,7 @@ async def on_message(message):
 def getInsufficentPermissionMessage():
     return "You do not have permission to run this command"
 
-def isTrusted(user)
+def isTrusted(user):
     trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
     trustedUsers = trustedFile.read()
     trustedFile.close()
