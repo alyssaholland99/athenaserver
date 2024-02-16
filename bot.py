@@ -159,6 +159,6 @@ def getInvalidServiceMessage():
     for service in services:
         serviceList += "- {}\n".format(service)
 
-    return "This is not a valid service, please use `.help service` to see valid commands for that service (you can also use `.help` to view all)\nServices:\n{}".format(serviceList)
+    return "This is not a valid service, please use `.help [service]` to see valid commands for that service (you can also use `.help` to view all)\nServices:\n{}".format(serviceList)
 
 client.run(TOKEN)
