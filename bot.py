@@ -152,6 +152,6 @@ def getInvalidServiceMessage():
 
     global helpCommands
 
-    return "This is not a valid service, please use '.help' to see valid commands\nValid services: {}".format(string(list(helpCommands.keys())))
+    return "This is not a valid service, please use '.help' to see valid commands\nValid services: {}".format(str(list(helpCommands.keys())))
 
 client.run(TOKEN)
