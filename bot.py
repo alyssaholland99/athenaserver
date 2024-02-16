@@ -150,7 +150,7 @@ async def on_message(message):
                                 trustedUsers = trustedFile.read()
                                 trustedFile.close()
                                 newTrustedUsers = ""
-                                for line in trustedUsers.splitline():
+                                for line in trustedUsers.splitlines():
                                     print(line)
                                     print(msg.split(" ")[2])
                                     if line.replace("\n", "") != msg.split(" ")[2]:
