@@ -130,7 +130,7 @@ def commandError(service):
     if service not in helpCommands:
         return getInvalidServiceMessage()
 
-    return "This is not a valid selection for {}, please pick from the following:\n{}".format(service, getCommands(service))
+    return "Syntax: `.{} [command]`\nThis is not a valid selection for {}, please pick from the following:\n{}".format(service, service, getCommands(service))
             
 def getCommands(service):
 
