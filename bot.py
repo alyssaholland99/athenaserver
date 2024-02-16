@@ -131,6 +131,9 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "add":
                         if isTrusted(message.author):
+                            if isTrusted(msg.split(" ")[2]):
+                                await message.channel.send("{} is already a trusted user of this bot".format(msg.split(" ")[2]))
+                                return
                             trustedFile = open("/root/athenaserver/trustedUsers.txt", "a")
                             trustedFile.write("{}\n".format(msg.split(" ")[2]))
                             trustedFile.close()
@@ -143,7 +146,7 @@ async def on_message(message):
                         await message.channel.send(message.author)
                     case "list":
                         trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
-                        trustedUsers = ""
+                        trustedUsers = "Trusted users:\n"
                         for u in trustedFile:
                             trustedUsers += "- {}".format(u)
                         trustedFile.close()
