@@ -43,6 +43,9 @@ async def on_message(message):
                 sendMessage += "\n  - info"
                 sendMessage += "\n  - players"
                 sendMessage += "\n  - restart"
+                sendMessage += "\n- server"
+                sendMessage += "\n  - uptime"
+                sendMessage += "\n  - load"
                 sendMessage += "\nExample: .palworld players"
                 await message.channel.send(sendMessage)
 
