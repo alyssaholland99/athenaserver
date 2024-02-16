@@ -156,6 +156,7 @@ def isTrusted(user):
     trustedFile = open("/root/athenaserver/trustedUsers.txt", "r")
     trustedUsers = trustedFile.read()
     trustedFile.close()
+    print(trustedUsers)
     for u in trustedUsers.splitlines():
         print(u)
         if user == u:
