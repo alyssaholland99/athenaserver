@@ -121,7 +121,7 @@ def getHelpForService(service):
     if service not in helpCommands:
         return "This is not a valid service, please use '.help' to see valid commands"
     
-    return "Available commands for service {}:\n{}".format(msg.split(" ")[1], getCommands(msg.split(" ")[1]))
+    return "Available commands for service {}:\n{}".format(service, getCommands(service))
 
 def commandError(service):
 
