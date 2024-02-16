@@ -153,7 +153,7 @@ async def on_message(message):
                                 for line in trustedUsers:
                                     if line.replace("\n", "") != msg.split(" ")[2]:
                                         newTrustedUsers += line
-                                trustedFile = open(trustedPath, "r")
+                                trustedFile = open(trustedPath, "w")
                                 trustedFile.write(newTrustedUsers)
                                 trustedFile.close()
                                 await message.channel.send("Removed {} from trusted users".format(msg.split(" ")[2]))
