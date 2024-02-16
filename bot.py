@@ -119,7 +119,7 @@ def getHelpForService(service):
     global helpCommands
 
     if service not in helpCommands:
-        return "This is not a valid service, please use '.help' to see valid commands"
+        return getInvalidServiceMessage()
     
     return "Available commands for service {}:\n{}".format(service, getCommands(service))
 
@@ -128,7 +128,7 @@ def commandError(service):
     global helpCommands
 
     if service not in helpCommands:
-        return "This is not a valid service, please use '.help' to see valid commands"
+        return getInvalidServiceMessage()
 
     return "This is not a valid selection for {}, please pick from the following:\n{}".format(service, getCommands(service))
             
@@ -137,7 +137,7 @@ def getCommands(service):
     global helpCommands
 
     if service not in helpCommands:
-        return "This is not a valid service, please use '.help' to see valid commands"
+        return getInvalidServiceMessage()
     
     validCommands = helpCommands[service]
 
@@ -147,5 +147,11 @@ def getCommands(service):
         returnOptions += "- " + commands + "\n"
 
     return returnOptions
+
+def getInvalidServiceMessage():
+
+    global helpCommands
+
+    return "This is not a valid service, please use '.help' to see valid commands\nValid services: {}".format(string(list(helpCommands.keys())))
 
 client.run(TOKEN)
