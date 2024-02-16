@@ -49,7 +49,7 @@ async def on_message(message):
             case "server":
                 match (msg.split(" ")[1]):
                     case "uptime":
-                        await message.channel.send(os.popen("uptime").read())
+                        await message.channel.send((os.popen("uptime").read()).split(",")[0])
 
             case "palworld":
                 match (msg.split(" ")[1]):
