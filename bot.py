@@ -112,7 +112,7 @@ async def on_message(message):
                 return
             
             case _:
-                await message.channel.send("Invalid command, use '.help' to see options")
+                await message.channel.send(getInvalidServiceMessage())
 
 def getHelpForService(service):
 
