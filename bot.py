@@ -18,7 +18,7 @@ serverCommands = ["uptime", "load"]
 helpCommands = {
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
-    "valheim (WIP)" : valheimCommands,
+    #"valheim (WIP)" : valheimCommands,
     "server" : serverCommands
 }
 
