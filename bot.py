@@ -11,7 +11,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
-palworldCommands = ["info", "players", "restart"]
+palworldCommands = ["info", "players", "start", "restart", "stop*"]
 minecraftCommands = ["info", "players", "start"]
 valheimCommands = ["info", "start"]
 serverCommands = ["uptime", "load"]
@@ -93,6 +93,15 @@ async def on_message(message):
                     case "restart":
                         restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/update_restart.sh").read()
                         await message.channel.send(restartStatus)
+                    case "stop":
+                        if isTrusted(message.author):
+                            restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/stop.sh").read()
+                            await message.channel.send(restartStatus)
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
+                    case "start":
+                        restartStatus = os.popen(" /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/docker-compose.yml up -d >> /dev/null 2>&1").read()
+                        await message.channel.send("Palworld server starting")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
