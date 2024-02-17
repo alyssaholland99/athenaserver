@@ -12,7 +12,7 @@ intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
 palworldCommands = ["info", "players", "start", "restart\*", "stop\*"]
-minecraftCommands = ["info", "players", "start", "restart\*", "stop\*"]
+minecraftCommands = ["info", "players", "start", "restart", "stop\*"]
 valheimCommands = ["info", "start", "stop\*"]
 serverCommands = ["uptime", "load"]
 trustCommands = ["add\*", "remove\*", "list"]
