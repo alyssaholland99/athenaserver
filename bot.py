@@ -11,8 +11,8 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
-palworldCommands = ["info", "players", "start", "restart\*", "stop\*"]
-minecraftCommands = ["info", "players", "start", "restart", "stop\*"]
+palworldCommands = ["info", "players", "start", "restart", "stop\*"]
+minecraftCommands = ["info", "players", "start", "restart\*", "stop\*"]
 valheimCommands = ["info", "start", "stop\*"]
 serverCommands = ["uptime", "load", "memory"]
 botCommands = ["add", "info"]
