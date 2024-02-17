@@ -12,7 +12,7 @@ intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
 palworldCommands = ["info", "players", "start", "restart", "stop*"]
-minecraftCommands = ["info", "players", "start"]
+minecraftCommands = ["info", "players", "start", "restart*", "stop*"]
 valheimCommands = ["info", "start"]
 serverCommands = ["uptime", "load"]
 trustCommands = ["add*", "remove*", "list"]
@@ -121,6 +121,26 @@ async def on_message(message):
                     case "start":
                         os.system("/bin/systemctl start minecraft")
                         await message.channel.send("Starting Minecraft server")
+                    case "stop":
+                        if isTrusted(message.author):
+                            status = minecraft.status()
+                            if status.players.online == 0:
+                                restartStatus = os.popen("/bin/systemctl stop minecraft").read()
+                                await message.channel.send("Stopping the minecraft server")
+                            else: 
+                                await message.channel.send("There are players currently on the world, not stopped")
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
+                    case "restart":
+                        if isTrusted(message.author):
+                            status = minecraft.status()
+                            if status.players.online == 0:
+                                restartStatus = os.popen("/bin/systemctl restart minecraft").read()
+                                await message.channel.send("Restarting the minecraft server")
+                            else: 
+                                await message.channel.send("There are players currently on the world, not restarted")
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
