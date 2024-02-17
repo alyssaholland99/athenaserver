@@ -154,11 +154,11 @@ async def on_message(message):
                         await message.channel.send("This command is currently WIP")
                     case "start":
                         os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
-                        await message.channel.send("Starting Valheim server")
+                        await message.channel.send("Starting the Valheim server")
                     case "stop":
                         if isTrusted(message.author):
                             restartStatus = os.popen("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1").read()
-                            await message.channel.send("Stopping the valheim server")
+                            await message.channel.send("Stopping the Valheim server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case _:
