@@ -14,7 +14,7 @@ client = discord.Client(intents=intents)
 palworldCommands = ["info", "players", "start", "restart\*", "stop\*"]
 minecraftCommands = ["info", "players", "start", "restart", "stop\*"]
 valheimCommands = ["info", "start", "stop\*"]
-serverCommands = ["uptime", "load"]
+serverCommands = ["uptime", "load", "memory"]
 botCommands = ["add", "info"]
 trustCommands = ["add\*", "remove\*", "list"]
 helpCommands = {
