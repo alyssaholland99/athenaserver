@@ -230,7 +230,7 @@ def getHelpForService(service):
     if service not in helpCommands:
         return getInvalidServiceMessage()
     
-    return "Syntax: `.{} [command]`\nAvailable commands for service {}:\n{}".format(service, service, getCommands(service))
+    return "Syntax: `.{} [command]`\nAvailable commands for service {}:\n{}\n*Trusted users only".format(service, service, getCommands(service))
 
 def commandError(service):
 
