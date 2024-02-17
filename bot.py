@@ -13,7 +13,7 @@ client = discord.Client(intents=intents)
 
 palworldCommands = ["info", "players", "start", "restart", "stop*"]
 minecraftCommands = ["info", "players", "start", "restart*", "stop*"]
-valheimCommands = ["info", "start"]
+valheimCommands = ["info", "start", "stop*"]
 serverCommands = ["uptime", "load"]
 trustCommands = ["add*", "remove*", "list"]
 helpCommands = {
@@ -155,6 +155,12 @@ async def on_message(message):
                     case "start":
                         os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Starting Valheim server")
+                    case "stop":
+                        if isTrusted(message.author):
+                            restartStatus = os.popen("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1").read()
+                            await message.channel.send("Stopping the valheim server")
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
