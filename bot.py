@@ -11,11 +11,11 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
-palworldCommands = ["info", "players", "start", "restart", "stop*"]
-minecraftCommands = ["info", "players", "start", "restart*", "stop*"]
-valheimCommands = ["info", "start", "stop*"]
+palworldCommands = ["info", "players", "start", "restart\*", "stop\*"]
+minecraftCommands = ["info", "players", "start", "restart\*", "stop\*"]
+valheimCommands = ["info", "start", "stop\*"]
 serverCommands = ["uptime", "load"]
-trustCommands = ["add*", "remove*", "list"]
+trustCommands = ["add\*", "remove\*", "list"]
 helpCommands = {
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
