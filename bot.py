@@ -100,7 +100,7 @@ async def on_message(message):
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "start":
-                        restartStatus = os.popen(" /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/docker-compose.yml up -d >> /dev/null 2>&1").read()
+                        restartStatus = os.system(" /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Palworld server starting")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
@@ -125,7 +125,7 @@ async def on_message(message):
                         if isTrusted(message.author):
                             status = minecraft.status()
                             if status.players.online == 0:
-                                restartStatus = os.popen("/bin/systemctl stop minecraft").read()
+                                restartStatus = os.system("/bin/systemctl stop minecraft")
                                 await message.channel.send("Stopping the minecraft server")
                             else: 
                                 await message.channel.send("There are players currently on the world, not stopped")
@@ -135,7 +135,7 @@ async def on_message(message):
                         if isTrusted(message.author):
                             status = minecraft.status()
                             if status.players.online == 0:
-                                restartStatus = os.popen("/bin/systemctl restart minecraft").read()
+                                restartStatus = os.system("/bin/systemctl restart minecraft")
                                 await message.channel.send("Restarting the minecraft server")
                             else: 
                                 await message.channel.send("There are players currently on the world, not restarted")
@@ -157,7 +157,7 @@ async def on_message(message):
                         await message.channel.send("Starting the Valheim server")
                     case "stop":
                         if isTrusted(message.author):
-                            restartStatus = os.popen("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1").read()
+                            restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the Valheim server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
