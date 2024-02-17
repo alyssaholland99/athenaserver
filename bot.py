@@ -15,12 +15,14 @@ palworldCommands = ["info", "players", "start", "restart\*", "stop\*"]
 minecraftCommands = ["info", "players", "start", "restart", "stop\*"]
 valheimCommands = ["info", "start", "stop\*"]
 serverCommands = ["uptime", "load"]
+botCommands = ["add", "info"]
 trustCommands = ["add\*", "remove\*", "list"]
 helpCommands = {
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
     "valheim" : valheimCommands,
     "server" : serverCommands,
+    "bot" : botCommands,
     "trust" : trustCommands
 }
 
@@ -206,7 +208,16 @@ async def on_message(message):
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
-            
+
+            case "bot":
+                match (msg.split(" ")[1]):
+                    case "add":
+                        message.channel.send("Use the following link to add this bot yo your server:\nhttps://discord.com/api/oauth2/authorize?client_id=1207456482170249287&permissions=3072&scope=bot")
+                    case "info":
+                        await message.channel.send("This bot is being used in {} servers".format(client.guilds))
+                    case "_":
+                        await message.channel.send(commandError(msg.split(" ")[0]))
+                        
             case _:
                 await message.channel.send(getInvalidServiceMessage())
 
