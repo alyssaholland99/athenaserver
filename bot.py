@@ -77,7 +77,7 @@ async def on_message(message):
                         await message.channel.send("CPU usage: " + load)
                     case "memory":
                         memoryPercent = os.popen("free | grep Mem | awk '{print $3/$2 * 100}'").read()
-                        await message.channel.send("{}%".format(round(memoryPercent, 1)))
+                        await message.channel.send("Memory usage: {}%".format(round(float(memoryPercent), 1)))
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
