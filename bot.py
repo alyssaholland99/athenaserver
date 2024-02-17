@@ -57,7 +57,7 @@ async def on_message(message):
                     return
                 sendMessage = "\nSyntax: `.[service] [command]`"
                 for key, value in helpCommands.items():
-                    sendMessage += "\n- {}\n  -".format(key)
+                    sendMessage += "\n- {}".format(key)
                     joinedCommands = ", ".join(value)
                     sendMessage += "\n  - {}".format(joinedCommands)
                 sendMessage += "\n*Trusted users only\nExample: `.palworld players`"
