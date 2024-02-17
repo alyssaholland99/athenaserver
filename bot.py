@@ -58,7 +58,8 @@ async def on_message(message):
                 sendMessage = "\nSyntax: `.[service] [command]`"
                 for key, value in helpCommands.items():
                     sendMessage += "\n- {}\n  -".format(key)
-                    sendMessage +=", ".join(value)
+                    joinedCommands = ", ".join(value)
+                    sendMessage += "\n  - {}".format(joinedCommands)
                 sendMessage += "\n*Trusted users only\nExample: `.palworld players`"
                 await message.channel.send(sendMessage)
 
