@@ -254,11 +254,16 @@ def isTrusted(user):
     trustedFile.close()
     return False
 
-def getHelpForService(service):
+def getAllCommands():
 
     global helpCommands
 
-    allCommands = {**helpCommands[0], **helpCommands[1]}
+    return {**helpCommands[0], **helpCommands[1]}
+
+
+def getHelpForService(service):
+
+    allCommands = getAllCommands()
 
     if (service not in allCommands):
         return getInvalidServiceMessage()
@@ -267,9 +272,7 @@ def getHelpForService(service):
 
 def commandError(service):
 
-    global helpCommands
-
-    allCommands = {**helpCommands[0], **helpCommands[1]}
+    allCommands = getAllCommands()
 
     if (service not in allCommands):
         return getInvalidServiceMessage()
@@ -278,9 +281,7 @@ def commandError(service):
             
 def getCommands(service):
 
-    global helpCommands
-
-    allCommands = {**helpCommands[0], **helpCommands[1]}
+    allCommands = getAllCommands()
 
     if (service not in allCommands):
         return getInvalidServiceMessage()
@@ -296,9 +297,7 @@ def getCommands(service):
 
 def getInvalidServiceMessage():
 
-    global helpCommands
-
-    allCommands = {**helpCommands[0], **helpCommands[1]}
+    allCommands = getAllCommands()
 
     services = list(allCommands.keys())
 
