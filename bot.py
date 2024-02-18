@@ -293,7 +293,9 @@ def getInvalidServiceMessage():
 
     global helpCommands
 
-    services = list(helpCommands.keys())
+    allCommands = {**helpCommands[0], **helpCommands[1]}
+
+    services = list(allCommands.keys())
 
     serviceList = ""
 
