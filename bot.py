@@ -17,14 +17,16 @@ valheimCommands = ["info", "start", "stop\*"]
 serverCommands = ["uptime", "load", "memory"]
 botCommands = ["add", "info"]
 trustCommands = ["add\*", "remove\*", "list"]
-helpCommands = {
+helpCommands = [{
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
     "valheim" : valheimCommands,
+},
+{
     "server" : serverCommands,
     "bot" : botCommands,
     "trust" : trustCommands
-}
+}]
 
 trustedPath = "/root/athenaserver/trustedUsers.txt"
 
@@ -55,15 +57,16 @@ async def on_message(message):
 
             case 'help':
                 if len(msg.split(" ")) == 2:
-                    await message.channel.send(getHelpForService(msg.split(" ")[1]))
-                    return
-                sendMessage = "\nSyntax: `.[service] [command]`"
-                for key, value in helpCommands.items():
-                    sendMessage += "\n- {}".format(key)
-                    joinedCommands = ", ".join(value)
-                    sendMessage += "\n  - {}".format(joinedCommands)
-                sendMessage += "\n*Trusted users only\nExample: `.palworld players`"
-                await message.channel.send(sendMessage)
+                    match (msg.split(" ")[1]):
+                        case '1':
+                        case '2':
+                            await message.channel.send(makeHelpMessage(int(msg.split(" ")[1])))
+                        case _:
+                            await message.channel.send(getHelpForService(msg.split(" ")[1]))
+                            return
+                else:
+                    await message.channel.send(makeHelpMessage("1") + "\nUse `.help 2` to see other commands available")
+                
 
             case "server":
                 match (msg.split(" ")[1]):
@@ -223,6 +226,19 @@ async def on_message(message):
             case _:
                 await message.channel.send(getInvalidServiceMessage())
 
+def makeHelpMessage(index):
+    global helpCommands
+
+    commands = helpCommands[index-1]
+
+    sendMessage = "\nSyntax: `.[service] [command]`"
+    for key, value in commands.items():
+        sendMessage += "\n- {}".format(key)
+        joinedCommands = ", ".join(value)
+        sendMessage += "\n  - {}".format(joinedCommands)
+    sendMessage += "\n*Trusted users only\nExample: `.palworld players`"
+    return sendMessage
+
 def getInsufficentPermissionMessage():
     return "You do not have permission to run this command"
 
@@ -249,7 +265,9 @@ def commandError(service):
 
     global helpCommands
 
-    if service not in helpCommands:
+    allCommands = {**helpCommands[0], **helpCommands[1]}
+
+    if (service not in allCommands):
         return getInvalidServiceMessage()
 
     return "Syntax: `.{} [command]`\nThis is not a valid command for {}, please pick from the following:\n{}".format(service, service, getCommands(service))
@@ -258,10 +276,12 @@ def getCommands(service):
 
     global helpCommands
 
-    if service not in helpCommands:
+    allCommands = {**helpCommands[0], **helpCommands[1]}
+
+    if (service not in allCommands):
         return getInvalidServiceMessage()
     
-    validCommands = helpCommands[service]
+    validCommands = allCommands[service]
 
     returnOptions = ""
 
