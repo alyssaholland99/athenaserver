@@ -58,8 +58,7 @@ async def on_message(message):
             case 'help':
                 if len(msg.split(" ")) == 2:
                     match (msg.split(" ")[1]):
-                        case '1':
-                        case '2':
+                        case '1' | '2':
                             await message.channel.send(makeHelpMessage(int(msg.split(" ")[1])))
                         case _:
                             await message.channel.send(getHelpForService(msg.split(" ")[1]))
