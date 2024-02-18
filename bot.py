@@ -228,7 +228,7 @@ async def on_message(message):
 def makeHelpMessage(index):
     global helpCommands
 
-    commands = helpCommands[index-1]
+    commands = helpCommands[int(index)-1]
 
     sendMessage = "\nSyntax: `.[service] [command]`"
     for key, value in commands.items():
