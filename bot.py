@@ -70,8 +70,7 @@ async def on_message(message):
                     case "uptime":
                         await message.channel.send((os.popen("uptime").read()).split(",")[0].split("up")[1])
                     case "load":
-                        initload = (os.popen("uptime").read()).split(",")[3]
-                        load = initload.split(":")[1]
+                        load = (os.popen("/bin/cat /proc/loadavg").read()).split(" ")[0]
                         load = (float(load)/12)*100
                         load = str(round(load, 2)) +"%"
                         await message.channel.send("CPU usage: " + load)
