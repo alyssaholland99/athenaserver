@@ -255,7 +255,9 @@ def getHelpForService(service):
 
     global helpCommands
 
-    if service not in helpCommands:
+    allCommands = {**helpCommands[0], **helpCommands[1]}
+
+    if (service not in allCommands):
         return getInvalidServiceMessage()
     
     return "Syntax: `.{} [command]`\nAvailable commands for service {}:\n{}*Trusted users only".format(service, service, getCommands(service))
