@@ -47,6 +47,9 @@ async def on_message(message):
 
         if not message.content.startswith('.'):
             return
+        if message.content.startswith('..'):
+            return
+        
         msg = message.content[1:].lower()
 
         if len(msg.split(" ")) == 1 and msg.split(" ")[0] != "help":
