@@ -69,7 +69,7 @@ async def on_message(message):
                             await message.channel.send(getHelpForService(msg.split(" ")[1]))
                             return
                 else:
-                    await message.channel.send(makeHelpMessage("1") + "\nUse `.help 2` to see other commands available or `help *` to see all commands")
+                    await message.channel.send(makeHelpMessage("1") + "\nUse `.help 2` to see other commands available or `help \*` to see all commands")
                 
             case "server":
                 match (msg.split(" ")[1]):
