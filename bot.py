@@ -63,13 +63,14 @@ async def on_message(message):
                     match (msg.split(" ")[1]):
                         case '1' | '2':
                             await message.channel.send(makeHelpMessage(int(msg.split(" ")[1])))
+                        case '*':
+                            await message.channel.send(makeHelpMessage('all'))
                         case _:
                             await message.channel.send(getHelpForService(msg.split(" ")[1]))
                             return
                 else:
                     await message.channel.send(makeHelpMessage("1") + "\nUse `.help 2` to see other commands available")
                 
-
             case "server":
                 match (msg.split(" ")[1]):
                     case "uptime":
@@ -231,7 +232,11 @@ async def on_message(message):
 def makeHelpMessage(index):
     global helpCommands
 
-    commands = helpCommands[int(index)-1]
+
+    if index == "all":
+        commands = getAllCommands()
+    else:
+        commands = helpCommands[int(index)-1]
 
     sendMessage = "\nSyntax: `.[service] [command]`"
     for key, value in commands.items():
