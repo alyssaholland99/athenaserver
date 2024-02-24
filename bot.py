@@ -288,11 +288,11 @@ async def on_message(message):
                                 stoppedServices.append(service)
                         messageConst = ""
                         if len(runningServices) > 0:
-                            messageConst += "Running Services:"
+                            messageConst += "Running Services:\n"
                             for s in runningServices:
                                 messageConst += "- {}\n".format(s)
                         if len(stoppedServices) > 0:
-                            messageConst += "Stopped Services:"
+                            messageConst += "Stopped Services:\n"
                             for s in stoppedServices:
                                 messageConst += "- {}\n".format(s)    
                         await message.channel.send(messageConst)
