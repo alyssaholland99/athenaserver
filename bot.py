@@ -14,6 +14,7 @@ client = discord.Client(intents=intents)
 palworldCommands = ["info", "players", "start", "restart", "stop\*"]
 minecraftCommands = ["info", "players", "start", "restart\*", "stop\*"]
 valheimCommands = ["info", "start", "stop\*"]
+sotfCommands = ["info", "start", "stop\*"]
 serverCommands = ["uptime", "load", "memory"]
 botCommands = ["add", "info"]
 trustCommands = ["add\*", "remove\*", "list"]
@@ -21,6 +22,7 @@ helpCommands = [{
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
     "valheim" : valheimCommands,
+    "forest" : sotfCommands
 },
 {
     "server" : serverCommands,
@@ -175,6 +177,23 @@ async def on_message(message):
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
             
+            case "forest":
+                match (msg.split(" ")[1]):
+                    case "info":
+                        await message.channel.send("Server address: 82.39.31.100:8766") ## GET IP
+                    case "start":
+                        os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
+                        await message.channel.send("Starting the Sons of the Forest server")
+                    case "stop":
+                        if isTrusted(message.author):
+                            restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1")
+                            await message.channel.send("Stopping the Sons of the Forest server")
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
+                    case _:
+                        await message.channel.send(commandError(msg.split(" ")[0]))
+
+            
             case "trust":
                 match (msg.split(" ")[1]):
                     case "add":
@@ -230,8 +249,8 @@ async def on_message(message):
                 await message.channel.send(getInvalidServiceMessage())
 
 def makeHelpMessage(index):
+    
     global helpCommands
-
 
     if index == "all":
         commands = getAllCommands()
