@@ -280,9 +280,9 @@ async def on_message(message):
                         messageConst = "Service Status:\n"
                         for service, port in servicePorts.items():
                             if isRunning(port):
-                                messageConst += "The {} server is running\n".format(service)
+                                messageConst += "The __{}__ server is running\n".format(service)
                             else:
-                                messageConst += "The {} server is not running\n".format(service)
+                                messageConst += "The __{}__ server is _not_ running\n".format(service)
                         await message.channel.send(messageConst)
                         
                              
