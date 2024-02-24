@@ -279,13 +279,25 @@ async def on_message(message):
             case "service":
                 match (msg.split(" ")[1]):
                     case "status":
-                        messageConst = "Service Status:\n"
+                        runningServices = []
+                        stoppedServices = []
                         for service, port in servicePorts.items():
                             if isRunning(port):
-                                messageConst += "The __{}__ server is running\n".format(service)
+                                runningServices += service
                             else:
-                                messageConst += "The __{}__ server is **not** running\n".format(service)
+                                stoppedServices += service
+                        messageConst = ""
+                        if len(runningServices) > 0:
+                            messageConst += "Running Services:"
+                            for s in runningServices:
+                                messageConst += "- {}\n".format(s)
+                        if len(stoppedServices) > 0:
+                            messageConst += "Stopped Services:"
+                            for s in stoppedServices:
+                                messageConst += "- {}\n".format(s)    
                         await message.channel.send(messageConst)
+                    case _:
+                        await message.channel.send(commandError(msg.split(" ")[0]))
                         
                              
 
