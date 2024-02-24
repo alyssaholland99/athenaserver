@@ -186,7 +186,7 @@ async def on_message(message):
                         await message.channel.send("Starting the Sons of the Forest server")
                     case "stop":
                         if isTrusted(message.author):
-                            restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1")
+                            restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the Sons of the Forest server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
