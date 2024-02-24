@@ -12,6 +12,13 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
+servicePorts = {
+    "Palworld" : "8211",
+    "Minecraft" : "25565",
+    "Valheim" : "2456",
+    "Sons of the Forest" : "8766"
+}
+
 palworldCommands = ["info", "status", "players", "start", "restart", "stop\*"]
 minecraftCommands = ["info", "status", "players", "start", "restart\*", "stop\*"]
 valheimCommands = ["info", "status", "start", "stop\*"]
@@ -43,6 +50,7 @@ async def on_message(message):
 
         global helpCommands
         global trustedPath
+        global servicePorts
 
         # don't respond to ourselves
         if message.author == client.user:
@@ -92,9 +100,9 @@ async def on_message(message):
             case "palworld":
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address for Palworld: `server.alyssaserver.co.uk:8211`\nPassword: `{}`".format(os.getenv('PAL_PASS')))
+                        await message.channel.send("Server address for Palworld: `server.alyssaserver.co.uk:{}`\nPassword: `{}`".format(servicePorts["Palworld"], os.getenv('PAL_PASS')))
                     case "status":
-                        if isRunning("8211"): 
+                        if isRunning(servicePorts["Palworld"]): 
                             await message.channel.send("The Palworld server is running")
                         else:
                             await message.channel.send("The Palworld server is not running")
@@ -125,12 +133,12 @@ async def on_message(message):
                 return
 
             case "minecraft":
-                minecraft = JavaServer.lookup("192.168.0.120:25565")
+                minecraft = JavaServer.lookup("192.168.0.120:{}".format(servicePorts["Minecraft"]))
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address for Minecraft: `server.alyssaserver.co.uk:25565`")
+                        await message.channel.send("Server address for Minecraft: `server.alyssaserver.co.uk:{}`".format(servicePorts["Minecraft"]))
                     case "status":
-                        if isRunning("25565"): 
+                        if isRunning(servicePorts["Minecraft"]): 
                             await message.channel.send("The Minecraft server is running")
                         else:
                             await message.channel.send("The Minecraft server is not running")
@@ -171,9 +179,9 @@ async def on_message(message):
             case "valheim":
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address for Valheim: `server.alyssaserver.co.uk:2456`")
+                        await message.channel.send("Server address for Valheim: `server.alyssaserver.co.uk:{}`".format(servicePorts["Valheim"]))
                     case "status":
-                        if isRunning("2456"): 
+                        if isRunning(servicePorts["Valheim"]): 
                             await message.channel.send("The Valheim server is running")
                         else:
                             await message.channel.send("The Valheim server is not running")
@@ -197,9 +205,9 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "info":
                         ip = get('https://api.ipify.org').content.decode('utf8')
-                        await message.channel.send("Server address for Sons of the Forest: `{}:8766`\nPassword: `{}`".format(ip, os.getenv('SOTF_PASS'))) ## GET IP
+                        await message.channel.send("Server address for Sons of the Forest: `{}:{}`\nPassword: `{}`".format(ip, servicePorts["Sons of the Forest"], os.getenv('SOTF_PASS'))) ## GET IP
                     case "status":
-                        if isRunning("8766"): 
+                        if isRunning(servicePorts["Sons of the Forest"]): 
                             await message.channel.send("The Sons of the Forest server is running")
                         else:
                             await message.channel.send("The Sons of the Forest server is not running")
