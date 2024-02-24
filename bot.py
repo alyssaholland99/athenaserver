@@ -4,6 +4,7 @@ import os
 import discord
 from dotenv import load_dotenv
 from mcstatus import JavaServer
+from requests import get
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -180,7 +181,8 @@ async def on_message(message):
             case "forest":
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address: 82.39.31.100:8766") ## GET IP
+                        ip = get('https://api.ipify.org').content.decode('utf8')
+                        await message.channel.send("Server address: {}:8766".format(ip)) ## GET IP
                     case "start":
                         os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Starting the Sons of the Forest server")
