@@ -31,7 +31,7 @@ helpCommands = [{
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
     "valheim" : valheimCommands,
-    "forest" : sotfCommands
+    "forest/sotf" : sotfCommands
 },
 {
     "server" : serverCommands,
@@ -202,8 +202,8 @@ async def on_message(message):
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
-            
-            case "forest":
+
+            case "forest" | "sotf" | "sons" | "sons of the forest":
                 match (msg.split(" ")[1]):
                     case "info":
                         ip = get('https://api.ipify.org').content.decode('utf8')
