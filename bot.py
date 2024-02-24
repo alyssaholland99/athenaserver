@@ -222,6 +222,12 @@ async def on_message(message):
                             await message.channel.send("Stopping the Sons of the Forest server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
+                    case "restart":
+                        if isTrusted(message.author):
+                            restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
+                            await message.channel.send("Restarting the Sons of the Forest server")
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
