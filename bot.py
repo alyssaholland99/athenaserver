@@ -216,7 +216,7 @@ async def on_message(message):
                             await message.channel.send("The Sons of the Forest server is not running")
                     case "start":
                         os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
-                        await message.channel.send("Starting the Sons of the Forest server\nPlease note: It may take a while for the server to start correctly, another message will confirm when the server is running")
+                        await message.channel.send("Starting the Sons of the Forest server\nPlease note: It may take a while (3-6 minutes) for the server to start correctly, another message will confirm when the server is running")
                         await message.channel.send(ensureSotFServerStarts())
                     case "stop":
                         if isTrusted(message.author):
