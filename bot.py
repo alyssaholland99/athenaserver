@@ -203,7 +203,7 @@ async def on_message(message):
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
 
-            case "forest" | "sotf" | "sons" | "sons of the forest":
+            case "forest" | "sotf":
                 match (msg.split(" ")[1]):
                     case "info":
                         ip = get('https://api.ipify.org').content.decode('utf8')
