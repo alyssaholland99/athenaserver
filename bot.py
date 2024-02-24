@@ -23,7 +23,7 @@ servicePorts = {
 palworldCommands = ["info", "status", "players", "start", "restart", "stop\*"]
 minecraftCommands = ["info", "status", "players", "start", "restart\*", "stop\*"]
 valheimCommands = ["info", "status", "start", "stop\*"]
-sotfCommands = ["info", "status", "start", "stop\*"]
+sotfCommands = ["info", "status", "start\*", "restart\*" "stop\*"]
 serverCommands = ["uptime", "load", "memory"]
 botCommands = ["add", "info"]
 trustCommands = ["add\*", "remove\*", "list"]
@@ -215,9 +215,12 @@ async def on_message(message):
                         else:
                             await message.channel.send("The Sons of the Forest server is not running")
                     case "start":
-                        os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
-                        await message.channel.send("Starting the Sons of the Forest server\nPlease note: It may take a while (3-6 minutes) for the server to start correctly, another message will confirm when the server is running")
-                        await message.channel.send(ensureSotFServerStarts())
+                        if isTrusted(message.author):
+                            os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
+                            await message.channel.send("Starting the Sons of the Forest server\nPlease note: It may take a while (3-6 minutes) for the server to start correctly, another message will confirm when the server is running")
+                            await message.channel.send(ensureSotFServerStarts())
+                        else:
+                            await message.channel.send("Due to server crashing issues with SotF only admins can turn on the server\n" + getInsufficentPermissionMessage())
                     case "stop":
                         if isTrusted(message.author):
                             restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1")
