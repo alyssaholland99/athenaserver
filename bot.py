@@ -283,9 +283,9 @@ async def on_message(message):
                         stoppedServices = []
                         for service, port in servicePorts.items():
                             if isRunning(port):
-                                runningServices += service
+                                runningServices.append(service)
                             else:
-                                stoppedServices += service
+                                stoppedServices.append(service)
                         messageConst = ""
                         if len(runningServices) > 0:
                             messageConst += "Running Services:"
