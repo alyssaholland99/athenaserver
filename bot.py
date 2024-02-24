@@ -283,6 +283,7 @@ async def on_message(message):
                                 messageConst += "The {} server is running".format(service)
                             else:
                                 messageConst += "The {} server is not running".format(service)
+                        await message.channel.send(messageConst)
                         
                              
 
