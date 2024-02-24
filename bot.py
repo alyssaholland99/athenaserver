@@ -26,6 +26,7 @@ sotfCommands = ["info", "status", "start", "stop\*"]
 serverCommands = ["uptime", "load", "memory"]
 botCommands = ["add", "info"]
 trustCommands = ["add\*", "remove\*", "list"]
+serviceCommands = ["status"]
 helpCommands = [{
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
@@ -35,7 +36,8 @@ helpCommands = [{
 {
     "server" : serverCommands,
     "bot" : botCommands,
-    "trust" : trustCommands
+    "trust" : trustCommands,
+    "service" : serviceCommands
 }]
 
 trustedPath = "/root/athenaserver/trustedUsers.txt"
@@ -282,7 +284,7 @@ async def on_message(message):
                             if isRunning(port):
                                 messageConst += "The __{}__ server is running\n".format(service)
                             else:
-                                messageConst += "The __{}__ server is _not_ running\n".format(service)
+                                messageConst += "The __{}__ server is **not** running\n".format(service)
                         await message.channel.send(messageConst)
                         
                              
