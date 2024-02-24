@@ -278,11 +278,11 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "status":
                         messageConst = "Service Status:\n"
-                        for key, value in servicePorts:
-                            if isRunning(value):
-                                messageConst += "The {} server is running".format(key)
+                        for service, port in servicePorts.items():
+                            if isRunning(port):
+                                messageConst += "The {} server is running".format(service)
                             else:
-                                messageConst += "The {} server is not running".format(key)
+                                messageConst += "The {} server is not running".format(service)
                         
                              
 
