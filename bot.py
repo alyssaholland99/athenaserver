@@ -294,7 +294,8 @@ async def on_message(message):
                         if len(stoppedServices) > 0:
                             messageConst += "Stopped Services:\n"
                             for s in stoppedServices:
-                                messageConst += "- {}\n".format(s)    
+                                messageConst += "- {}\n".format(s)
+                            messageConst += "You can use `.[service] start` to start the service"
                         await message.channel.send(messageConst)
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
