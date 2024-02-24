@@ -92,7 +92,7 @@ async def on_message(message):
             case "palworld":
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address for Palworld: server.alyssaserver.co.uk:8211\nPassword: {}".format(os.getenv('PAL_PASS')))
+                        await message.channel.send("Server address for Palworld: `server.alyssaserver.co.uk:8211`\nPassword: `{}`".format(os.getenv('PAL_PASS')))
                     case "players":
                         players = os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers").read()
                         players = players.splitlines()
@@ -123,7 +123,7 @@ async def on_message(message):
                 minecraft = JavaServer.lookup("192.168.0.120:25565")
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address: server.alyssaserver.co.uk:25565")
+                        await message.channel.send("Server address for Minecraft: server.alyssaserver.co.uk:25565")
                     case "players":
                         query = minecraft.query()
                         status = minecraft.status()
@@ -161,7 +161,7 @@ async def on_message(message):
             case "valheim":
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address for Valheim: server.alyssaserver.co.uk:2456")
+                        await message.channel.send("Server address for Valheim: `server.alyssaserver.co.uk:2456`")
                     case "players":
                         #TODO
                         await message.channel.send("This command is currently WIP")
@@ -182,7 +182,7 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "info":
                         ip = get('https://api.ipify.org').content.decode('utf8')
-                        await message.channel.send("Server address for Sons of the Forest: {}:8766".format(ip)) ## GET IP
+                        await message.channel.send("Server address for Sons of the Forest: `{}:8766`\nPassword: {}".format(ip, os.getenv('SOTF_PASS'))) ## GET IP
                     case "start":
                         os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Starting the Sons of the Forest server")
