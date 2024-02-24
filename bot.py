@@ -195,7 +195,6 @@ async def on_message(message):
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
-            
             case "trust":
                 match (msg.split(" ")[1]):
                     case "add":
