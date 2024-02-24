@@ -274,6 +274,18 @@ async def on_message(message):
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
+            case "service":
+                match (msg.split(" ")[1]):
+                    case "status":
+                        messageConst = "Service Status:\n"
+                        for key, value in servicePorts:
+                            if isRunning(value):
+                                messageConst += "The {} server is running".format(key)
+                            else:
+                                messageConst += "The {} server is not running".format(key)
+                        
+                             
+
             case _:
                 await message.channel.send(getInvalidServiceMessage())
 
