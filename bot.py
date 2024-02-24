@@ -93,6 +93,11 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "info":
                         await message.channel.send("Server address for Palworld: `server.alyssaserver.co.uk:8211`\nPassword: `{}`".format(os.getenv('PAL_PASS')))
+                    case "status":
+                        if isRunning("8211"): 
+                            await message.channel.send("The Palworld server is running")
+                        else:
+                            await message.channel.send("The Palworld server is not running")
                     case "players":
                         players = os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers").read()
                         players = players.splitlines()
@@ -124,6 +129,11 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "info":
                         await message.channel.send("Server address for Minecraft: `server.alyssaserver.co.uk:25565`")
+                    case "status":
+                        if isRunning("25565"): 
+                            await message.channel.send("The Minecraft server is running")
+                        else:
+                            await message.channel.send("The Minecraft server is not running")
                     case "players":
                         query = minecraft.query()
                         status = minecraft.status()
@@ -162,6 +172,11 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "info":
                         await message.channel.send("Server address for Valheim: `server.alyssaserver.co.uk:2456`")
+                    case "status":
+                        if isRunning("2456"): 
+                            await message.channel.send("The Valheim server is running")
+                        else:
+                            await message.channel.send("The Valheim server is not running")
                     case "players":
                         #TODO
                         await message.channel.send("This command is currently WIP")
@@ -183,6 +198,11 @@ async def on_message(message):
                     case "info":
                         ip = get('https://api.ipify.org').content.decode('utf8')
                         await message.channel.send("Server address for Sons of the Forest: `{}:8766`\nPassword: `{}`".format(ip, os.getenv('SOTF_PASS'))) ## GET IP
+                    case "status":
+                        if isRunning("8766"): 
+                            await message.channel.send("The Sons of the Forest server is running")
+                        else:
+                            await message.channel.send("The Sons of the Forest server is not running")
                     case "start":
                         os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Starting the Sons of the Forest server")
@@ -248,6 +268,10 @@ async def on_message(message):
 
             case _:
                 await message.channel.send(getInvalidServiceMessage())
+
+def isRunning(port):
+    runningServices = os.popen("/bin/lsof -i:{}".format(port)).read()
+    return len(runningServices.splitlines()) > 0
 
 def makeHelpMessage(index):
     
