@@ -150,8 +150,9 @@ async def on_message(message):
                         if not isRunning(servicePorts["Palworld"]):
                             await message.channel.send("The Palworld server is not running - Use `.palworld start` to start it")
                             return
+                        await message.channel.send("Backing up palworld", delete_after=8)
                         os.system("/bin/docker exec palworld-dedicated-server backup create")
-                        await message.channel.send("Backing up palworld")
+                        await message.channel.send("Palworld backup created")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
