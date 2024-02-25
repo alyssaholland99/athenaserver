@@ -138,7 +138,7 @@ async def on_message(message):
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "start":
-                        if not isRunning(servicePorts["Palworld"]):
+                        if isRunning(servicePorts["Palworld"]):
                             await message.channel.send("The Palworld server is already running")
                             return
                         restartStatus = os.system(" /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/docker-compose.yml up -d >> /dev/null 2>&1")
