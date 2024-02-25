@@ -72,7 +72,7 @@ async def on_message(message):
 
         match (msg.split(" ")[0]):
 
-            case 'help':
+            case 'help' | "h":
                 if len(msg.split(" ")) == 2:
                     match (msg.split(" ")[1]):
                         case '1' | '2':
@@ -147,7 +147,7 @@ async def on_message(message):
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
 
-            case "minecraft":
+            case "minecraft" | "mine":
                 minecraft = JavaServer.lookup("192.168.0.120:{}".format(servicePorts["Minecraft"]))
                 match (msg.split(" ")[1]):
                     case "info":
@@ -203,7 +203,7 @@ async def on_message(message):
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
 
-            case "valheim":
+            case "valheim" | "val":
                 match (msg.split(" ")[1]):
                     case "info":
                         await message.channel.send("Server address for Valheim: `server.alyssaserver.co.uk:{}`".format(servicePorts["Valheim"]))
