@@ -66,9 +66,9 @@ async def on_message(message):
         
         msg = message.content[1:].lower()
 
-        if len(msg.split(" ")) == 1 and msg.split(" ")[0] != "help":
-            await message.channel.send(commandError(msg.split(" ")[0]))
-            return
+        #if len(msg.split(" ")) == 1 and msg.split(" ")[0] != "help":
+        #    await message.channel.send(commandError(msg.split(" ")[0]))
+        #    return
 
         match (msg.split(" ")[0]):
 
