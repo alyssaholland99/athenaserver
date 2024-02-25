@@ -100,7 +100,7 @@ async def on_message(message):
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
-            case "palworld":
+            case "palworld" | "pal":
                 match (msg.split(" ")[1]):
                     case "info":
                         await message.channel.send("Server address for Palworld: `server.alyssaserver.co.uk:{}`\nPassword: `{}`".format(servicePorts["Palworld"], os.getenv('PAL_PASS')))
@@ -158,6 +158,9 @@ async def on_message(message):
                         else:
                             await message.channel.send("The Minecraft server is not running")
                     case "players":
+                        if not isRunning(servicePorts["Minecraft"]):
+                            await message.channel.send("The Minecraft server is not running, use `.minecraft start` to start it")
+                            return
                         query = minecraft.query()
                         status = minecraft.status()
                         if status.players.online > 0:
