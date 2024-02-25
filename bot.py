@@ -20,7 +20,7 @@ servicePorts = {
     "Sons of the Forest" : "8766"
 }
 
-palworldCommands = ["info", "status", "players", "start", "restart", "stop\*"]
+palworldCommands = ["info", "status", "players", "backup", "start", "restart", "stop\*"]
 minecraftCommands = ["info", "status", "players", "start", "restart\*", "stop\*"]
 valheimCommands = ["info", "status", "start", "stop\*"]
 sotfCommands = ["info", "status", "start\*", "restart\*", "stop\*"]
