@@ -357,12 +357,12 @@ async def on_message(message):
                             if len(msg.split(" ")) == 4:
                                 try:
                                     channel = client.get_channel(int(msg.split(" ")[2]))
-                                    messageToDelete = channel.fetch_message(int(msg.split(" ")[3]))
+                                    messageToDelete = await channel.fetch_message(int(msg.split(" ")[3]))
                                     await messageToDelete.delete()
                                 except Exception as e:
-                                    print (e)
-                                    await message.channel.send(msg.split(" ")[2])
-                                    #await message.channel.send("Incorrect syntax - Usage `bot delete [channel_id] [message_id]")
+                                    #print (e)
+                                    #await message.channel.send(msg.split(" ")[2])
+                                    await message.channel.send("Incorrect syntax - Usage `bot delete [channel_id] [message_id]")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
