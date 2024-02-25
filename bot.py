@@ -101,6 +101,9 @@ async def on_message(message):
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
             case "palworld" | "pal":
+                if len(msg.split(" ")) == 1:
+                    message.channel.send(commandError("palworld"))
+                    return
                 match (msg.split(" ")[1]):
                     case "info":
                         await message.channel.send("Server address for Palworld: `server.alyssaserver.co.uk:{}`\nPassword: `{}`".format(servicePorts["Palworld"], os.getenv('PAL_PASS')))
@@ -149,6 +152,9 @@ async def on_message(message):
 
             case "minecraft" | "mine":
                 minecraft = JavaServer.lookup("192.168.0.120:{}".format(servicePorts["Minecraft"]))
+                if len(msg.split(" ")) == 1:
+                    message.channel.send(commandError("minecraft"))
+                    return
                 match (msg.split(" ")[1]):
                     case "info":
                         await message.channel.send("Server address for Minecraft: `server.alyssaserver.co.uk:{}`".format(servicePorts["Minecraft"]))
@@ -204,6 +210,9 @@ async def on_message(message):
                 return
 
             case "valheim" | "val":
+                if len(msg.split(" ")) == 1:
+                    message.channel.send(commandError("valheim"))
+                    return
                 match (msg.split(" ")[1]):
                     case "info":
                         await message.channel.send("Server address for Valheim: `server.alyssaserver.co.uk:{}`".format(servicePorts["Valheim"]))
@@ -244,6 +253,9 @@ async def on_message(message):
                 return
 
             case "forest" | "sotf":
+                if len(msg.split(" ")) == 1:
+                    message.channel.send(commandError("forest"))
+                    return
                 match (msg.split(" ")[1]):
                     case "info":
                         ip = get('https://api.ipify.org').content.decode('utf8')
