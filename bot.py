@@ -216,6 +216,9 @@ async def on_message(message):
                             await message.channel.send("The Sons of the Forest server is not running")
                     case "start":
                         if isTrusted(message.author):
+                            if isRunning(servicePorts["Sons of the Forest"]): 
+                                await message.channel.send("The Sons of the Forest server is already running")
+                                return
                             if isRunning(servicePorts["Palworld"]): 
                                 await message.channel.send("Please stop the Palworld server before starting this server, once Sons of the Forest is running you can start Palworld again\nThis is to prevent world corruption in the case of a server crash")
                                 return
@@ -226,12 +229,18 @@ async def on_message(message):
                             await message.channel.send("Due to server crashing issues with SotF only admins can turn on the server\n" + getInsufficentPermissionMessage())
                     case "stop":
                         if isTrusted(message.author):
+                            if not isRunning(servicePorts["Sons of the Forest"]): 
+                                await message.channel.send("The Sons of the Forest server is not running")
+                                return
                             restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the Sons of the Forest server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "restart":
                         if isTrusted(message.author):
+                            if not isRunning(servicePorts["Sons of the Forest"]): 
+                                await message.channel.send("The Sons of the Forest server is not running, use `.sotf start` to start the server")
+                                return
                             if isRunning(servicePorts["Palworld"]): 
                                 await message.channel.send("Please stop the Palworld server before restarting this server, once SofF is running you can start Palworld")
                                 return
