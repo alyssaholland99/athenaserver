@@ -361,7 +361,8 @@ async def on_message(message):
                                     await messageToDelete.delete()
                                 except Exception as e:
                                     print (e)
-                                    await message.channel.send("Incorrect syntax - Usage `bot delete [channel_id] [message_id]")
+                                    await message.channel.send(e)
+                                    #await message.channel.send("Incorrect syntax - Usage `bot delete [channel_id] [message_id]")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
