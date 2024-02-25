@@ -338,6 +338,8 @@ async def on_message(message):
                         await message.channel.send("Use the following link to add this bot yo your server:\nhttps://discord.com/api/oauth2/authorize?client_id=1207456482170249287&permissions=3072&scope=bot")
                     case "info":
                         await message.channel.send("This bot is being used in {} servers".format(str(len(client.guilds))))
+                    case "code" | "git":
+                        await message.channel.send("Source code: https://github.com/alyssaholland99/athenaserver")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
