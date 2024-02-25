@@ -102,7 +102,7 @@ async def on_message(message):
 
             case "palworld" | "pal":
                 if len(msg.split(" ")) == 1:
-                    message.channel.send(commandError("palworld"))
+                    await message.channel.send(commandError("palworld"))
                     return
                 match (msg.split(" ")[1]):
                     case "info":
@@ -153,7 +153,7 @@ async def on_message(message):
             case "minecraft" | "mine":
                 minecraft = JavaServer.lookup("192.168.0.120:{}".format(servicePorts["Minecraft"]))
                 if len(msg.split(" ")) == 1:
-                    message.channel.send(commandError("minecraft"))
+                    await message.channel.send(commandError("minecraft"))
                     return
                 match (msg.split(" ")[1]):
                     case "info":
@@ -211,7 +211,7 @@ async def on_message(message):
 
             case "valheim" | "val":
                 if len(msg.split(" ")) == 1:
-                    message.channel.send(commandError("valheim"))
+                    await message.channel.send(commandError("valheim"))
                     return
                 match (msg.split(" ")[1]):
                     case "info":
@@ -254,7 +254,7 @@ async def on_message(message):
 
             case "forest" | "sotf":
                 if len(msg.split(" ")) == 1:
-                    message.channel.send(commandError("forest"))
+                    await message.channel.send(commandError("forest"))
                     return
                 match (msg.split(" ")[1]):
                     case "info":
