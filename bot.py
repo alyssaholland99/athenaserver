@@ -110,6 +110,9 @@ async def on_message(message):
                         else:
                             await message.channel.send("The Palworld server is not running")
                     case "players":
+                        if not isRunning(servicePorts["Palworld"]):
+                            await message.channel.send("The Palworld server is not running - Use `.palworld start` to start it")
+                            return
                         players = os.popen("/bin/docker exec palworld-dedicated-server rcon showPlayers").read()
                         players = players.splitlines()
                         playerSend = "Players currently online:"
@@ -120,15 +123,24 @@ async def on_message(message):
                             playerSend = "There are currently no players online"
                         await message.channel.send(playerSend)
                     case "restart":
+                        if not isRunning(servicePorts["Palworld"]):
+                            await message.channel.send("The Palworld server is not running - Use `.palworld start` to start it")
+                            return
                         restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/update_restart.sh").read()
                         await message.channel.send(restartStatus)
                     case "stop":
                         if isTrusted(message.author):
+                            if not isRunning(servicePorts["Palworld"]):
+                                await message.channel.send("The Palworld server is already stopped")
+                                return
                             restartStatus = os.popen("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/stop.sh").read()
                             await message.channel.send(restartStatus)
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "start":
+                        if not isRunning(servicePorts["Palworld"]):
+                            await message.channel.send("The Palworld server is already running")
+                            return
                         restartStatus = os.system(" /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Palworld server starting")
                     case _:
@@ -153,10 +165,16 @@ async def on_message(message):
                         else:
                             await message.channel.send("There are currently no players online")
                     case "start":
+                        if isRunning(servicePorts["Minecraft"]):
+                            await message.channel.send("The Minecraft server is already running")
+                            return
                         os.system("/bin/systemctl start minecraft")
                         await message.channel.send("Starting Minecraft server")
                     case "stop":
                         if isTrusted(message.author):
+                            if not isRunning(servicePorts["Minecraft"]):
+                                await message.channel.send("The Minecraft server is already stopped")
+                                return
                             status = minecraft.status()
                             if status.players.online == 0:
                                 restartStatus = os.system("/bin/systemctl stop minecraft")
@@ -167,6 +185,9 @@ async def on_message(message):
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "restart":
                         if isTrusted(message.author):
+                            if not isRunning(servicePorts["Minecraft"]):
+                                await message.channel.send("The Minecraft server is not running, use `.minecraft start` to start it")
+                                return
                             status = minecraft.status()
                             if status.players.online == 0:
                                 restartStatus = os.system("/bin/systemctl restart minecraft")
@@ -192,12 +213,27 @@ async def on_message(message):
                         #TODO
                         await message.channel.send("This command is currently WIP")
                     case "start":
+                        if isRunning(servicePorts["Valheim"]):
+                            await message.channel.send("The Valheim server is already running")
+                            return
                         os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Starting the Valheim server")
                     case "stop":
                         if isTrusted(message.author):
+                            if not isRunning(servicePorts["Valheim"]):
+                                await message.channel.send("The Valheim server is already stopped")
+                                return
                             restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the Valheim server")
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
+                    case "restart":
+                        if isTrusted(message.author):
+                            if not isRunning(servicePorts["Valheim"]):
+                                await message.channel.send("The Valheim server is not running, use `.valheim start` to start it")
+                                return
+                            restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
+                            await message.channel.send("Restarting the Valheim server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case _:
@@ -230,7 +266,7 @@ async def on_message(message):
                     case "stop":
                         if isTrusted(message.author):
                             if not isRunning(servicePorts["Sons of the Forest"]): 
-                                await message.channel.send("The Sons of the Forest server is not running")
+                                await message.channel.send("The Sons of the Forest server is already stopped")
                                 return
                             restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the Sons of the Forest server")
