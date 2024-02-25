@@ -356,8 +356,7 @@ async def on_message(message):
                         if isTrusted(message.author):
                             if len(msg.split(" ")) == 4:
                                 try:
-                                    channel = client.get_channel(int(msg.split(" ")[2]))
-                                    channel = 1207789219540508782
+                                    channel = client.get_channel(1207789219540508782)
                                     messageToDelete = await channel.fetch_message(int(msg.split(" ")[3]))
                                     await messageToDelete.delete()
                                 except Exception as e:
