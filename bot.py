@@ -382,6 +382,7 @@ async def on_message(message):
             case "delete":
                 ch = int(msg.split(" ")[1])
                 ch = 920039832720388126
+                ch = client.get_channel(ch)
                 msgid = msg.split(" ")[2]
                 m = await ch.fetch_message(int(msgid))
                 await m.delete()
