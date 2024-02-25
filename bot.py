@@ -146,6 +146,12 @@ async def on_message(message):
                             return
                         restartStatus = os.system(" /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Palworld server starting")
+                    case "backup":
+                        if not isRunning(servicePorts["Palworld"]):
+                            await message.channel.send("The Palworld server is not running - Use `.palworld start` to start it")
+                            return
+                        os.system("/bin/docker exec -user steam palworld-dedicated-server backup")
+                        await message.channel.send("Backing up palworld")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                 return
