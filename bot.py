@@ -380,9 +380,10 @@ async def on_message(message):
                         await message.channel.send(commandError(msg.split(" ")[0]))
                         
             case "delete":
-                ch = msg.split(" ")[1]
+                ch = int(msg.split(" ")[1])
+                ch = 920039832720388126
                 msgid = msg.split(" ")[2]
-                m = await ch.fetch_message(msgid)
+                m = await ch.fetch_message(int(msgid))
                 await m.delete()
 
             case _:
