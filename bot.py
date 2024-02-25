@@ -352,6 +352,15 @@ async def on_message(message):
                         await message.channel.send("This bot is being used in {} servers".format(str(len(client.guilds))))
                     case "code" | "git":
                         await message.channel.send("Source code: https://github.com/alyssaholland99/athenaserver")
+                    case "delete": 
+                        if isTrusted(message.author):
+                            if len(msg.split(" ")) == 4:
+                                try:
+                                    channel = client.get_channel(int(msg.split(" ")[2]))
+                                    messageToDelete = channel.fetch_message(int(msg.split(" ")[3]))
+                                    await messageToDelete.delete()
+                                except:
+                                    await message.channel.send("Incorrect syntax - Usage `bot delete [channel_id] [message_id]")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
