@@ -379,7 +379,11 @@ async def on_message(message):
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
                         
-                             
+            case "delete":
+                ch = msg.split(" ")[1]
+                msgid = msg.split(" ")[2]
+                m = await ch.fetch_message(msgid)
+                await m.delete()
 
             case _:
                 await message.channel.send(getInvalidServiceMessage())
