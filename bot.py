@@ -274,7 +274,7 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "info":
                         ip = get('https://api.ipify.org').content.decode('utf8')
-                        await message.channel.send("Server address for Sons of the Forest: `{}:{}`\nPassword: `{}`".format(ip, servicePorts["Sons of the Forest"], os.getenv('SOTF_PASS'))) ## GET IP
+                        await message.channel.send("Server name: Aly's SotF server\nServer address: `{}:{}`\nPassword: `{}`".format(ip, servicePorts["Sons of the Forest"], os.getenv('SOTF_PASS'))) ## GET IP
                     case "status":
                         if isRunning(servicePorts["Sons of the Forest"]): 
                             await message.channel.send("The Sons of the Forest server is running")
