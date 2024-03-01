@@ -27,7 +27,7 @@ async def on_message(message):
         return
     msg = message.content[1:].lower()
     if msg == "ping":
-        message.channel.send("pong")
+        await message.channel.send("pong")
 
 @tasks.loop(minutes=1)
 async def timer(channel):
