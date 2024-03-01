@@ -67,7 +67,7 @@ async def on_message(message):
         
         msg = message.content[1:].lower()
 
-        logCommand(message)
+        await logCommand(message)
 
         match (msg.split(" ")[0]):
 
