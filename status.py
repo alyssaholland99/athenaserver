@@ -21,7 +21,7 @@ class MyClient(commands.Bot):
         channel = bot.get_channel(1212969964634374186)  # replace with channel ID that you want to send to
         await self.timer.start(channel)
 
-    @tasks.loop(seconds=1)
+    @tasks.loop(seconds=60)
     async def timer(self, channel):
         match getCurrentTime():
             case [12, 0] | [4, 36]:
