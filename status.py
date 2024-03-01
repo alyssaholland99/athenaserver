@@ -19,6 +19,16 @@ time = datetime.datetime.now
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
 
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    if not message.content.startswith('.'):
+        return
+    msg = message.content[1:].lower()
+    if msg == "ping":
+        message.channel.send("pong")
+
 @tasks.loop(minutes=1)
 async def timer(channel):
 
