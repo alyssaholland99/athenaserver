@@ -52,6 +52,8 @@ class MyClient(commands.Bot):
                     checkDrive = os.popen('smartctl -a {} | grep "SMART overall-health self-assessment test result:"'.format(drive)).read()
                     if not "PASSED" in checkDrive:
                         await urgent.send("FAILURE: {} - {}".format(drive, checkDrive))
+                    else:
+                        await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
                 self.msg_sent = True
             case _:
                 self.msg_sent = False
