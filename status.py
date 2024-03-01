@@ -26,7 +26,7 @@ class MyClient(commands.Bot):
     @tasks.loop(seconds=1)
     async def timer(self, channel, urgent):
         match getCurrentTime():
-            case [12, 0] | [4, 55]: #Midday
+            case [12, 0]: #Midday
                 if self.msg_sent:
                     return
                 checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
@@ -40,6 +40,23 @@ class MyClient(commands.Bot):
                         await urgent.send("FAILURE: Backup date and current date do not match; server may not have backed up last night")
                 else:
                     await urgent.send("FAILURE: Unable to get status for offsite backup")
+                self.msg_sent = True
+            case [10, 0] | [5, 12]: #10am
+                if self.msg_sent:
+                    return
+                driveList = [
+                    "/dev/sda",
+                    "/dev/sdb",
+                    "/dev/sdc",
+                    "/dev/sdd",
+                    "/dev/sde",
+                    "/dev/sdf",
+                    "/dev/sdg",
+                    "/dev/sdh"
+                ]
+                for drive in driveList:
+                    checkDrive = os.popen('smartctl -a {} | grep "SMART overall-health self-assessment test result:"'.format(drive)).read()
+                    await channel.send(drive + checkDrive)
                 self.msg_sent = True
             case _:
                 self.msg_sent = False
