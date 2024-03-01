@@ -59,7 +59,7 @@ class MyClient(commands.Bot):
                 self.msg_sent = False
 
 
-bot = MyClient(command_prefix='.', intents=discord.Intents().all())
+bot = MyClient(command_prefix='.!.!.!', intents=discord.Intents().all())
 
 def getCurrentTime():
     return [time().hour, time().minute]
