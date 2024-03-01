@@ -10,39 +10,32 @@ import datetime
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-intents = discord.Intents.all()
-client = discord.Client(intents=intents)
-
 time = datetime.datetime.now
 
-@client.event
-async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+class MyClient(commands.Bot):
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if not message.content.startswith('.'):
-        return
-    msg = message.content[1:].lower()
-    if msg == "ping":
-        await message.channel.send("pong")
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.msg_sent = False
 
-@tasks.loop(minutes=1)
-async def timer(channel):
+    async def on_ready(self):
+        channel = bot.get_channel(123456789)  # replace with channel ID that you want to send to
+        await self.timer.start(channel)
 
-    channel = client.get_channel(1212969964634374186)
-    currentTime = getCurrentTime()
+    @tasks.loop(seconds=1)
+    async def timer(self, channel):
+        if time().hour == 7 and time().minute == 0:
+            if not self.msg_sent:
+                await channel.send('Its 7 am')
+                self.msg_sent = True
+        else:
+            self.msg_sent = False
 
-    match currentTime:
-        case [12, 0]:
-            await channel.send('Test12')
-        case _:
-            await channel.send('Test')
+
+bot = MyClient(command_prefix='.', intents=discord.Intents().all())
 
 
 def getCurrentTime():
     return [time().hour, time().minute]
 
-client.run(TOKEN)
+bot.run(TOKEN)
