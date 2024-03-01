@@ -45,11 +45,11 @@ class MyClient(commands.Bot):
                 if self.msg_sent:
                     return
                 driveList = []
-                getDriveList = os.popen('/bin/smartctl --scan').read()
+                getDriveList = os.popen('smartctl --scan').read()
                 for drive in getDriveList.splitlines():
                     driveList.append(drive.split(" ")[0])
                 for drive in driveList:
-                    checkDrive = os.popen('/bin/smartctl -a {} | grep "SMART overall-health self-assessment test result:"'.format(drive)).read()
+                    checkDrive = os.popen('smartctl -a {} | grep "SMART overall-health self-assessment test result:"'.format(drive)).read()
                     if not "PASSED" in checkDrive:
                         await urgent.send("FAILURE: {} - {}".format(drive, checkDrive))
                     else:
