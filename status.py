@@ -25,14 +25,18 @@ class MyClient(commands.Bot):
     @tasks.loop(seconds=1)
     async def timer(self, channel):
         match getCurrentTime():
-            case [12, 0] | [4, 46]:
+            case [12, 0] | [4, 50]:
                 if self.msg_sent:
                     return
                 checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
                 checkBackup = checkBackup.splitlines()
                 if len(checkBackup) > 1:
                     lastBackup = checkBackup[5].split(" ")[1]
-                    await channel.send(lastBackup + str(date))
+                    currentDate = str(date).split(" ")[0]
+                    if lastBackup == currentDate:
+                        await channel.send("Offsite server was backed up to successfully overnight")
+                    else:
+                        await channel.send("Backup date and current date do not match; server may not have backed up last night")
                 else:
                     await channel.send("FAILURE: Unable to get status for offsite backup")
                 self.msg_sent = True
