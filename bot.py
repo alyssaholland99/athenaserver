@@ -314,7 +314,7 @@ async def on_message(message):
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "backup":
-                        os.system("tar -zcvf /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/backups/\"$(date '+%Y-%m-%d_%H:%M:%S')_sotf.tar.gz\" /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/game/userdata/Saves")
+                        os.system("tar -zcvf /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/backups/\"$(date '+%Y-%m-%d_%H:%M:%S')_sotf.tar.gz\" /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/game/userdata/Saves >> /dev/null 2>&1")
                         await message.channel.send("Backing up the Sons of the Forest server")
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
