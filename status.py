@@ -10,6 +10,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 time = datetime.datetime.now
+date = datetime.today()
 
 class MyClient(commands.Bot):
 
@@ -24,14 +25,14 @@ class MyClient(commands.Bot):
     @tasks.loop(seconds=1)
     async def timer(self, channel):
         match getCurrentTime():
-            case [12, 0] | [4, 44]:
+            case [12, 0] | [4, 46]:
                 if self.msg_sent:
                     return
                 checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
                 checkBackup = checkBackup.splitlines()
                 if len(checkBackup) > 1:
                     lastBackup = checkBackup[5].split(" ")[1]
-                    await channel.send(lastBackup)
+                    await channel.send(lastBackup + date)
                 else:
                     await channel.send("FAILURE: Unable to get status for offsite backup")
                 self.msg_sent = True
