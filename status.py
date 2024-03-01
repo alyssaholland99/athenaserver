@@ -19,7 +19,7 @@ class MyClient(commands.Bot):
         self.msg_sent = False
 
     async def on_ready(self):
-        channel = bot.get_channel(123456789)  # replace with channel ID that you want to send to
+        channel = bot.get_channel(1212969964634374186)  # replace with channel ID that you want to send to
         await self.timer.start(channel)
 
     @tasks.loop(seconds=1)
@@ -29,6 +29,7 @@ class MyClient(commands.Bot):
                 await channel.send('Its 7 am')
                 self.msg_sent = True
         else:
+            await channel.send('Test')
             self.msg_sent = False
 
 
