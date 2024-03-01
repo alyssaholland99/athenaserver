@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from mcstatus import JavaServer
 from requests import get
 import time
+from datetime import date
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -66,9 +67,7 @@ async def on_message(message):
         
         msg = message.content[1:].lower()
 
-        #if len(msg.split(" ")) == 1 and msg.split(" ")[0] != "help":
-        #    await message.channel.send(commandError(msg.split(" ")[0]))
-        #    return
+        logCommand(message)
 
         match (msg.split(" ")[0]):
 
@@ -513,5 +512,10 @@ def getInvalidServiceMessage():
         serviceList += "- {}\n".format(service)
 
     return "This is not a valid service, please use `.help [service]` to see valid commands for that service (you can also use `.help` to view all)\nServices:\n{}".format(serviceList)
+
+async def logCommand(msg):
+    dateAndTime = date.today()
+    ch = client.get_channel(1213120151361429594)
+    await ch.send("{} - User: {} - Command: {}".format(dateAndTime, msg.author, msg.content))
 
 client.run(TOKEN)
