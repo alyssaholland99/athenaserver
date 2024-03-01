@@ -35,7 +35,7 @@ class MyClient(commands.Bot):
                     lastBackup = checkBackup[5].split(" ")[1]
                     currentDate = str(date).split(" ")[0]
                     if lastBackup == currentDate:
-                        await urgent.send("SUCCESS: Offsite server was backed up to successfully overnight")
+                        await channel.send("SUCCESS: Offsite server was backed up to successfully overnight")
                     else:
                         await urgent.send("FAILURE: Backup date and current date do not match; server may not have backed up last night")
                 else:
