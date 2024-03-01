@@ -24,9 +24,14 @@ class MyClient(commands.Bot):
     @tasks.loop(seconds=1)
     async def timer(self, channel):
         match getCurrentTime():
-            case [12, 0] | [4, 30]:
+            case [12, 0] | [4, 34]:
+                if not self.msg_sent:
+                    return
                 isBackedUp = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
                 await channel.send(isBackedUp)
+                self.msg_sent = True
+            case _:
+                self.msg_sent = False
 
 
 bot = MyClient(command_prefix='.', intents=discord.Intents().all())
