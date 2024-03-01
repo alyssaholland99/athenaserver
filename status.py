@@ -10,7 +10,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 time = datetime.datetime.now
-date = datetime.today()
+date = datetime.datetime.today()
 
 class MyClient(commands.Bot):
 
