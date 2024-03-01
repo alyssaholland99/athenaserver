@@ -41,22 +41,19 @@ class MyClient(commands.Bot):
                 else:
                     await urgent.send("FAILURE: Unable to get status for offsite backup")
                 self.msg_sent = True
-            case [10, 0] | [5, 12]: #10am
+            case [10, 0] | [5, 17]: #10am
                 if self.msg_sent:
                     return
-                driveList = [
-                    "/dev/sda",
-                    "/dev/sdb",
-                    "/dev/sdc",
-                    "/dev/sdd",
-                    "/dev/sde",
-                    "/dev/sdf",
-                    "/dev/sdg",
-                    "/dev/sdh"
-                ]
+                driveList = []
+                getDriveList = os.popen('/bin/smartctl --scan').read()
+                for drive in getDriveList.splitlines():
+                    driveList.append(drive.split(" ")[0])
                 for drive in driveList:
-                    checkDrive = os.popen('smartctl -a {} | grep "SMART overall-health self-assessment test result:"'.format(drive)).read()
-                    await channel.send(drive + checkDrive)
+                    checkDrive = os.popen('/bin/smartctl -a {} | grep "SMART overall-health self-assessment test result:"'.format(drive)).read()
+                    if not "PASSED" in checkDrive:
+                        await urgent.send("FAILURE: {} - {}".format(drive, checkDrive))
+                    else:
+                        await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
                 self.msg_sent = True
             case _:
                 self.msg_sent = False
