@@ -32,7 +32,7 @@ class MyClient(commands.Bot):
                 checkBackup = checkBackup.splitlines()
                 if len(checkBackup) > 1:
                     lastBackup = checkBackup[5].split(" ")[1]
-                    await channel.send(lastBackup + date)
+                    await channel.send(lastBackup + str(date))
                 else:
                     await channel.send("FAILURE: Unable to get status for offsite backup")
                 self.msg_sent = True
