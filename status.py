@@ -21,7 +21,7 @@ class MyClient(commands.Bot):
     async def on_ready(self):
         channel = bot.get_channel(1212969964634374186)
         urgent = bot.get_channel(1212985612877955122)
-        await self.timer.start(channel)
+        await self.timer.start(channel, urgent)
 
     @tasks.loop(seconds=1)
     async def timer(self, channel, urgent):
