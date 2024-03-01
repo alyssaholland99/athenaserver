@@ -297,6 +297,7 @@ async def on_message(message):
                             if not isRunning(servicePorts["Sons of the Forest"]): 
                                 await message.channel.send("The Sons of the Forest server is already stopped")
                                 return
+                            await message.channel.send(backupSotF())
                             restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the Sons of the Forest server")
                         else:
@@ -309,13 +310,13 @@ async def on_message(message):
                             if isRunning(servicePorts["Palworld"]): 
                                 await message.channel.send("Please stop the Palworld server before restarting this server, once SofF is running you can start Palworld")
                                 return
+                            await message.channel.send(backupSotF())
                             restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
                             await message.channel.send("Restarting the Sons of the Forest server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "backup":
-                        os.system("tar -zcvf /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/backups/\"$(date '+%Y-%m-%d_%H:%M:%S')_sotf.tar.gz\" /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/game/userdata/Saves >> /dev/null 2>&1")
-                        await message.channel.send("Backing up the Sons of the Forest server")
+                        await message.channel.send(backupSotF())
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
@@ -411,6 +412,10 @@ async def on_message(message):
 
             case _:
                 await message.channel.send(getInvalidServiceMessage())
+
+def backupSotF():
+    os.system("tar -zcvf /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/backups/\"$(date '+%Y-%m-%d_%H:%M:%S')_sotf.tar.gz\" /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/game/userdata/Saves >> /dev/null 2>&1")
+    return "Backing up the Sons of the Forest server"
 
 def ensureSotFServerStarts():
     running = False
