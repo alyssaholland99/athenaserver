@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from mcstatus import JavaServer
 from requests import get
 import time
-import datetime
+from datetime import datetime
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
