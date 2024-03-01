@@ -1,6 +1,5 @@
 # bot.py
 import os
-
 import discord
 from dotenv import load_dotenv
 from discord.ext import commands, tasks
@@ -24,17 +23,13 @@ class MyClient(commands.Bot):
 
     @tasks.loop(seconds=1)
     async def timer(self, channel):
-        if time().hour == 7 and time().minute == 0:
-            if not self.msg_sent:
-                await channel.send('Its 7 am')
-                self.msg_sent = True
-        else:
-            await channel.send('Test')
-            self.msg_sent = False
+        match getCurrentTime():
+            case [12, 0] | [4, 30]:
+                isBackedUp = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
+                await channel.send(isBackedUp)
 
 
 bot = MyClient(command_prefix='.', intents=discord.Intents().all())
-
 
 def getCurrentTime():
     return [time().hour, time().minute]
