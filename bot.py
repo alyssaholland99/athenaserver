@@ -284,9 +284,15 @@ async def on_message(message):
                             if isRunning(servicePorts["Sons of the Forest"]): 
                                 await message.channel.send("The Sons of the Forest server is already running")
                                 return
-                            if isRunning(servicePorts["Palworld"]) and ((len(msg.split(" ")) < 3) || (msg.split(" ")[2] != "force")): 
-                                await message.channel.send("Please stop the Palworld server before starting this server, once Sons of the Forest is running you can start Palworld again\nThis is to prevent world corruption in the case of a server crash\nYou can use `.sotf start force` to skip this check")
-                                return
+                            if isRunning(servicePorts["Palworld"]):
+                                if len(msg.split(" ")) == 3 and msg.split(" ")[2] == "force":
+                                    await message.channel.send("The palworld server is currently running, forcing start anyway - Making backup of palworld as a precaution")
+                                    await message.channel.send("Backing up palworld", delete_after=5)
+                                    os.system("/bin/docker exec palworld-dedicated-server backup create")
+                                    await message.channel.send("Palworld backup created")
+                                else:
+                                    await message.channel.send("Please stop the Palworld server before starting this server, once Sons of the Forest is running you can start Palworld again\nThis is to prevent world corruption in the case of a server crash\nYou can use `.sotf start force` to skip this check")
+                                    return
                             os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
                             await message.channel.send("Starting the Sons of the Forest server\nPlease note: It may take a while (3-6 minutes) for the server to start correctly, another message will confirm when the server is running")
                             await message.channel.send(ensureSotFServerStarts())
