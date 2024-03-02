@@ -10,7 +10,6 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 time = datetime.datetime.now
-date = datetime.datetime.today()
 
 class MyClient(commands.Bot):
 
@@ -29,6 +28,7 @@ class MyClient(commands.Bot):
             case [12, 0]: #Midday
                 if self.msg_sent:
                     return
+                date = datetime.datetime.today()
                 checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
                 checkBackup = checkBackup.splitlines()
                 if len(checkBackup) > 1:
