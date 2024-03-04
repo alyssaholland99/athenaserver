@@ -56,6 +56,8 @@ class MyClient(commands.Bot):
                         await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
                 self.msg_sent = True
             case [4, 15]:
+                if self.msg_sent:
+                    return
                 day = datetime.datetime.today().weekday()
                 if day == 0: # If Monday
                     ping = os.popen("ping -c 1 192.168.0.100").read()
