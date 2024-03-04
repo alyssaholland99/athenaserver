@@ -55,6 +55,13 @@ class MyClient(commands.Bot):
                     else:
                         await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
                 self.msg_sent = True
+            case [4, 15]:
+                if datetime.datetime.today().weekday() == 0: # If Monday
+                    ping = os.popen("ping -c 1 192.168.0.100").read()
+                    if "0% packet loss" in ping:
+                        await channel.send("SUCCESS: Cold storage is active")
+                    else:
+                        await channel.send("FAILURE: Cold storage was not able to be pinged")
             case _:
                 self.msg_sent = False
 
