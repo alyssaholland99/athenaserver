@@ -56,12 +56,16 @@ class MyClient(commands.Bot):
                         await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
                 self.msg_sent = True
             case [4, 15]:
-                if datetime.datetime.today().weekday() == 0: # If Monday
+                day = datetime.datetime.today().weekday()
+                if day == 0: # If Monday
                     ping = os.popen("ping -c 1 192.168.0.100").read()
                     if "0% packet loss" in ping:
                         await channel.send("SUCCESS: Cold storage is active")
                     else:
-                        await channel.send("FAILURE: Cold storage was not able to be pinged")
+                        await urgent.send("FAILURE: Cold storage was not able to be pinged")
+                if day == 1: # If Tuesday
+                    if "0% packet loss" in ping:
+                        await urgent.send("FAILURE: Cold storage is still active when it shouldn't be; could be a long backup or the backup may have failed")
             case _:
                 self.msg_sent = False
 
