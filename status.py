@@ -55,7 +55,7 @@ class MyClient(commands.Bot):
                     else:
                         await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
                 self.msg_sent = True
-            case [4, 15]:
+            case [4, 15] | [19, 32]:
                 if self.msg_sent:
                     return
                 day = datetime.datetime.today().weekday()
