@@ -67,6 +67,7 @@ class MyClient(commands.Bot):
                         await urgent.send("FAILURE: Cold storage was not able to be pinged")
                 if day == 1: # If Tuesday
                     if "0% packet loss" in ping:
+                        ping = os.popen("ping -c 1 192.168.0.100").read()
                         await urgent.send("FAILURE: Cold storage is still active when it shouldn't be; could be a long backup or the backup may have failed")
             case _:
                 self.msg_sent = False
