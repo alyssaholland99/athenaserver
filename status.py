@@ -24,9 +24,8 @@ class MyClient(commands.Bot):
 
     @tasks.loop(seconds=30)
     async def timer(self, channel, urgent):
-        print(getCurrentTime())
         match getCurrentTime():
-            case [12, 0]: #Midday
+            case [12, 0] | [21, 1]: #Midday
                 if self.msg_sent:
                     return
                 date = datetime.datetime.today()
