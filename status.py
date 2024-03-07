@@ -25,7 +25,7 @@ class MyClient(commands.Bot):
     @tasks.loop(seconds=30)
     async def timer(self, channel, urgent):
         match getCurrentTime():
-            case [12, 0] | [21, 1]: #Midday
+            case [12, 0]: #Midday
                 if self.msg_sent:
                     return
                 date = datetime.datetime.today()
@@ -55,7 +55,7 @@ class MyClient(commands.Bot):
                     else:
                         await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
                 self.msg_sent = True
-            case [4, 15] | [20, 57]:
+            case [4, 15]:
                 if self.msg_sent:
                     return
                 day = datetime.datetime.today().weekday()
