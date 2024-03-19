@@ -58,11 +58,14 @@ class MyClient(commands.Bot):
                 if self.msg_sent:
                     return
                 day = datetime.datetime.today().weekday()
-                if day != 1:
-                    return
                 self.msg_sent = True
                 checkRAID = os.popen("/sbin/mdadm -D /dev/md1").read()
-                await channel.send("RAID Status: \n{}".format(checkRAID))
+                if "State : clean" in checkRAID:
+                    if day != 0:
+                        return
+                    await channel.send("RAID Status: \n{}".format(checkRAID))
+                else:
+                    await urgent.send("RAID Status: \n{}".format(checkRAID))
             case [12, 0]: #Midday
                 if self.msg_sent:
                     return
