@@ -25,6 +25,44 @@ class MyClient(commands.Bot):
     @tasks.loop(seconds=30)
     async def timer(self, channel, urgent):
         match getCurrentTime():
+            case [4, 15]:
+                if self.msg_sent:
+                    return
+                self.msg_sent = True
+                day = datetime.datetime.today().weekday()
+                if day == 0: # If Monday
+                    ping = os.popen("ping -c 1 192.168.0.100").read()
+                    if "0% packet loss" in ping:
+                        await channel.send("SUCCESS: Cold storage is active")
+                    else:
+                        await urgent.send("FAILURE: Cold storage was not able to be pinged")
+                if day == 1: # If Tuesday
+                    ping = os.popen("ping -c 1 192.168.0.100").read()
+                    if "0% packet loss" in ping:
+                        await urgent.send("FAILURE: Cold storage is still active when it shouldn't be; could be a long backup or the backup may have failed")
+            case [10, 0]: #10am
+                if self.msg_sent:
+                    return
+                driveList = []
+                getDriveList = os.popen('smartctl --scan').read()
+                for drive in getDriveList.splitlines():
+                    driveList.append(drive.split(" ")[0])
+                for drive in driveList:
+                    checkDrive = os.popen('smartctl -a {} | grep "SMART overall-health self-assessment test result:"'.format(drive)).read()
+                    if not "PASSED" in checkDrive:
+                        await urgent.send("FAILURE: {} - {}".format(drive, checkDrive))
+                    else:
+                        await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
+                self.msg_sent = True
+            case [11, 0]: #11am
+                if self.msg_sent:
+                    return
+                day = datetime.datetime.today().weekday()
+                if day != 1:
+                    return
+                self.msg_sent = True
+                checkRAID = os.popen("/sbin/mdadm -D /dev/md1").read()
+                await channel.send("RAID Status: \n{}".format(checkRAID))
             case [12, 0]: #Midday
                 if self.msg_sent:
                     return
@@ -41,34 +79,6 @@ class MyClient(commands.Bot):
                 else:
                     await urgent.send("FAILURE: Unable to get status for offsite backup")
                 self.msg_sent = True
-            case [10, 0]: #10am
-                if self.msg_sent:
-                    return
-                driveList = []
-                getDriveList = os.popen('smartctl --scan').read()
-                for drive in getDriveList.splitlines():
-                    driveList.append(drive.split(" ")[0])
-                for drive in driveList:
-                    checkDrive = os.popen('smartctl -a {} | grep "SMART overall-health self-assessment test result:"'.format(drive)).read()
-                    if not "PASSED" in checkDrive:
-                        await urgent.send("FAILURE: {} - {}".format(drive, checkDrive))
-                    else:
-                        await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
-                self.msg_sent = True
-            case [4, 15]:
-                if self.msg_sent:
-                    return
-                day = datetime.datetime.today().weekday()
-                if day == 0: # If Monday
-                    ping = os.popen("ping -c 1 192.168.0.100").read()
-                    if "0% packet loss" in ping:
-                        await channel.send("SUCCESS: Cold storage is active")
-                    else:
-                        await urgent.send("FAILURE: Cold storage was not able to be pinged")
-                if day == 1: # If Tuesday
-                    ping = os.popen("ping -c 1 192.168.0.100").read()
-                    if "0% packet loss" in ping:
-                        await urgent.send("FAILURE: Cold storage is still active when it shouldn't be; could be a long backup or the backup may have failed")
             case _:
                 self.msg_sent = False
 
