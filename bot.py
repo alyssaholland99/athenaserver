@@ -22,7 +22,7 @@ servicePorts = {
 }
 
 palworldCommands = ["info", "status", "players", "backup", "start", "restart", "stop\*"]
-minecraftCommands = ["info", "status", "players", "start", "restart\*", "stop\*"]
+minecraftCommands = ["info", "status", "players", "start", "stop\*"]
 valheimCommands = ["info", "status", "start", "stop\*"]
 sotfCommands = ["info", "status", "backup", "start\* [force]", "restart\*", "stop\*"]
 serverCommands = ["uptime", "load", "memory"]
@@ -207,6 +207,8 @@ async def on_message(message):
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "restart":
+                        await message.channel.send("This is disabled because it breaks the bot for some reason")
+                        return
                         if isTrusted(message.author):
                             if not isRunning(servicePorts["Minecraft"]):
                                 await message.channel.send("The Minecraft server is not running, use `.minecraft start` to start it")
