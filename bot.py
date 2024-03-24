@@ -171,7 +171,7 @@ async def on_message(message):
                     return
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address for Minecraft: `server.alyssaserver.co.uk:{}`\nOnline Map: http://server.alyssaserver.co.uk:8000".format(servicePorts["Minecraft"]))
+                        await message.channel.send("Server address for Minecraft: `server.alyssaserver.co.uk:{}`\nOnline Map: <http://server.alyssaserver.co.uk:8000>".format(servicePorts["Minecraft"]))
                     case "status":
                         if isRunning(servicePorts["Minecraft"]): 
                             await message.channel.send("The Minecraft server is running")
