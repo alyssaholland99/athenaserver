@@ -29,6 +29,7 @@ serverCommands = ["uptime", "load", "memory"]
 botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
 trustCommands = ["add\*", "remove\*", "list"]
 serviceCommands = ["status"]
+photoprismCommands = ["start\*", "stop\*"]
 helpCommands = [{
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
@@ -36,6 +37,7 @@ helpCommands = [{
     "forest/sotf" : sotfCommands
 },
 {
+    "photoprism" : photoprismCommands,
     "server" : serverCommands,
     "bot" : botCommands,
     "trust" : trustCommands,
@@ -161,7 +163,7 @@ async def on_message(message):
                         os.system("/bin/docker exec palworld-dedicated-server backup create")
                         await message.channel.send("Palworld backup created")
                     case _:
-                        await message.channel.send(commandError(msg.split(" ")[0]))
+                        await message.channel.send(commandError("palworld"))
                 return
 
             case "minecraft" | "mine":
@@ -222,7 +224,7 @@ async def on_message(message):
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case _:
-                        await message.channel.send(commandError(msg.split(" ")[0]))
+                        await message.channel.send(commandError("minecraft"))
                 return
 
             case "valheim" | "val":
@@ -265,7 +267,7 @@ async def on_message(message):
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case _:
-                        await message.channel.send(commandError(msg.split(" ")[0]))
+                        await message.channel.send(commandError("valheim"))
                 return
 
             case "forest" | "sotf":
@@ -326,8 +328,22 @@ async def on_message(message):
                     case "backup":
                         await message.channel.send(backupSotF())
                     case _:
-                        await message.channel.send(commandError(msg.split(" ")[0]))
+                        await message.channel.send(commandError("forest/sotf"))
 
+            case "photo" | "photos" | "photoprism":
+                if not isTrusted(message.author):
+                    await message.channel.send(getInsufficentPermissionMessage())
+                    return
+                match (msg.split(" ")[1]):
+                    case "start":
+                        os.system("/bin/docker-compose -f /root/Photoprism/docker-compose.yml up -d >> /dev/null 2>&1")
+                        await message.channel.send("Starting Photoprism")
+                    case "stop":
+                        os.system("/bin/docker-compose -f /root/Photoprism/docker-compose.yml down >> /dev/null 2>&1")
+                        await message.channel.send("Stopping Photoprism")
+                    case _:
+                        await message.channel.send(commandError("photoprism"))
+            
             case "trust":
                 match (msg.split(" ")[1]):
                     case "add":
