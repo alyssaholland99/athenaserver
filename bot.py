@@ -87,6 +87,9 @@ async def on_message(message):
                     await message.channel.send(makeHelpMessage("1") + "\nUse `.help 2` to see other commands available")
                 
             case "server":
+                if len(msg.split(" ")) == 1:
+                    await message.channel.send(commandError("server"))
+                    return
                 match (msg.split(" ")[1]):
                     case "uptime":
                         await message.channel.send((os.popen("uptime").read()).split(",")[0].split("up")[1])
@@ -331,6 +334,9 @@ async def on_message(message):
                         await message.channel.send(commandError("forest/sotf"))
 
             case "photo" | "photos" | "photoprism":
+                if len(msg.split(" ")) == 1:
+                    await message.channel.send(commandError("photoprism"))
+                    return
                 if not isTrusted(message.author):
                     await message.channel.send(getInsufficentPermissionMessage())
                     return
@@ -345,6 +351,9 @@ async def on_message(message):
                         await message.channel.send(commandError("photoprism"))
             
             case "trust":
+                if len(msg.split(" ")) == 1:
+                    await message.channel.send(commandError("trust"))
+                    return
                 match (msg.split(" ")[1]):
                     case "add":
                         if isTrusted(message.author):
@@ -387,6 +396,9 @@ async def on_message(message):
                 return
 
             case "bot":
+                if len(msg.split(" ")) == 1:
+                    await message.channel.send(commandError("bot"))
+                    return
                 match (msg.split(" ")[1]):
                     case "add":
                         await message.channel.send("Use the following link to add this bot yo your server:\nhttps://discord.com/api/oauth2/authorize?client_id=1207456482170249287&permissions=3072&scope=bot")
@@ -411,6 +423,9 @@ async def on_message(message):
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
             case "service":
+                if len(msg.split(" ")) == 1:
+                    await message.channel.send(commandError("service"))
+                    return
                 match (msg.split(" ")[1]):
                     case "status":
                         runningServices = []
