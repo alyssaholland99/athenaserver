@@ -236,7 +236,7 @@ async def on_message(message):
                     return
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address for Valheim: `server.alyssaserver.co.uk:{}`".format(servicePorts["Valheim"]))
+                        await message.channel.send("Server address for Valheim: `server.alyssaserver.co.uk:{}`\nPassword: `{}`".format(servicePorts["Valheim"], os.getenv('VAL_PASS')))
                     case "status":
                         if isRunning(servicePorts["Valheim"]): 
                             await message.channel.send("The Valheim server is running")
