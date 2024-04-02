@@ -229,7 +229,7 @@ async def on_message(message):
                             wltxt.write(msg.split(" ")[2])
                         
                         newWhitelist = []
-                        for line in open("players.txt", "r"):
+                        for line in open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.txt", "r"):
                             r = requests.get("https://api.mojang.com/users/profiles/minecraft/" + line.rstrip())
                             pj = json.loads(r.text)
                             newWhitelist.append({
