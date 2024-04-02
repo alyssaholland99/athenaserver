@@ -222,7 +222,7 @@ async def on_message(message):
                                 for i in currentWhitelist:
                                     await message.channel.send(i["name"])
                             return
-                        uri = "https://api.mojang.com/users/profiles/minecraft/" + message.content[1:].split(" ")[2]
+                        uri = "https://api.mojang.com/users/profiles/minecraft/test"
                         await message.channel.send(uri)
                         apiReq = requests.get(uri)
                         if ("Couldn't find any profile with name" in str(apiReq)):
