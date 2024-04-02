@@ -223,7 +223,7 @@ async def on_message(message):
                             await message.channel.send(returnedWhitelist)
                             return
                         apiReq = requests.get("https://api.mojang.com/users/profiles/minecraft/" + message.content[1:].split(" ")[2])
-                        if ("Couldn't find any profile with name" in str(apiReq)):
+                        if ("errorMessage" in str(apiReq)):
                             await message.channel.send("There is no user with this username, please try again")
                             return
                         with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.txt", "a") as wltxt:
