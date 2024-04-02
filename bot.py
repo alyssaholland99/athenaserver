@@ -223,6 +223,7 @@ async def on_message(message):
                                     await message.channel.send(i["name"])
                             return
                         uri = "https://api.mojang.com/users/profiles/minecraft/" + message.content[1:].split(" ")[2]
+                        await message.channel.send(uri)
                         apiReq = requests.get(uri)
                         if ("Couldn't find any profile with name" in str(apiReq)):
                             await message.channel.send("There is no user with this username, please try again")
