@@ -216,7 +216,7 @@ async def on_message(message):
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "whitelist":
                         if len(msg.split(" ")) == 2:
-                            with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.json") as wl:
+                            with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.txt") as wl:
                                 currentWhitelist = json.load(wl)
                                 for i in currentWhitelist:
                                     await message.channel.send(i["name"])
@@ -225,12 +225,20 @@ async def on_message(message):
                         if ("Couldn't find any profile with name" in str(apiReq)):
                             await message.channel.send("There is no user with this username, please try again")
                             return
-                        with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.json") as wl:
-                            currentWhitelist = json.load(wl)
-                        print(currentWhitelist)
-                        #currentWhitelist.append(apiReq.text)
-                        #with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.json", "w") as newWhitelist:
-                        #    json.dump(currentWhitelist, newWhitelist)
+                        with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.txt", "a") as wltxt:
+                            wltxt.write(msg.split(" ")[2])
+                        
+                        newWhitelist = []
+                        for line in open("players.txt", "r"):
+                            r = requests.get("https://api.mojang.com/users/profiles/minecraft/" + line.rstrip())
+                            pj = json.loads(r.text)
+                            newWhitelist.append({
+                                "uuid": str(uuid.UUID(pj['id'])),
+                                "name": pj['name']
+                            })
+                        with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.json", "w") as wltxt:
+                            wltxt.write(json.dumps(newWhitelist))
+                        
                         await message.channel.send(str(currentWhitelist))
                     
                     
