@@ -233,6 +233,7 @@ async def on_message(message):
                         for line in open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.txt", "r"):
                             r = requests.get("https://api.mojang.com/users/profiles/minecraft/" + line.rstrip())
                             pj = json.loads(r.text)
+                            await message.channel.send(str(pj))
                             newWhitelist.append({
                                 "uuid": str(uuid.UUID(pj['id'])),
                                 "name": pj['name']
