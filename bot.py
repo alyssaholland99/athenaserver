@@ -26,7 +26,7 @@ servicePorts = {
 }
 
 palworldCommands = ["info", "status", "players", "backup", "start", "restart", "stop\*"]
-minecraftCommands = ["info", "status", "players", "start", "stop\*"]
+minecraftCommands = ["info", "status", "players", "whitelist [minecraft_username]", "start", "stop\*"]
 valheimCommands = ["info", "status", "start", "stop\*"]
 sotfCommands = ["info", "status", "backup", "start\* [force]", "restart\*", "stop\*"]
 serverCommands = ["uptime", "load", "memory"]
