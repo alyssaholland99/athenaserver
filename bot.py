@@ -241,15 +241,7 @@ async def on_message(message):
                             wltxt.write(json.dumps(newWhitelist))
                         
                         await message.channel.send("Added {} to the whitelist".format(message.content[1:].split(" ")[2]))
-                    
-                    
-                    
-                    
-                    
-                    
                     case "restart":
-                        await message.channel.send("This is disabled because it breaks the bot for some reason")
-                        return
                         if isTrusted(message.author):
                             if not isRunning(servicePorts["Minecraft"]):
                                 await message.channel.send("The Minecraft server is not running, use `.minecraft start` to start it")
