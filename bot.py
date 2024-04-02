@@ -227,9 +227,10 @@ async def on_message(message):
                             return
                         with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.json") as wl:
                             currentWhitelist = json.load(wl)
-                        currentWhitelist.append(apiReq.text)
-                        with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.json", "w") as newWhitelist:
-                            json.dump(currentWhitelist, newWhitelist)
+                        print(currentWhitelist)
+                        #currentWhitelist.append(apiReq.text)
+                        #with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.json", "w") as newWhitelist:
+                        #    json.dump(currentWhitelist, newWhitelist)
                         await message.channel.send("Added user to whitelist")
                     
                     
