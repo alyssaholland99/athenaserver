@@ -1,5 +1,8 @@
 # bot.py
+import json
 import os
+
+import requests
 
 import discord
 from dotenv import load_dotenv
@@ -211,6 +214,29 @@ async def on_message(message):
                                 await message.channel.send("There are players currently on the world, not stopped")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
+                    case "whitelist":
+                        if len(msg.split(" ")) == 2:
+                            with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.json") as wl:
+                                currentWhitelist = json.load(wl)
+                                for i in currentWhitelist:
+                                    await message.channel.send(i["name"])
+                            return
+                        apiReq = requests.get("https://api.mojang.com/users/profiles/minecraft/" + msg.split(" ")[2])
+                        if ("Couldn't find any profile with name" in str(apiReq)):
+                            await message.channel.send("There is no user with this username, please try again")
+                            return
+                        with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.json") as wl:
+                            currentWhitelist = json.load(wl)
+                        currentWhitelist.update(apiReq)
+                        with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.json", "w") as newWhitelist:
+                            json.dump(currentWhitelist, newWhitelist)
+                        await message.channel.send("Added user to whitelist")
+                    
+                    
+                    
+                    
+                    
+                    
                     case "restart":
                         await message.channel.send("This is disabled because it breaks the bot for some reason")
                         return
