@@ -217,10 +217,10 @@ async def on_message(message):
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "whitelist":
                         if len(msg.split(" ")) == 2:
-                            with open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.txt") as wl:
-                                currentWhitelist = json.load(wl)
-                                for i in currentWhitelist:
-                                    await message.channel.send(i["name"])
+                            returnedWhitelist = ""
+                            for line in open("/srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/whitelist.txt", "r"):
+                                returnedWhitelist += "{}".format(line)
+                            await message.channel.send(returnedWhitelist)
                             return
                         apiReq = requests.get("https://api.mojang.com/users/profiles/minecraft/" + message.content[1:].split(" ")[2])
                         if ("Couldn't find any profile with name" in str(apiReq)):
