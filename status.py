@@ -40,15 +40,15 @@ class MyClient(commands.Bot):
                     ping = os.popen("ping -c 1 192.168.0.100").read()
                     if not "100% packet loss" in ping:
                         await urgent.send("FAILURE: Cold storage is still active when it shouldn't be; could be a long backup or the backup may have failed")
-            case [4, 31]: #9am
+            case [9, 0]: #9am
                 if self.msg_sent:
                     return
                 driveList = []
                 getDriveList = os.popen('smartctl --scan').read()
                 for drive in getDriveList.splitlines():
                     driveList.append(drive.split(" ")[0])
-                for drive in driveList:
-                    checkDrive = os.system('smartctl -t short {}'.format(drive))
+                #for drive in driveList:
+                #    checkDrive = os.system('smartctl -t short {}'.format(drive))
                 self.msg_sent = True
             case [10, 0]: #10am
                 if self.msg_sent:
