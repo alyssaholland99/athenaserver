@@ -16,14 +16,21 @@ class MyClient(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.msg_sent = False
+        self.isMdadmChecking = False
 
     async def on_ready(self):
         channel = bot.get_channel(1212969964634374186)
         urgent = bot.get_channel(1212985612877955122)
-        await self.timer.start(channel, urgent)
+        alerts = bot.get_channel(1234274146997899394)
+        await self.timer.start(channel, urgent, alerts)
 
     @tasks.loop(seconds=30)
-    async def timer(self, channel, urgent):
+    async def timer(self, channel, urgent, alerts):
+        if ("checking" in os.popen("/sbin/mdadm -D /dev/md1").read() and not self.isMdadmChecking):
+            await alerts.send("WARNING: The main drives are being verified for data integrity, modifictions to files within Nextcloud may be slow or not working. Please try later\nTo check the progress of this check please use .server mdadm")
+            self.isMdadmChecking = True
+        else:
+            self.isMdadmChecking = False
         match getCurrentTime():
             case [4, 15]:
                 if self.msg_sent:
