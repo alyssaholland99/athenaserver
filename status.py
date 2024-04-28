@@ -28,7 +28,7 @@ class MyClient(commands.Bot):
     async def timer(self, channel, urgent, alerts):
         if ("checking" in os.popen("/sbin/mdadm -D /dev/md1").read()):
             if (not self.isMdadmChecking):
-                await alerts.send("WARNING: The main drives are being verified for data integrity, modifictions to files within Nextcloud may be slow or not working. Please try later\nTo check the progress of this check please use `.server mdadm`")
+                await alerts.send("WARNING: The main drives are being verified for data integrity, modifictions to files within Nextcloud may be slow or not working. \nTo check the progress of this check please use `.server mdadm`")
             self.isMdadmChecking = True
         elif (self.isMdadmChecking):
             await alerts.send("The drives have now finished their data integrity check\nDrive {}".format(os.popen("/sbin/mdadm -D /dev/md1 | grep \"State\"").read()))
