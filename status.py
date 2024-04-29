@@ -31,7 +31,7 @@ class MyClient(commands.Bot):
                 await alerts.send("WARNING: The main drives are being verified for data integrity, modifictions to files within Nextcloud may be slow or not working. \nTo check the progress of this check please use `.server mdadm`")
             self.isMdadmChecking = True
         elif (self.isMdadmChecking):
-            await alerts.send("The drives have now finished their data integrity check\nDrive {}".format(os.popen("/sbin/mdadm -D /dev/md1 | grep \"State\"").read()))
+            await alerts.send("The drives have now finished their data integrity check")
             self.isMdadmChecking = False
         match getCurrentTime():
             case [4, 15]:
