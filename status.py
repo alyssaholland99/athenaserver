@@ -51,7 +51,7 @@ class MyClient(commands.Bot):
                     await urgent.send("URGENT: The LSI HBA is over {}°C! Currently at {}°C".format(allowed_lsi_temp + 20, lsi_temp))
                     self.isHighTempAlerting = True
         elif (self.isTempAlerting): # Reset temperature booleans and send message
-            await alerts.send("The LSI HBA is now an acceptable temperature ({}°C) ")
+            await alerts.send("The LSI HBA is now an acceptable temperature ({}°C) ".format(lsi_temp))
             self.isTempAlerting = False
             self.isHighTempAlerting = False
 
