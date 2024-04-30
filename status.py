@@ -16,7 +16,9 @@ class MyClient(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.msg_sent = False
-        self.isMdadmChecking = False
+        self.isMdadmChecking = True
+        self.isTempAlerting = False
+        self.isHighTempAlerting = False
 
     async def on_ready(self):
         channel = bot.get_channel(1212969964634374186)
@@ -24,15 +26,37 @@ class MyClient(commands.Bot):
         alerts = bot.get_channel(1234274146997899394)
         await self.timer.start(channel, urgent, alerts)
 
-    @tasks.loop(seconds=30)
+    @tasks.loop(seconds=60)
     async def timer(self, channel, urgent, alerts):
-        if ("checking" in os.popen("/sbin/mdadm -D /dev/md1").read()):
+
+        ### vars ###
+        allowed_lsi_temp = 65
+
+        ### Constant checks ###
+        if ("checking" in os.popen("/sbin/mdadm -D /dev/md1").read()): # Check to see if the RAID is being verified
             if (not self.isMdadmChecking):
                 await alerts.send("WARNING: The main drives are being verified for data integrity, modifictions to files within Nextcloud may be slow or not working. \nTo check the progress of this check please use `.server mdadm`")
-            self.isMdadmChecking = True
+                self.isMdadmChecking = True
         elif (self.isMdadmChecking):
             await alerts.send("The drives have now finished their data integrity check")
             self.isMdadmChecking = False
+
+        lsi_temp = int(os.popen("/opt/MegaRAID/storcli/storcli64 /c0 show temperature | grep temperature").read().split(" temperature(Degree Celsius) ")[1]) # Check temperature of LSI HBA
+        if (allowed_lsi_temp < lsi_temp): # Check to see if the LSI HBA is too hot
+            if not self.isTempAlerting: # Check to see if an alert has already been sent
+                await alerts.send("ALERT: The LSI HBA is over {}°C! The fan may be unplugged or may have failed".format(lsi_temp))
+                self.isTempAlerting = True
+            if (allowed_lsi_temp + 20 < lsi_temp): # Check to see if the LSI HBA is far too hot
+                if not self.isHighTempAlerting: # Check to see if an alert has already been sent
+                    await urgent.send("URGENT: The LSI HBA is over {}°C! The fan may be unplugged or may have failed".format(lsi_temp))
+                    self.isHighTempAlerting = True
+        elif (self.isTempAlerting): # Reset temperature booleans and send message
+            await alerts.send("The LSI HBA is now an acceptable temperature ({}°C) ")
+            self.isTempAlerting = False
+            self.isHighTempAlerting = False
+
+
+        ### Checks at specific times ###
         match getCurrentTime():
             case [4, 15]:
                 if self.msg_sent:
