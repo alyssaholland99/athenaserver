@@ -30,7 +30,7 @@ class MyClient(commands.Bot):
     async def timer(self, channel, urgent, alerts):
 
         ### vars ###
-        allowed_lsi_temp = 65
+        allowed_lsi_temp = 45
 
         ### Constant checks ###
         if ("checking" in os.popen("/sbin/mdadm -D /dev/md1").read()): # Check to see if the RAID is being verified
