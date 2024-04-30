@@ -16,7 +16,7 @@ class MyClient(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.msg_sent = False
-        self.isMdadmChecking = True
+        self.isMdadmChecking = False
         self.isTempAlerting = False
         self.isHighTempAlerting = False
 
@@ -30,7 +30,7 @@ class MyClient(commands.Bot):
     async def timer(self, channel, urgent, alerts):
 
         ### vars ###
-        allowed_lsi_temp = 20
+        allowed_lsi_temp = 65
 
         ### Constant checks ###
         if ("checking" in os.popen("/sbin/mdadm -D /dev/md1").read()): # Check to see if the RAID is being verified
