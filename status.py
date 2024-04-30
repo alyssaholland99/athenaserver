@@ -90,7 +90,7 @@ class MyClient(commands.Bot):
                     return
                 date = datetime.datetime.today()
                 checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
-                checkBackupUptime = os.popen('/bin/ssh root@offsitebackup "uptime').read()
+                checkBackupUptime = os.popen('/bin/ssh root@offsitebackup "uptime"').read()
                 checkBackup = checkBackup.splitlines()
                 if len(checkBackup) > 1:
                     lastBackup = checkBackup[5].split(" ")[1]
