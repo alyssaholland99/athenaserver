@@ -30,7 +30,7 @@ class MyClient(commands.Bot):
     async def timer(self, channel, urgent, alerts):
 
         ### vars ###
-        allowed_lsi_temp = 45
+        allowed_lsi_temp = 20
 
         ### Constant checks ###
         if ("checking" in os.popen("/sbin/mdadm -D /dev/md1").read()): # Check to see if the RAID is being verified
@@ -44,11 +44,11 @@ class MyClient(commands.Bot):
         lsi_temp = int(os.popen("/opt/MegaRAID/storcli/storcli64 /c0 show temperature | grep temperature").read().split(" temperature(Degree Celsius) ")[1]) # Check temperature of LSI HBA
         if (allowed_lsi_temp < lsi_temp): # Check to see if the LSI HBA is too hot
             if not self.isTempAlerting: # Check to see if an alert has already been sent
-                await alerts.send("ALERT: The LSI HBA is over {}°C! The fan may be unplugged or may have failed".format(lsi_temp))
+                await alerts.send("ALERT: The LSI HBA is over {}°C! Currently at {}°C\nThe fan may be unplugged or may have failed".format(allowed_lsi_temp, lsi_temp))
                 self.isTempAlerting = True
             if (allowed_lsi_temp + 20 < lsi_temp): # Check to see if the LSI HBA is far too hot
                 if not self.isHighTempAlerting: # Check to see if an alert has already been sent
-                    await urgent.send("URGENT: The LSI HBA is over {}°C! The fan may be unplugged or may have failed".format(lsi_temp))
+                    await urgent.send("URGENT: The LSI HBA is over {}°C! Currently at {}°C".format(allowed_lsi_temp + 20, lsi_temp))
                     self.isHighTempAlerting = True
         elif (self.isTempAlerting): # Reset temperature booleans and send message
             await alerts.send("The LSI HBA is now an acceptable temperature ({}°C) ")
