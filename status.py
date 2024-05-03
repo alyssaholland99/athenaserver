@@ -33,8 +33,94 @@ class MyClient(commands.Bot):
         allowed_lsi_temp = 65
 
         ### Constant checks ###
+        await self.raid_integrity(channel, urgent, alerts)
+        await self.lsi_temp(channel, urgent, alerts, allowed_lsi_temp)
 
-        # RAID checking
+        ### Checks at specific times ###
+        match getCurrentTime():
+
+            case [4, 15]: #4:15
+                if self.msg_sent:
+                    return
+                await self.amelia_ping(channel, urgent, alerts)
+                
+            case [10, 0]: #10:00
+                if self.msg_sent:
+                    return
+                await self.smart(channel, urgent, alerts)
+
+            case [11, 0]: #11:00
+                if self.msg_sent:
+                    return
+                day = datetime.datetime.today().weekday()
+                if day == 0:
+                    await self.raid_status(channel, urgent, alerts)
+                
+            case [12, 0]: #12:00
+                if self.msg_sent:
+                    return
+                await self.raid_status(channel, urgent, alerts)
+
+            case _:
+                self.msg_sent = False
+
+    async def offsite_backup_check(self, channel, urgent, alerts):
+        # Offsite backup status
+        
+        date = datetime.datetime.today()
+        checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
+        checkBackupUptime = os.popen('/bin/ssh root@offsitebackup "uptime"').read()
+        checkBackup = checkBackup.splitlines()
+        if len(checkBackup) > 1:
+            lastBackup = checkBackup[5].split(" ")[1]
+            currentDate = str(date).split(" ")[0]
+            if lastBackup == currentDate:
+                await channel.send("SUCCESS: Offsite server was backed up to successfully overnight and has been up for{}".format(checkBackupUptime.split(",")[0].split("up")[1]))
+            else:
+                await urgent.send("FAILURE: Backup date and current date do not match; server may not have backed up last night")
+        else:
+            await urgent.send("FAILURE: Unable to get status for offsite backup")
+        self.msg_sent = True
+            
+    async def raid_status(self, channel, urgent, alerts):
+        # RAID status
+        self.msg_sent = True
+        checkRAID = os.popen("/sbin/mdadm -D /dev/md1").read()
+        if "State : clean" in checkRAID:
+            await channel.send("RAID Status: \n{}".format(checkRAID))
+        else:
+            await urgent.send("RAID Status: \n{}".format(checkRAID))
+    
+    async def smart(self, channel, urgent, alerts):
+        # SMART status
+        driveList = []
+        getDriveList = os.popen('smartctl --scan').read()
+        for drive in getDriveList.splitlines():
+            driveList.append(drive.split(" ")[0])
+        for drive in driveList:
+            checkDrive = os.popen('smartctl -a {} | grep "SMART overall-health self-assessment test result:"'.format(drive)).read()
+            if not "PASSED" in checkDrive:
+                await urgent.send("FAILURE: {} - {}".format(drive, checkDrive))
+            else:
+                await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
+        self.msg_sent = True
+
+    async def amelia_ping(self, channel, urgent, alerts):
+        # AmeliaServer status
+        self.msg_sent = True
+        day = datetime.datetime.today().weekday()
+        if day == 0: # If Monday
+            ping = os.popen("ping -c 1 192.168.0.100").read()
+            if "0% packet loss" in ping:
+                await channel.send("SUCCESS: Cold storage is active")
+            else:
+                await urgent.send("FAILURE: Cold storage was not able to be pinged")
+        if day == 1: # If Tuesday
+            ping = os.popen("ping -c 1 192.168.0.100").read()
+            if not "100% packet loss" in ping:
+                await urgent.send("FAILURE: Cold storage is still active when it shouldn't be; could be a long backup or the backup may have failed")
+
+    async def raid_integrity(self, channel, urgent, alerts):
         if ("checking" in os.popen("/sbin/mdadm -D /dev/md1").read()): # Check to see if the RAID is being verified
             if (not self.isMdadmChecking):
                 await alerts.send("WARNING: The main drives are being verified for data integrity, modifictions to files within Nextcloud may be slow or not working. \nTo check the progress of this check please use `.server mdadm`")
@@ -43,87 +129,6 @@ class MyClient(commands.Bot):
             await alerts.send("The drives have now finished their data integrity check")
             self.isMdadmChecking = False
 
-        # LSI temperature
-        await self.lsi_temp(channel, urgent, alerts, allowed_lsi_temp)
-
-
-        ### Checks at specific times ###
-        match getCurrentTime():
-            case [4, 15]:
-                
-                # AmeliaServer status
-                if self.msg_sent:
-                    return
-                self.msg_sent = True
-                day = datetime.datetime.today().weekday()
-                if day == 0: # If Monday
-                    ping = os.popen("ping -c 1 192.168.0.100").read()
-                    if "0% packet loss" in ping:
-                        await channel.send("SUCCESS: Cold storage is active")
-                    else:
-                        await urgent.send("FAILURE: Cold storage was not able to be pinged")
-                if day == 1: # If Tuesday
-                    ping = os.popen("ping -c 1 192.168.0.100").read()
-                    if not "100% packet loss" in ping:
-                        await urgent.send("FAILURE: Cold storage is still active when it shouldn't be; could be a long backup or the backup may have failed")
-
-
-            case [10, 0]: #10am
-                
-                # SMART status
-                if self.msg_sent:
-                    return
-                driveList = []
-                getDriveList = os.popen('smartctl --scan').read()
-                for drive in getDriveList.splitlines():
-                    driveList.append(drive.split(" ")[0])
-                for drive in driveList:
-                    checkDrive = os.popen('smartctl -a {} | grep "SMART overall-health self-assessment test result:"'.format(drive)).read()
-                    if not "PASSED" in checkDrive:
-                        await urgent.send("FAILURE: {} - {}".format(drive, checkDrive))
-                    else:
-                        await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
-                self.msg_sent = True
-
-            case [11, 0]: #11am
-
-                # RAID status
-                if self.msg_sent:
-                    return
-                day = datetime.datetime.today().weekday()
-                self.msg_sent = True
-                checkRAID = os.popen("/sbin/mdadm -D /dev/md1").read()
-                if "State : clean" in checkRAID:
-                    if day != 0:
-                        return
-                    await channel.send("RAID Status: \n{}".format(checkRAID))
-                else:
-                    await urgent.send("RAID Status: \n{}".format(checkRAID))
-
-            case [12, 0]: #Midday
-
-                # Offsite backup status
-                if self.msg_sent:
-                    return
-                date = datetime.datetime.today()
-                checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
-                checkBackupUptime = os.popen('/bin/ssh root@offsitebackup "uptime"').read()
-                checkBackup = checkBackup.splitlines()
-                if len(checkBackup) > 1:
-                    lastBackup = checkBackup[5].split(" ")[1]
-                    currentDate = str(date).split(" ")[0]
-                    if lastBackup == currentDate:
-                        await channel.send("SUCCESS: Offsite server was backed up to successfully overnight and has been up for{}".format(checkBackupUptime.split(",")[0].split("up")[1]))
-                    else:
-                        await urgent.send("FAILURE: Backup date and current date do not match; server may not have backed up last night")
-                else:
-                    await urgent.send("FAILURE: Unable to get status for offsite backup")
-                self.msg_sent = True
-
-
-            case _:
-                self.msg_sent = False
-    
     async def lsi_temp(self, channel, urgent, alerts, allowed_lsi_temp):
         lsi_temp = int(os.popen("/opt/MegaRAID/storcli/storcli64 /c0 show temperature | grep temperature").read().split(" temperature(Degree Celsius) ")[1]) # Check temperature of LSI HBA
         if (allowed_lsi_temp < lsi_temp): # Check to see if the LSI HBA is too hot
