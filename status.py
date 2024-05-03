@@ -33,6 +33,8 @@ class MyClient(commands.Bot):
         allowed_lsi_temp = 65
 
         ### Constant checks ###
+
+        # RAID checking
         if ("checking" in os.popen("/sbin/mdadm -D /dev/md1").read()): # Check to see if the RAID is being verified
             if (not self.isMdadmChecking):
                 await alerts.send("WARNING: The main drives are being verified for data integrity, modifictions to files within Nextcloud may be slow or not working. \nTo check the progress of this check please use `.server mdadm`")
@@ -41,24 +43,15 @@ class MyClient(commands.Bot):
             await alerts.send("The drives have now finished their data integrity check")
             self.isMdadmChecking = False
 
-        lsi_temp = int(os.popen("/opt/MegaRAID/storcli/storcli64 /c0 show temperature | grep temperature").read().split(" temperature(Degree Celsius) ")[1]) # Check temperature of LSI HBA
-        if (allowed_lsi_temp < lsi_temp): # Check to see if the LSI HBA is too hot
-            if not self.isTempAlerting: # Check to see if an alert has already been sent
-                await alerts.send("ALERT: The LSI HBA is over {}°C! Currently at {}°C\nThe fan may be unplugged or may have failed".format(allowed_lsi_temp, lsi_temp))
-                self.isTempAlerting = True
-            if (allowed_lsi_temp + 20 < lsi_temp): # Check to see if the LSI HBA is far too hot
-                if not self.isHighTempAlerting: # Check to see if an alert has already been sent
-                    await urgent.send("URGENT: The LSI HBA is over {}°C! Currently at {}°C".format(allowed_lsi_temp + 20, lsi_temp))
-                    self.isHighTempAlerting = True
-        elif (self.isTempAlerting): # Reset temperature booleans and send message
-            await alerts.send("The LSI HBA is now an acceptable temperature ({}°C) ".format(lsi_temp))
-            self.isTempAlerting = False
-            self.isHighTempAlerting = False
+        # LSI temperature
+        await self.lsi_temp(channel, urgent, alerts, allowed_lsi_temp)
 
 
         ### Checks at specific times ###
         match getCurrentTime():
             case [4, 15]:
+                
+                # AmeliaServer status
                 if self.msg_sent:
                     return
                 self.msg_sent = True
@@ -73,17 +66,11 @@ class MyClient(commands.Bot):
                     ping = os.popen("ping -c 1 192.168.0.100").read()
                     if not "100% packet loss" in ping:
                         await urgent.send("FAILURE: Cold storage is still active when it shouldn't be; could be a long backup or the backup may have failed")
-            case [9, 0]: #9am
-                if self.msg_sent:
-                    return
-                driveList = []
-                getDriveList = os.popen('smartctl --scan').read()
-                for drive in getDriveList.splitlines():
-                    driveList.append(drive.split(" ")[0])
-                #for drive in driveList:
-                #    checkDrive = os.system('smartctl -t short {}'.format(drive))
-                self.msg_sent = True
+
+
             case [10, 0]: #10am
+                
+                # SMART status
                 if self.msg_sent:
                     return
                 driveList = []
@@ -97,7 +84,10 @@ class MyClient(commands.Bot):
                     else:
                         await channel.send("SUCCESS: {} - {}".format(drive, checkDrive))
                 self.msg_sent = True
+
             case [11, 0]: #11am
+
+                # RAID status
                 if self.msg_sent:
                     return
                 day = datetime.datetime.today().weekday()
@@ -109,7 +99,10 @@ class MyClient(commands.Bot):
                     await channel.send("RAID Status: \n{}".format(checkRAID))
                 else:
                     await urgent.send("RAID Status: \n{}".format(checkRAID))
+
             case [12, 0]: #Midday
+
+                # Offsite backup status
                 if self.msg_sent:
                     return
                 date = datetime.datetime.today()
@@ -126,8 +119,25 @@ class MyClient(commands.Bot):
                 else:
                     await urgent.send("FAILURE: Unable to get status for offsite backup")
                 self.msg_sent = True
+
+
             case _:
                 self.msg_sent = False
+    
+    async def lsi_temp(self, channel, urgent, alerts, allowed_lsi_temp):
+        lsi_temp = int(os.popen("/opt/MegaRAID/storcli/storcli64 /c0 show temperature | grep temperature").read().split(" temperature(Degree Celsius) ")[1]) # Check temperature of LSI HBA
+        if (allowed_lsi_temp < lsi_temp): # Check to see if the LSI HBA is too hot
+            if not self.isTempAlerting: # Check to see if an alert has already been sent
+                await alerts.send("ALERT: The LSI HBA is over {}°C! Currently at {}°C\nThe fan may be unplugged or may have failed".format(allowed_lsi_temp, lsi_temp))
+                self.isTempAlerting = True
+            if (allowed_lsi_temp + 20 < lsi_temp): # Check to see if the LSI HBA is far too hot
+                if not self.isHighTempAlerting: # Check to see if an alert has already been sent
+                    await urgent.send("URGENT: The LSI HBA is over {}°C! Currently at {}°C".format(allowed_lsi_temp + 20, lsi_temp))
+                    self.isHighTempAlerting = True
+        elif (self.isTempAlerting): # Reset temperature booleans and send message
+            await alerts.send("The LSI HBA is now an acceptable temperature ({}°C) ".format(lsi_temp))
+            self.isTempAlerting = False
+            self.isHighTempAlerting = False
 
 
 bot = MyClient(command_prefix='.!.!.!', intents=discord.Intents().all())
