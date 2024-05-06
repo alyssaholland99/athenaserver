@@ -61,11 +61,6 @@ class MyClient(commands.Bot):
                     return
                 await self.offsite_backup_check(channel, urgent, alerts)
 
-            case [18, 10]: #12:00
-                if self.msg_sent:
-                    return
-                await self.offsite_backup_check(channel, urgent, alerts)
-
             case _:
                 self.msg_sent = False
 
@@ -75,7 +70,6 @@ class MyClient(commands.Bot):
         date = datetime.datetime.today()
         checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
         checkBackupUptime = os.popen('/bin/ssh root@offsitebackup "uptime -p"').read()
-        checkBackup = checkBackup.splitlines()
         if len(checkBackup) > 1:
             lastBackup = checkBackup[5].split(" ")[1]
             currentDate = str(date).split(" ")[0]
