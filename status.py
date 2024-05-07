@@ -56,7 +56,7 @@ class MyClient(commands.Bot):
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
                 
-            case [17, 34]: #12:00
+            case [17, 36]: #12:00
                 if self.msg_sent:
                     return
                 await self.offsite_backup_check(channel, urgent, alerts)
@@ -69,6 +69,7 @@ class MyClient(commands.Bot):
         
         date = datetime.datetime.today()
         checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
+        checkBackup = checkBackup.splitlines()
         if len(checkBackup) > 1:
             lastBackup = checkBackup[5].split(" ")[1]
             currentDate = str(date).split(" ")[0]
