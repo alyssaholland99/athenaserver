@@ -56,7 +56,7 @@ class MyClient(commands.Bot):
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
                 
-            case [12, 00]: #12:00
+            case [17, 34]: #12:00
                 if self.msg_sent:
                     return
                 await self.offsite_backup_check(channel, urgent, alerts)
