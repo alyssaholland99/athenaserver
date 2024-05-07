@@ -96,7 +96,8 @@ async def on_message(message):
                     return
                 match (msg.split(" ")[1]):
                     case "uptime":
-                        await message.channel.send(os.popen("uptime -p").read())
+                        await message.channel.send("Athena: ".format(os.popen("uptime -p").read()))
+                        await message.channel.send("Offsite: ".format(os.popen('/bin/ssh root@offsitebackup "uptime -p"').read()))
                     case "load":
                         load = (os.popen("/bin/cat /proc/loadavg").read()).split(" ")[0]
                         load = (float(load)/12)*100
