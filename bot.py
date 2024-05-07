@@ -96,7 +96,7 @@ async def on_message(message):
                     return
                 match (msg.split(" ")[1]):
                     case "uptime":
-                        await message.channel.send((os.popen("uptime").read()).split(",")[0].split("up")[1])
+                        await message.channel.send(os.popen("uptime -p"))
                     case "load":
                         load = (os.popen("/bin/cat /proc/loadavg").read()).split(" ")[0]
                         load = (float(load)/12)*100
