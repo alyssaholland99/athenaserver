@@ -97,6 +97,10 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "uptime":
                         await message.channel.send("Athena: {}".format(os.popen("uptime -p").read()))
+                        if "0% packet loss" in os.popen("ping -c 1 192.168.0.100").read():
+                            message.channel.send("Amelia (Cold storage): Online - Unable to get uptime due to security constraints")
+                        else:
+                             message.channel.send("Amelia (Cold storage): Offline")
                         await message.channel.send("Offsite: " + os.popen('/bin/ssh root@offsitebackup "uptime -p"').read())
                     case "load":
                         load = (os.popen("/bin/cat /proc/loadavg").read()).split(" ")[0]
