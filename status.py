@@ -56,7 +56,7 @@ class MyClient(commands.Bot):
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
                 
-            case [12, 00]: #12:00
+            case [1, 17]: #12:00
                 if self.msg_sent:
                     return
                 await self.offsite_backup_check(channel, urgent, alerts)
@@ -69,12 +69,12 @@ class MyClient(commands.Bot):
         
         date = datetime.datetime.today()
         checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
-        #checkBackupUptime = os.popen('/bin/ssh root@offsitebackup "uptime -p"').read()
+        checkBackupUptime = os.popen('/bin/ssh root@offsitebackup "uptime -p"').read()
         if len(checkBackup) > 1:
             lastBackup = checkBackup[5].split(" ")[1]
             currentDate = str(date).split(" ")[0]
             if lastBackup == currentDate:
-                await channel.send("SUCCESS: Offsite server was backed up to successfully overnight")
+                await channel.send("SUCCESS: Offsite server was backed up to successfully overnight - Uptime: {}".format(checkBackupUptime))
             else:
                 await urgent.send("FAILURE: Backup date and current date do not match; server may not have backed up last night")
         else:
