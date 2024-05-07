@@ -109,7 +109,7 @@ class MyClient(commands.Bot):
         day = datetime.datetime.today().weekday()
         if day == 0: # If Monday
             ping = os.popen("ping -c 1 192.168.0.100").read()
-            if "0% packet loss" in ping:
+            if not "100% packet loss" in ping:
                 await channel.send("SUCCESS: Cold storage is active")
             else:
                 await urgent.send("FAILURE: Cold storage was not able to be pinged")
