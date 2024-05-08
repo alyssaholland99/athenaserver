@@ -29,7 +29,7 @@ palworldCommands = ["info", "status", "players", "backup", "start", "restart", "
 minecraftCommands = ["info", "status", "players", "whitelist [minecraft_username]", "start", "stop\*"]
 valheimCommands = ["info", "status", "start", "stop\*"]
 sotfCommands = ["info", "status", "backup", "start\* [force]", "restart\*", "stop\*"]
-serverCommands = ["uptime", "load", "memory", "mdadm"]
+serverCommands = ["uptime", "load", "memory", "mdadm", "gpu_pwr"]
 botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
 trustCommands = ["add\*", "remove\*", "list"]
 serviceCommands = ["status"]
@@ -120,7 +120,7 @@ async def on_message(message):
                         time.sleep(1)
                         power2 = os.popen("cat /sys/class/drm/card0/device/hwmon/hwmon3/energy1_input").read()
                         power3 = int(power2) - int(power1)
-                        await message.channel.send(power3/(1000000))
+                        await message.channel.send("Current power {} watts".format(str(round(power3/1000000), 1)))
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
