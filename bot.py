@@ -120,7 +120,7 @@ async def on_message(message):
                         time.sleep(1)
                         power2 = os.popen("cat /sys/class/drm/card0/device/hwmon/hwmon3/energy1_input").read()
                         power3 = int(power2) - int(power1)
-                        await message.channel.send("Current power {} watts".format(str(round(power3/1000000), 1)))
+                        await message.channel.send("Current power {} watts".format(round(power3/1000000), 1))
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
