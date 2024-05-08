@@ -115,6 +115,12 @@ async def on_message(message):
                         await message.channel.send("Memory usage: {}%".format(round(float(memoryPercent), 1)))
                     case "mdadm":
                         await message.channel.send(os.popen("/sbin/mdadm -D /dev/md1 | grep \"Check Status\"").read())
+                    case "gpu_pwr":
+                        power1 = os.popen("cat /sys/class/drm/card0/device/hwmon/hwmon3/energy1_input").read()
+                        time.sleep(1)
+                        power2 = os.popen("cat /sys/class/drm/card0/device/hwmon/hwmon3/energy1_input").read()
+                        power3 = int(power2) - int(power1)
+                        await message.channel.send(power3/(1000000))
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
