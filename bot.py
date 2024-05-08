@@ -101,7 +101,10 @@ async def on_message(message):
                             await message.channel.send("Amelia (Cold storage): Online - Unable to get uptime due to security constraints")
                         else:
                             await message.channel.send("Amelia (Cold storage): Offline")
-                        await message.channel.send("Offsite: " + os.popen('/bin/ssh root@offsitebackup "uptime -p"').read())
+                        if not "100% packet loss" in os.popen("ping -c 1 offsitebackup").read():
+                            await message.channel.send("Offsite: " + os.popen('/bin/ssh root@offsitebackup "uptime -p"').read())
+                        else: 
+                            await message.channel.send("Offsite: Offline")
                     case "load":
                         load = (os.popen("/bin/cat /proc/loadavg").read()).split(" ")[0]
                         load = (float(load)/12)*100
