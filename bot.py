@@ -400,8 +400,8 @@ async def on_message(message):
                         await message.channel.send("Starting the BeamNG server")
                     case "stop":
                         if isTrusted(message.author):
-                            if not isRunning(servicePorts["Sons of the Forest"]): 
-                                await message.channel.send("The Sons of the Forest server is already stopped")
+                            if not isRunning(servicePorts["Beam"]): 
+                                await message.channel.send("The BeamNG server is already stopped")
                                 return
                             os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the BeamNG server")
