@@ -22,13 +22,15 @@ servicePorts = {
     "Palworld" : "8211",
     "Minecraft" : "25565",
     "Valheim" : "2456",
-    "Sons of the Forest" : "8766"
+    "Sons of the Forest" : "8766",
+    "Beam" : "30814"
 }
 
 palworldCommands = ["info", "status", "players", "backup", "start", "restart", "stop\*"]
 minecraftCommands = ["info", "status", "players", "whitelist [minecraft_username]", "start", "stop\*"]
 valheimCommands = ["info", "status", "start", "stop\*"]
 sotfCommands = ["info", "status", "backup", "start\* [force]", "restart\*", "stop\*"]
+beamCommands = ["info, status, start, stop\*"]
 serverCommands = ["uptime", "load", "memory", "mdadm", "gpu_pwr"]
 botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
 trustCommands = ["add\*", "remove\*", "list"]
@@ -38,7 +40,8 @@ helpCommands = [{
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
     "valheim" : valheimCommands,
-    "forest/sotf" : sotfCommands
+    "forest/sotf" : sotfCommands,
+    "beam" : beamCommands
 },
 {
     "photoprism" : photoprismCommands,
@@ -376,6 +379,35 @@ async def on_message(message):
                         await message.channel.send(backupSotF())
                     case _:
                         await message.channel.send(commandError("forest/sotf"))
+
+            case "beam":
+                if len(msg.split(" ")) == 1:
+                    await message.channel.send(commandError("beam"))
+                    return
+                match (msg.split(" ")[1]):
+                    case "info":
+                        await message.channel.send("Server address for BeamNG server: `server.alyssaserver.co.uk:{}`".format(servicePorts["Beam"]))
+                    case "status":
+                        if isRunning(servicePorts["Beam"]): 
+                            await message.channel.send("The BeamNG server is running")
+                        else:
+                            await message.channel.send("The BeamNG server is not running")
+                    case "start":
+                        if isRunning(servicePorts["Beam"]): 
+                            await message.channel.send("The BeamNG server is already running")
+                            return
+                        os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml up -d >> /dev/null 2>&1")
+                        await message.channel.send("Starting the BeamNG server")
+                    case "stop":
+                        if isTrusted(message.author):
+                            if not isRunning(servicePorts["Sons of the Forest"]): 
+                                await message.channel.send("The Sons of the Forest server is already stopped")
+                                return
+                            os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml down >> /dev/null 2>&1")
+                            await message.channel.send("Stopping the BeamNG server")
+                    case _:
+                        await message.channel.send(commandError("beam"))
+
 
             case "photo" | "photos" | "photoprism":
                 if len(msg.split(" ")) == 1:
