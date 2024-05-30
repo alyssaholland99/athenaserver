@@ -526,8 +526,8 @@ async def on_message(message):
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
             case "stop" | "start":
-                if len(msg.split(" ")) == 1:
-                    await message.channel.send(commandError("service"))
+                if (len(msg.split(" ")) == 1) or (msg.split(" ")[1] not in getAllCommands()):
+                    await message.channel.send(getInvalidServiceMessage())
                     return
                 await message.channel.send("Invalid command; did you mean `.{} {}`? You can use `.service status` to see running/stopped services \n_I could fix this so it does it anyway but I don't want to :sleeping:_".format(msg.split(" ")[1], msg.split(" ")[0]))
 
