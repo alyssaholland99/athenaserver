@@ -527,7 +527,7 @@ async def on_message(message):
 
             case "stop" | "start":
                 if len(msg.split(" ")) == 1:
-                    await message.channel.send("Invalid command; did you mean `[service] {}`?".format(msg.split(" ")[0]))
+                    await message.channel.send("Invalid command; did you mean `.[service] {}`?".format(msg.split(" ")[0]))
                     return
                 await message.channel.send("Invalid command; did you mean `.{} {}`? You can use `.service status` to see running/stopped services \n_I could fix this so it does it anyway but I don't want to :sleeping: - If you want to fix it use `.bot git` and open a pull request_".format(msg.split(" ")[1], msg.split(" ")[0]))
 
