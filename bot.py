@@ -529,7 +529,7 @@ async def on_message(message):
                 if (len(msg.split(" ")) == 1) or (msg.split(" ")[1] not in getAllCommands()):
                     await message.channel.send(getInvalidServiceMessage())
                     return
-                await message.channel.send("Invalid command; did you mean `.{} {}`? You can use `.service status` to see running/stopped services \n_I could fix this so it does it anyway but I don't want to :sleeping:_".format(msg.split(" ")[1], msg.split(" ")[0]))
+                await message.channel.send("Invalid command; did you mean `.{} {}`? You can use `.service status` to see running/stopped services \n_I could fix this so it does it anyway but I don't want to :sleeping: - If you want to fix it use `.bot git`_".format(msg.split(" ")[1], msg.split(" ")[0]))
 
             case _:
                 await message.channel.send(getInvalidServiceMessage())
