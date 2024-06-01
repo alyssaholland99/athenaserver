@@ -126,6 +126,7 @@ class MyClient(commands.Bot):
                 self.isMdadmChecking = True
         elif (self.isMdadmChecking):
             await alerts.send("The drives have now finished their data integrity check")
+            await alerts.send(os.popen("/sbin/mdadm -D /dev/md1 | grep State").read())
             self.isMdadmChecking = False
 
     async def lsi_temp(self, channel, urgent, alerts, allowed_lsi_temp):
