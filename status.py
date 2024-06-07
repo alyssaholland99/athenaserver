@@ -39,7 +39,7 @@ class MyClient(commands.Bot):
         ### Checks at specific times ###
         match getCurrentTime():
 
-            case [4, 15]: #4:15
+            case [4, 30]: #4:15
                 if self.msg_sent:
                     return
                 await self.amelia_ping(channel, urgent, alerts)
