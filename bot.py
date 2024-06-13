@@ -437,13 +437,13 @@ async def on_message(message):
                     return
                 match (msg.split(" ")[1]):
                     case "start":
-                        os.system("/bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && docker stop transmission-openvpn-proxy && docker rm transmission-openvpn-proxy")
+                        os.system(" /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
                         await message.channel.send("Starting Transmission")
                     case "stop":
-                        os.system("/bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1")
+                        os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1")
                         await message.channel.send("Stopping Transmission")
                     case "restart":
-                        os.system("/bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1 && docker stop transmission-openvpn-proxy && docker rm transmission-openvpn-proxy && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
+                        os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
                         await message.channel.send("Restarting Transmission")
                     case _:
                         await message.channel.send(commandError("transmission"))
