@@ -36,7 +36,7 @@ botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
 trustCommands = ["add\*", "remove\*", "list"]
 serviceCommands = ["status"]
 photoprismCommands = ["start\*", "stop\*"]
-transmissionCommands = ["start\*", "stop\*"]
+transmissionCommands = ["start\*", "stop\*", "restart\*", "ip\*"]
 helpCommands = [{
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
