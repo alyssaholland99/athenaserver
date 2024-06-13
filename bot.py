@@ -445,6 +445,9 @@ async def on_message(message):
                     case "restart":
                         os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
                         await message.channel.send("Restarting Transmission")
+                    case "ip":
+                        vpn_ip = os.popen("/bin/docker exec transmission curl -s http://ipinfo.io/ip").read()
+                        await message.channel.send("IP for VPN: {}".format(vpn_ip))
                     case _:
                         await message.channel.send(commandError("transmission"))
             
