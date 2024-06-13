@@ -36,6 +36,7 @@ botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
 trustCommands = ["add\*", "remove\*", "list"]
 serviceCommands = ["status"]
 photoprismCommands = ["start\*", "stop\*"]
+transmissionCommands = ["start\*", "stop\*"]
 helpCommands = [{
     "minecraft" : minecraftCommands,
     "palworld" : palworldCommands,
@@ -48,7 +49,8 @@ helpCommands = [{
     "server" : serverCommands,
     "bot" : botCommands,
     "trust" : trustCommands,
-    "service" : serviceCommands
+    "service" : serviceCommands,
+    "transmission" : transmissionCommands
 }]
 
 trustedPath = "/root/athenaserver/trustedUsers.txt"
@@ -425,6 +427,26 @@ async def on_message(message):
                         await message.channel.send("Stopping Photoprism")
                     case _:
                         await message.channel.send(commandError("photoprism"))
+
+            case "transmission":
+                if len(msg.split(" ")) == 1:
+                    await message.channel.send(commandError("photoprism"))
+                    return
+                if not isTrusted(message.author):
+                    await message.channel.send(getInsufficentPermissionMessage())
+                    return
+                match (msg.split(" ")[1]):
+                    case "start":
+                        os.system("/bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && docker stop transmission-openvpn-proxy && docker rm transmission-openvpn-proxy")
+                        await message.channel.send("Starting Transmission")
+                    case "stop":
+                        os.system("/bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1")
+                        await message.channel.send("Stopping Transmission")
+                    case "restart":
+                        os.system("/bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1 && docker stop transmission-openvpn-proxy && docker rm transmission-openvpn-proxy && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
+                        await message.channel.send("Restarting Transmission")
+                    case _:
+                        await message.channel.send(commandError("transmission"))
             
             case "trust":
                 if len(msg.split(" ")) == 1:
