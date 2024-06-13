@@ -430,7 +430,7 @@ async def on_message(message):
 
             case "transmission":
                 if len(msg.split(" ")) == 1:
-                    await message.channel.send(commandError("photoprism"))
+                    await message.channel.send(commandError("transmission"))
                     return
                 if not isTrusted(message.author):
                     await message.channel.send(getInsufficentPermissionMessage())
