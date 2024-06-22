@@ -147,7 +147,7 @@ class MyClient(commands.Bot):
 
     async def transmissionCheck(self, alerts):
         transmissionStatusCheck = os.popen("curl server.alyssaserver.co.uk:9091").read()
-        if "401" not in transmissionCheck:
+        if "401" not in transmissionStatusCheck:
             await alerts.send("Transmission is unreachable. Restarting")
             os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
             await alerts.send("Transmission restarted")
