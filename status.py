@@ -71,15 +71,16 @@ class MyClient(commands.Bot):
         date = datetime.datetime.today()
         checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
         checkBackup = checkBackup.splitlines()
+        backupLogs = os.popen('cat /root/athenaserver/syslogs/duplicityBackup').read()
         if len(checkBackup) > 1:
             lastBackup = checkBackup[5].split(" ")[1]
             currentDate = str(date).split(" ")[0]
             if lastBackup == currentDate:
-                await channel.send("SUCCESS: Offsite server was backed up to successfully overnight")
+                await channel.send("SUCCESS: Offsite server was backed up to successfully overnight\n\nOutput Log:\n{}".format(backupLogs))
             else:
-                await urgent.send("FAILURE: Backup date and current date do not match; server may not have backed up last night")
+                await urgent.send("FAILURE: Backup date and current date do not match; server may not have backed up last night\n\nOutput Log:\n{}".format(backupLogs))
         else:
-            await urgent.send("FAILURE: Unable to get status for offsite backup")
+            await urgent.send("FAILURE: Unable to get status for offsite backup\n\nOutput Log:\n{}".format(backupLogs))
         self.msg_sent = True
             
     async def raid_status(self, channel, urgent, alerts):
