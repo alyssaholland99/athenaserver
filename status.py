@@ -43,7 +43,7 @@ class MyClient(commands.Bot):
             case [4, 30]: #4:15
                 if self.msg_sent:
                     return
-                await self.amelia_ping(channel, urgent, alerts)
+                #await self.amelia_ping(channel, urgent, alerts)
                 
             case [10, 0]: #10:00
                 if self.msg_sent:
