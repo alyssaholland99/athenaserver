@@ -28,9 +28,10 @@ servicePorts = {
 
 palworldCommands = ["info", "status", "players", "backup", "start", "restart", "stop\*"]
 minecraftCommands = ["info", "status", "players", "whitelist [minecraft_username]", "start", "stop\*"]
-valheimCommands = ["info", "status", "start", "stop\*"]
 sotfCommands = ["info", "status", "backup", "start\* [force]", "restart\*", "stop\*"]
+valheimCommands = ["info", "status", "start", "stop\*"]
 beamCommands = ["info, status, start, stop\*"]
+rustCommands = ["info, status, start, stop\*"]
 serverCommands = ["uptime", "load", "memory", "mdadm", "gpu_pwr"]
 botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
 trustCommands = ["add\*", "remove\*", "list"]
@@ -42,7 +43,8 @@ helpCommands = [{
     "palworld" : palworldCommands,
     "valheim" : valheimCommands,
     "forest/sotf" : sotfCommands,
-    "beam" : beamCommands
+    "beam" : beamCommands,
+    "rust" : rustCommands
 },
 {
     "photoprism" : photoprismCommands,
@@ -409,6 +411,34 @@ async def on_message(message):
                             await message.channel.send("Stopping the BeamNG server")
                     case _:
                         await message.channel.send(commandError("beam"))
+
+            case "rust":
+                if len(msg.split(" ")) == 1:
+                    await message.channel.send(commandError("rust"))
+                    return
+                match (msg.split(" ")[1]):
+                    case "info":
+                        await message.channel.send("Server address for Rust server: `server.alyssaserver.co.uk`\nConnect by hitting `F1` and typing `client.connect server.alyssaserver.co.uk`\n9916")
+                    case "status":
+                        if isRunning(servicePorts["Rust"]): 
+                            await message.channel.send("The Rust server is running")
+                        else:
+                            await message.channel.send("The Rust server is not running")
+                    case "start":
+                        if isRunning(servicePorts["Rust"]): 
+                            await message.channel.send("The Rust server is already running")
+                            return
+                        os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/rust/docker-compose.yml up -d >> /dev/null 2>&1")
+                        await message.channel.send("Starting the Rust server")
+                    case "stop":
+                        if isTrusted(message.author):
+                            if not isRunning(servicePorts["Rust"]): 
+                                await message.channel.send("The Rust server is already stopped")
+                                return
+                            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/rust/docker-compose.yml down >> /dev/null 2>&1")
+                            await message.channel.send("Stopping the Rust server")
+                    case _:
+                        await message.channel.send(commandError("rust"))
 
 
             case "photo" | "photos" | "photoprism":
