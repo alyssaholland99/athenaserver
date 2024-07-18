@@ -23,7 +23,8 @@ servicePorts = {
     "Minecraft" : "25565",
     "Valheim" : "2456",
     "Sons of the Forest" : "8766",
-    "Beam" : "30814"
+    "Beam" : "30814",
+    "Rust" : "28016"
 }
 
 palworldCommands = ["info", "status", "players", "backup", "start", "restart", "stop\*"]
