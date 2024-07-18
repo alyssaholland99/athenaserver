@@ -419,7 +419,7 @@ async def on_message(message):
                     return
                 match (msg.split(" ")[1]):
                     case "info":
-                        await message.channel.send("Server address for Rust server: `server.alyssaserver.co.uk`\nConnect by hitting `F1` and typing `client.connect server.alyssaserver.co.uk`\n9916")
+                        await message.channel.send("Server address for Rust server: `server.alyssaserver.co.uk`\nConnect by hitting `F1` and typing `client.connect server.alyssaserver.co.uk`\nOnce you're in the server you'll have to do `/auth {}` to not get kicked".format(os.getenv('RUST_PASS')))
                     case "status":
                         if isRunning(servicePorts["Rust"]): 
                             await message.channel.send("The Rust server is running")
