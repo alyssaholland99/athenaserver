@@ -181,7 +181,7 @@ async def on_message(message):
                         if isRunning(servicePorts["Palworld"]):
                             await message.channel.send("The Palworld server is already running")
                             return
-                        restartStatus = os.system(" /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/docker-compose.yml up -d >> /dev/null 2>&1")
+                        restartStatus = os.system(" /bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/palworld/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Palworld server starting")
                     case "backup":
                         if not isRunning(servicePorts["Palworld"]):
@@ -298,14 +298,14 @@ async def on_message(message):
                         if isRunning(servicePorts["Valheim"]):
                             await message.channel.send("The Valheim server is already running")
                             return
-                        os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
+                        os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Starting the Valheim server")
                     case "stop":
                         if isTrusted(message.author):
                             if not isRunning(servicePorts["Valheim"]):
                                 await message.channel.send("The Valheim server is already stopped")
                                 return
-                            restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1")
+                            restartStatus = os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the Valheim server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
@@ -314,7 +314,7 @@ async def on_message(message):
                             if not isRunning(servicePorts["Valheim"]):
                                 await message.channel.send("The Valheim server is not running, use `.valheim start` to start it")
                                 return
-                            restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
+                            restartStatus = os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
                             await message.channel.send("Restarting the Valheim server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
@@ -349,7 +349,7 @@ async def on_message(message):
                                 else:
                                     await message.channel.send("Please stop the Palworld server before starting this server, once Sons of the Forest is running you can start Palworld again\nThis is to prevent world corruption in the case of a server crash\nYou can use `.sotf start force` to skip this check")
                                     return
-                            os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
+                            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
                             await message.channel.send("Starting the Sons of the Forest server\nPlease note: It may take a while (3-6 minutes) for the server to start correctly, another message will confirm when the server is running")
                             await message.channel.send(ensureSotFServerStarts())
                         else:
@@ -360,7 +360,7 @@ async def on_message(message):
                                 await message.channel.send("The Sons of the Forest server is already stopped")
                                 return
                             await message.channel.send(backupSotF())
-                            restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1")
+                            restartStatus = os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the Sons of the Forest server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
@@ -373,7 +373,7 @@ async def on_message(message):
                                 await message.channel.send("Please stop the Palworld server before restarting this server, once SofF is running you can start Palworld")
                                 return
                             await message.channel.send(backupSotF())
-                            restartStatus = os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
+                            restartStatus = os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
                             await message.channel.send("Restarting the Sons of the Forest server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
@@ -398,14 +398,14 @@ async def on_message(message):
                         if isRunning(servicePorts["Beam"]): 
                             await message.channel.send("The BeamNG server is already running")
                             return
-                        os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml up -d >> /dev/null 2>&1")
+                        os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Starting the BeamNG server")
                     case "stop":
                         if isTrusted(message.author):
                             if not isRunning(servicePorts["Beam"]): 
                                 await message.channel.send("The BeamNG server is already stopped")
                                 return
-                            os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml down >> /dev/null 2>&1")
+                            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the BeamNG server")
                     case _:
                         await message.channel.send(commandError("beam"))
@@ -420,10 +420,10 @@ async def on_message(message):
                     return
                 match (msg.split(" ")[1]):
                     case "start":
-                        os.system("/bin/docker-compose -f /root/Photoprism/docker-compose.yml up -d >> /dev/null 2>&1")
+                        os.system("/bin/docker compose -f /root/Photoprism/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Starting Photoprism")
                     case "stop":
-                        os.system("/bin/docker-compose -f /root/Photoprism/docker-compose.yml down >> /dev/null 2>&1")
+                        os.system("/bin/docker compose -f /root/Photoprism/docker-compose.yml down >> /dev/null 2>&1")
                         await message.channel.send("Stopping Photoprism")
                     case _:
                         await message.channel.send(commandError("photoprism"))
@@ -437,13 +437,13 @@ async def on_message(message):
                     return
                 match (msg.split(" ")[1]):
                     case "start":
-                        os.system(" /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
+                        os.system(" /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
                         await message.channel.send("Starting Transmission")
                     case "stop":
-                        os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1")
+                        os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1")
                         await message.channel.send("Stopping Transmission")
                     case "restart":
-                        os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker-compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
+                        os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
                         await message.channel.send("Restarting Transmission")
                     case "ip":
                         vpn_ip = os.popen("/bin/docker exec transmission curl -s http://ipinfo.io/ip").read()
@@ -570,7 +570,7 @@ def ensureSotFServerStarts():
     while running == False:
         sotfStatus = os.popen("docker logs sons-of-the-forest-dedicated-server 2>&1 | grep 'server/fd.c:1644'").read()
         if len(sotfStatus.splitlines()) > 0:
-            os.system("/bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker-compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
+            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
             time.sleep(120)
             retryCount += 1
             if retryCount >= 10:
