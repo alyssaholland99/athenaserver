@@ -33,7 +33,7 @@ class MyClient(commands.Bot):
 
         ### vars ###
         allowed_lsi_temp = 65
-        allowed_cpu_temp = 40
+        allowed_cpu_temp = 75
 
         ### Constant checks ###
         await self.raid_integrity(channel, urgent, alerts)
