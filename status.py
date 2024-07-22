@@ -91,7 +91,7 @@ class MyClient(commands.Bot):
         # RAID status
         self.msg_sent = True
         checkRAID = os.popen("/sbin/mdadm -D /dev/md1").read()
-        if "State : clean" in checkRAID:
+        if ("State : clean" in checkRAID or "State : active, checking" in checkRAID):
             await channel.send("RAID Status: \n{}".format(checkRAID))
         else:
             await urgent.send("RAID Status: \n{}".format(checkRAID))
