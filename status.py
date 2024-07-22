@@ -17,8 +17,10 @@ class MyClient(commands.Bot):
         super().__init__(*args, **kwargs)
         self.msg_sent = False
         self.isMdadmChecking = False
-        self.isTempAlerting = False
-        self.isHighTempAlerting = False
+        self.isHBATempAlerting = False
+        self.isHBAHighTempAlerting = False
+        self.isCPUTempAlerting = False
+        self.isCPUHighTempAlerting = False
 
     async def on_ready(self):
         channel = bot.get_channel(1212969964634374186)
@@ -31,10 +33,12 @@ class MyClient(commands.Bot):
 
         ### vars ###
         allowed_lsi_temp = 65
+        allowed_cpu_temp = 75
 
         ### Constant checks ###
         await self.raid_integrity(channel, urgent, alerts)
         await self.lsi_temp(channel, urgent, alerts, allowed_lsi_temp)
+        await self.cpu_temp(channel, urgent, alerts, allowed_cpu_temp)
         await self.transmissionCheck(alerts)
 
         ### Checks at specific times ###
@@ -50,17 +54,17 @@ class MyClient(commands.Bot):
                     return
                 await self.smart(channel, urgent, alerts)
 
-            case [11, 0]: #11:00
+            case [10, 30]: #10:30
+                if self.msg_sent:
+                    return
+                await self.offsite_backup_check(channel, urgent, alerts)
+
+            case [12, 0]: #12:00
                 if self.msg_sent:
                     return
                 day = datetime.datetime.today().weekday()
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
-                
-            case [12, 00]: #12:00
-                if self.msg_sent:
-                    return
-                await self.offsite_backup_check(channel, urgent, alerts)
 
             case _:
                 self.msg_sent = False
@@ -134,17 +138,32 @@ class MyClient(commands.Bot):
     async def lsi_temp(self, channel, urgent, alerts, allowed_lsi_temp):
         lsi_temp = int(os.popen("/opt/MegaRAID/storcli/storcli64 /c0 show temperature | grep temperature").read().split(" temperature(Degree Celsius) ")[1]) # Check temperature of LSI HBA
         if (allowed_lsi_temp < lsi_temp): # Check to see if the LSI HBA is too hot
-            if not self.isTempAlerting: # Check to see if an alert has already been sent
+            if not self.isHBATempAlerting: # Check to see if an alert has already been sent
                 await alerts.send("ALERT: The LSI HBA is over {}°C! Currently at {}°C\nThe fan may be unplugged or may have failed".format(allowed_lsi_temp, lsi_temp))
-                self.isTempAlerting = True
+                self.isHBATempAlerting = True
             if (allowed_lsi_temp + 20 < lsi_temp): # Check to see if the LSI HBA is far too hot
-                if not self.isHighTempAlerting: # Check to see if an alert has already been sent
+                if not self.isHBAHighTempAlerting: # Check to see if an alert has already been sent
                     await urgent.send("URGENT: The LSI HBA is over {}°C! Currently at {}°C".format(allowed_lsi_temp + 20, lsi_temp))
-                    self.isHighTempAlerting = True
-        elif (self.isTempAlerting): # Reset temperature booleans and send message
+                    self.isHBAHighTempAlerting = True
+        elif (self.isHBATempAlerting): # Reset temperature booleans and send message
             await alerts.send("The LSI HBA is now an acceptable temperature ({}°C) ".format(lsi_temp))
-            self.isTempAlerting = False
-            self.isHighTempAlerting = False
+            self.isHBATempAlerting = False
+            self.isHBAHighTempAlerting = False
+
+    async def cpu_temp(self, channel, urgent, alerts, allowed_cpu_temp):
+        cpu_temp = int(os.popen("/bin/sensors | grep Tccd1").read().split("+")[1].split("°")[0]) # Check temperature of CPU
+        if (allowed_cpu_temp < cpu_temp): # Check to see if the CPU is too hot
+            if not self.isCPUTempAlerting: # Check to see if an alert has already been sent
+                await alerts.send("ALERT: The CPU is over {}°C! Currently at {}°C\nThe fan may be unplugged or may have failed".format(allowed_cpu_temp, cpu_temp))
+                self.isCPUTempAlerting = True
+            if (allowed_cpu_temp + 20 < allowed_cpu_temp): # Check to see if the CPU is far too hot
+                if not self.isCPUHighTempAlerting: # Check to see if an alert has already been sent
+                    await urgent.send("URGENT: The CPU is over {}°C! Currently at {}°C".format(allowed_cpu_temp + 20, cpu_temp))
+                    self.isCPUHighTempAlerting = True
+        elif (self.isCPUTempAlerting): # Reset temperature booleans and send message
+            await alerts.send("The CPU is now an acceptable temperature ({}°C) ".format(cpu_temp))
+            self.isCPUTempAlerting = False
+            self.isCPUHighTempAlerting = False
 
     async def transmissionCheck(self, alerts):
         transmissionStatusCheck = os.popen("curl server.alyssaserver.co.uk:9091").read()
