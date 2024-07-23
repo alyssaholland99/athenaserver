@@ -154,13 +154,13 @@ class MyClient(commands.Bot):
         cpu_temp = int(os.popen("/bin/sensors | grep Tccd1").read().split("+")[1].split(".")[0]) # Check temperature of CPU
         if (allowed_cpu_temp < cpu_temp): # Check to see if the CPU is too hot
             if not self.isCPUTempAlerting: # Check to see if an alert has already been sent
-                await alerts.send("ALERT: The CPU is over {}°C! Currently at {}°C\nThe fan may be unplugged or may have failed".format(allowed_cpu_temp, cpu_temp))
+                await alerts.send("ALERT: The CPU is over {}°C! Currently at {}°C".format(allowed_cpu_temp, cpu_temp))
                 self.isCPUTempAlerting = True
             if (allowed_cpu_temp + 20 < cpu_temp): # Check to see if the CPU is far too hot
                 if not self.isCPUHighTempAlerting: # Check to see if an alert has already been sent
                     await urgent.send("URGENT: The CPU is over {}°C! Currently at {}°C".format(allowed_cpu_temp + 20, cpu_temp))
                     self.isCPUHighTempAlerting = True
-        elif (self.isCPUTempAlerting): # Reset temperature booleans and send message
+        elif (self.isCPUTempAlerting and allowed_cpu_temp - 5 > cpu_temp): # Reset temperature booleans and send message
             await alerts.send("The CPU is now an acceptable temperature ({}°C) ".format(cpu_temp))
             self.isCPUTempAlerting = False
             self.isCPUHighTempAlerting = False
