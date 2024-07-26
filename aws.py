@@ -3,9 +3,6 @@ import os
 
 import discord
 from dotenv import load_dotenv
-from mcstatus import JavaServer
-from requests import get
-from datetime import datetime
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
