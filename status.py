@@ -35,7 +35,7 @@ class MyClient(commands.Bot):
 
         ### vars ###
         allowed_lsi_temp = 65
-        allowed_cpu_temp = 80
+        allowed_cpu_temp = 70
 
         allowed_cpu_load = 12 # 12 Threads
         allowed_memory_percentage = 80
