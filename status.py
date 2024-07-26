@@ -21,6 +21,8 @@ class MyClient(commands.Bot):
         self.isHBAHighTempAlerting = False
         self.isCPUTempAlerting = False
         self.isCPUHighTempAlerting = False
+        self.isloadAverageAlerting = False
+        self.isMemoryAlerting = False
 
     async def on_ready(self):
         channel = bot.get_channel(1212969964634374186)
@@ -35,10 +37,15 @@ class MyClient(commands.Bot):
         allowed_lsi_temp = 65
         allowed_cpu_temp = 80
 
+        allowed_cpu_load = 12 # 12 Threads
+        allowed_memory_percentage = 80
+
         ### Constant checks ###
         await self.raid_integrity(channel, urgent, alerts)
         await self.lsi_temp(channel, urgent, alerts, allowed_lsi_temp)
         await self.cpu_temp(channel, urgent, alerts, allowed_cpu_temp)
+        await self.cpu_load_average(channel, urgent, alerts, allowed_cpu_load)
+        await self.memory_usage(channel, urgent, alerts, allowed_memory_percentage)
         await self.transmissionCheck(alerts)
 
         ### Checks at specific times ###
@@ -164,6 +171,26 @@ class MyClient(commands.Bot):
             await alerts.send("The CPU is now an acceptable temperature ({}°C) ".format(cpu_temp))
             self.isCPUTempAlerting = False
             self.isCPUHighTempAlerting = False
+
+    async def cpu_load_average(self, channel, urgent, alerts, allowed_load_age):
+        load = (os.popen("/bin/cat /proc/loadavg").read()).split(" ")[0]
+        if (allowed_load_age < load): # Check to see if the CPU has a high load average
+            if not self.isloadAverageAlerting: # Check to see if an alert has already been sent
+                await alerts.send("ALERT: The CPU has a high load average! Currently at {}".format(str(round(load, 2))))
+                self.isloadAverageAlerting = True
+        elif (self.isloadAverageAlerting): # Reset load boolean
+            await alerts.send("The CPU is now at a load average of {}".format(str(round(load, 2))))
+            self.isloadAverageAlerting = False
+
+    async def memory_usage(self, channel, urgent, alerts, allowed_memory_usage):
+        memoryPercent = os.popen("free | grep Mem | awk '{print $3/$2 * 100}'").read()
+        if (allowed_memory_usage < memoryPercent): # Check to see if the memory usage is high
+            if not self.isMemoryAlerting: # Check to see if an alert has already been sent
+                await alerts.send("ALERT: The memory usage on the server is high! Currently at {}%".format(str(round(memoryPercent, 2))))
+                self.isMemoryAlerting = True
+        elif (self.isMemoryAlerting): # Reset memory boolean
+            await alerts.send("The memory usage is now {}$%".format(str(round(memoryPercent, 2))))
+            self.isMemoryAlerting = False
 
     async def transmissionCheck(self, alerts):
         transmissionStatusCheck = os.popen("curl server.alyssaserver.co.uk:9091").read()
