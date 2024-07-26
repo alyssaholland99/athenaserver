@@ -172,9 +172,9 @@ class MyClient(commands.Bot):
             self.isCPUTempAlerting = False
             self.isCPUHighTempAlerting = False
 
-    async def cpu_load_average(self, channel, urgent, alerts, allowed_load_age):
-        load = (os.popen("/bin/cat /proc/loadavg").read()).split(" ")[0]
-        if (allowed_load_age < load): # Check to see if the CPU has a high load average
+    async def cpu_load_average(self, channel, urgent, alerts, allowed_load_average):
+        load = int((os.popen("/bin/cat /proc/loadavg").read()).split(" ")[0])
+        if (allowed_load_average < load): # Check to see if the CPU has a high load average
             if not self.isloadAverageAlerting: # Check to see if an alert has already been sent
                 await alerts.send("ALERT: The CPU has a high load average! Currently at {}".format(str(round(load, 2))))
                 self.isloadAverageAlerting = True
