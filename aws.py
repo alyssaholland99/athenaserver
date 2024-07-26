@@ -27,7 +27,7 @@ async def on_message(message):
         if message.content.startswith('..'):
             return
         
-        if "100% packet loss" in os.popen("ping -c 4 server123.alyssaserver.co.uk").read():
+        if not "302" in os.popen("curl -Is https://cloud.alyssaserver.co.uk | head -n 1").read():
              await message.channel.send("AthenaServer may be offline, please checkout the status page here: <http://uptime.alyssaserver.co.uk/status/main>")
         
 client.run(TOKEN)
