@@ -27,7 +27,7 @@ async def on_message(message):
         if message.content.startswith('..'):
             return
         
-        if not "302" in os.popen("curl -Is https://cloud.alyssaserver.co.uk | head -n 1").read():
+        if not "302" in os.popen("curl -Is https://deadend.alyssaserver.co.uk | head -n 1").read():
              await message.channel.send("AthenaServer may be offline, please checkout the status page here: <http://uptime.alyssaserver.co.uk/status/main>")
         
 client.run(TOKEN)
