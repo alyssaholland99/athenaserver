@@ -105,18 +105,18 @@ async def on_message(message):
                 match (msg.split(" ")[1]):
                     case "uptime":
                         await message.channel.send("Athena: {}".format(os.popen("uptime -p").read()))
-                        if not "100% packet loss" in os.popen("ping -c 1 192.168.0.100").read():
-                            await message.channel.send("Amelia (Cold storage): Online - Unable to get uptime due to security constraints")
-                        else:
-                            await message.channel.send("Amelia (Cold storage): Offline")
-                        if not "up" in os.popen('/bin/ssh -i "/root/aws/us.pem" ec2-user@uptime.alyssaserver.co.uk "uptime -p"').read():
-                            await message.channel.send("AWS: " + os.popen('/bin/ssh -i "/root/aws/us.pem" ec2-user@uptime.alyssaserver.co.uk "uptime -p"').read())
-                        else: 
-                            await message.channel.send("AWS: Offline")
                         if not "100% packet loss" in os.popen("ping -c 1 offsitebackup").read():
                             await message.channel.send("Offsite: " + os.popen('/bin/ssh root@offsitebackup "uptime -p"').read())
                         else: 
                             await message.channel.send("Offsite: Offline")
+                        if "up" in os.popen('/bin/ssh -i "/root/aws/us.pem" ec2-user@uptime.alyssaserver.co.uk "uptime -p"').read():
+                            await message.channel.send("AWS: " + os.popen('/bin/ssh -i "/root/aws/us.pem" ec2-user@uptime.alyssaserver.co.uk "uptime -p"').read())
+                        else: 
+                            await message.channel.send("AWS: Offline")
+                        if not "100% packet loss" in os.popen("ping -c 1 192.168.0.100").read():
+                            await message.channel.send("Amelia (Cold storage): Online - Unable to get uptime due to security constraints")
+                        else:
+                            await message.channel.send("Amelia (Cold storage): Offline")
                     case "load":
                         load = (os.popen("/bin/cat /proc/loadavg").read()).split(" ")[0]
                         load = (float(load)/12)*100
