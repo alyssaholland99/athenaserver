@@ -37,8 +37,8 @@ class MyClient(commands.Bot):
         allowed_lsi_temp = 65
         allowed_cpu_temp = 80
 
-        allowed_cpu_load = 1 # 12 Threads
-        allowed_memory_percentage = 1
+        allowed_cpu_load = 12 # 12 Threads
+        allowed_memory_percentage = 80
 
         ### Constant checks ###
         await self.raid_integrity(channel, urgent, alerts)
