@@ -113,7 +113,7 @@ async def on_message(message):
                             await message.channel.send("Offsite: " + os.popen('/bin/ssh root@offsitebackup "uptime -p"').read())
                         else: 
                             await message.channel.send("Offsite: Offline")
-                        if not "100% packet loss" in os.popen("ping -c 1 uptime.alyssaserver.co.uk").read():
+                        if not "up" in os.popen('/bin/ssh -i "/root/aws/us.pem" ec2-user@uptime.alyssaserver.co.uk "uptime -p"').read():
                             await message.channel.send("AWS: " + os.popen('/bin/ssh -i "/root/aws/us.pem" ec2-user@uptime.alyssaserver.co.uk "uptime -p"').read())
                         else: 
                             await message.channel.send("AWS: Offline")
