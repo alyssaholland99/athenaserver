@@ -183,7 +183,7 @@ class MyClient(commands.Bot):
             self.isloadAverageAlerting = False
 
     async def memory_usage(self, channel, urgent, alerts, allowed_memory_usage):
-        memoryPercent = os.popen("free | grep Mem | awk '{print $3/$2 * 100}'").read()
+        memoryPercent = float(os.popen("free | grep Mem | awk '{print $3/$2 * 100}'").read())
         if (allowed_memory_usage < memoryPercent): # Check to see if the memory usage is high
             if not self.isMemoryAlerting: # Check to see if an alert has already been sent
                 await alerts.send("ALERT: The memory usage on the server is high! Currently at {}%".format(str(round(memoryPercent, 2))))
