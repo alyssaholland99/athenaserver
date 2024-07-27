@@ -61,7 +61,7 @@ class MyClient(commands.Bot):
                     return
                 await self.smart(channel, urgent, alerts)
 
-            case [10, 30]: #10:30
+            case [18, 30]: #10:30
                 if self.msg_sent:
                     return
                 await self.offsite_backup_check(channel, urgent, alerts)
