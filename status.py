@@ -35,7 +35,7 @@ class MyClient(commands.Bot):
 
         ### vars ###
         allowed_lsi_temp = 65
-        allowed_cpu_temp = 70
+        allowed_cpu_temp = 75
 
         allowed_cpu_load = 12 # 12 Threads
         allowed_memory_percentage = 80
@@ -163,7 +163,7 @@ class MyClient(commands.Bot):
             if not self.isCPUTempAlerting: # Check to see if an alert has already been sent
                 await alerts.send("ALERT: The CPU is over {}°C! Currently at {}°C".format(allowed_cpu_temp, cpu_temp))
                 self.isCPUTempAlerting = True
-            if (allowed_cpu_temp + 20 < cpu_temp): # Check to see if the CPU is far too hot
+            if (allowed_cpu_temp + 10 < cpu_temp): # Check to see if the CPU is far too hot
                 if not self.isCPUHighTempAlerting: # Check to see if an alert has already been sent
                     await urgent.send("URGENT: The CPU is over {}°C! Currently at {}°C".format(allowed_cpu_temp + 20, cpu_temp))
                     self.isCPUHighTempAlerting = True
