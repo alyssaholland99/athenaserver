@@ -189,7 +189,7 @@ class MyClient(commands.Bot):
                 await alerts.send("ALERT: The memory usage on the server is high! Currently at {}%".format(str(round(memoryPercent, 2))))
                 self.isMemoryAlerting = True
         elif (self.isMemoryAlerting): # Reset memory boolean
-            await alerts.send("The memory usage is now {}$%".format(str(round(memoryPercent, 2))))
+            await alerts.send("The memory usage is now {}%".format(str(round(memoryPercent, 2))))
             self.isMemoryAlerting = False
 
     async def transmissionCheck(self, alerts):
