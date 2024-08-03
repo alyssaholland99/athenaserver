@@ -583,7 +583,7 @@ async def on_message(message):
                             messageConst += "Stopped Services:\n"
                             for s in stoppedServices:
                                 messageConst += "- {}\n".format(s)
-                            messageConst += "You can use `.[service] start` to start the service\nSee uptimes of game servers here: <http://uptime.alyssaserver.co.uk/status/main>\nSee uptime of main services here: <http://uptime.alyssaserver.co.uk/status/gameservers>"
+                            messageConst += "You can use `.[service] start` to start the service\n\nSee uptimes of game servers here: <http://uptime.alyssaserver.co.uk/status/gameservers>\nSee uptime of main services here: <http://uptime.alyssaserver.co.uk/status/main>"
                         await message.channel.send(messageConst)
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
