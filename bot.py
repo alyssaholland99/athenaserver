@@ -37,7 +37,7 @@ serverCommands = ["uptime", "load", "memory", "mdadm", "gpu_pwr"]
 botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
 trustCommands = ["add\*", "remove\*", "list"]
 serviceCommands = ["status"]
-photoprismCommands = ["start\*", "stop\*"]
+immichCommands = ["start\*", "stop\*"]
 transmissionCommands = ["start\*", "stop\*", "restart\*", "ip\*"]
 helpCommands = [{
     "minecraft" : minecraftCommands,
@@ -48,7 +48,7 @@ helpCommands = [{
     "rust" : rustCommands
 },
 {
-    "photoprism" : photoprismCommands,
+    "immich" : immichCommands,
     "server" : serverCommands,
     "bot" : botCommands,
     "trust" : trustCommands,
@@ -446,22 +446,25 @@ async def on_message(message):
                         await message.channel.send(commandError("rust"))
 
 
-            case "photo" | "photos" | "photoprism":
+            case "photo" | "photos" | "immich":
                 if len(msg.split(" ")) == 1:
-                    await message.channel.send(commandError("photoprism"))
+                    await message.channel.send(commandError("immich"))
                     return
                 if not isTrusted(message.author):
                     await message.channel.send(getInsufficentPermissionMessage())
                     return
                 match (msg.split(" ")[1]):
                     case "start":
-                        os.system("/bin/docker compose -f /root/Photoprism/docker-compose.yml up -d >> /dev/null 2>&1")
-                        await message.channel.send("Starting Photoprism")
+                        os.system("/bin/docker compose -f /root/immich/docker-compose.yml up -d >> /dev/null 2>&1")
+                        await message.channel.send("Starting Immich")
                     case "stop":
-                        os.system("/bin/docker compose -f /root/Photoprism/docker-compose.yml down >> /dev/null 2>&1")
-                        await message.channel.send("Stopping Photoprism")
+                        os.system("/bin/docker compose -f /root/immich/docker-compose.yml down >> /dev/null 2>&1")
+                        await message.channel.send("Stopping Immich")
+                    case "restart":
+                        os.system("/bin/docker compose -f /root/immich/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker compose -f /root/immich/docker-compose.yml up -d >> /dev/null 2>&1")
+                        await message.channel.send("Stopping Immich")
                     case _:
-                        await message.channel.send(commandError("photoprism"))
+                        await message.channel.send(commandError("immich"))
 
             case "transmission":
                 if len(msg.split(" ")) == 1:
