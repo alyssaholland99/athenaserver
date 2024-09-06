@@ -206,7 +206,7 @@ class MyClient(commands.Bot):
         currentSshClients = sshClientCheck.splitlines()
         currentSshClients.remove('-')
         clientDifference = list(set(self.sshClients) - set(currentSshClients))
-        if clientDifference >= 1:
+        if len(clientDifference) >= 1:
             for ip in clientDifference:
                 await alerts.send("{} has just started an SSH session".format(ip))
         self.sshClients = currentSshClients
