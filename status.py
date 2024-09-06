@@ -205,10 +205,14 @@ class MyClient(commands.Bot):
         sshClientCheck = os.popen("w -ih | awk '{print $2}'").read()
         currentSshClients = sshClientCheck.splitlines()
         currentSshClients.remove('-')
-        clientDifference = list(set(currentSshClients) - set(self.sshClients))
-        if len(clientDifference) >= 1:
-            for ip in clientDifference:
+        clientDifferenceConnected = list(set(currentSshClients) - set(self.sshClients))
+        clientDifferenceDisconnected = list(set(self.sshClients) - set(currentSshClients))
+        if len(clientDifferenceConnected) >= 1:
+            for ip in clientDifferenceConnected:
                 await alerts.send("{} has just started an SSH session".format(ip))
+        if len(clientDifferenceDisconnected) >= 1:
+            for ip in clientDifferenceDisconnected:
+                await alerts.send("{} has just closed their SSH session".format(ip))
         self.sshClients = currentSshClients
 
 
