@@ -23,6 +23,7 @@ class MyClient(commands.Bot):
         self.isCPUHighTempAlerting = False
         self.isloadAverageAlerting = False
         self.isMemoryAlerting = False
+        self.sshClients = []
 
     async def on_ready(self):
         channel = bot.get_channel(1212969964634374186)
@@ -47,6 +48,7 @@ class MyClient(commands.Bot):
         await self.cpu_load_average(channel, urgent, alerts, allowed_cpu_load)
         await self.memory_usage(channel, urgent, alerts, allowed_memory_percentage)
         await self.transmissionCheck(alerts)
+        await self.sshConnectionCheck(alerts)
 
         ### Checks at specific times ###
         match getCurrentTime():
@@ -198,6 +200,17 @@ class MyClient(commands.Bot):
             await alerts.send("Transmission is unreachable. Restarting...")
             os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
             await alerts.send("Transmission restarted")
+
+    async def sshConnectionCheck(self, alerts):
+        sshClientCheck = os.popen("w -ih | awk '{print $2}'").read()
+        currentSshClients = sshClientCheck.splitlines()
+        currentSshClients.remove('-')
+        clientDifference = list(set(self.sshClients) - set(currentSshClients))
+        if clientDifference >= 1:
+            for ip in clientDifference:
+                await alerts.send("{} has just started an SSH session".format(ip))
+        self.sshClients = currentSshClients
+
 
 bot = MyClient(command_prefix='.!.!.!', intents=discord.Intents().all())
 
