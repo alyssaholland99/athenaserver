@@ -205,7 +205,7 @@ class MyClient(commands.Bot):
         sshClientCheck = os.popen("w -ih | awk '{print $2}'").read()
         currentSshClients = sshClientCheck.splitlines()
         currentSshClients.remove('-')
-        clientDifference = list(set(self.sshClients) - set(currentSshClients))
+        clientDifference = list(set(currentSshClients) - set(self.sshClients))
         await alerts.send(clientDifference)
         await alerts.send(currentSshClients)
         await alerts.send(self.sshClients)
