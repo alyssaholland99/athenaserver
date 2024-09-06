@@ -204,7 +204,8 @@ class MyClient(commands.Bot):
     async def sshConnectionCheck(self, alerts):
         sshClientCheck = os.popen("w -ih | awk '{print $2}'").read()
         currentSshClients = sshClientCheck.splitlines()
-        currentSshClients.remove('-')
+        if '-' in currentSshClients:
+            currentSshClients.remove('-')
         clientDifferenceConnected = list(set(currentSshClients) - set(self.sshClients))
         clientDifferenceDisconnected = list(set(self.sshClients) - set(currentSshClients))
         if len(clientDifferenceConnected) >= 1:
