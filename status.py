@@ -26,9 +26,9 @@ class MyClient(commands.Bot):
         self.sshClients = []
 
     async def on_ready(self):
-        channel = bot.get_channel(os.getenv('ALERTS'))
-        urgent = bot.get_channel(os.getenv('URGENT'))
-        alerts = bot.get_channel(os.getenv('NOTIFICATIONS'))
+        channel = bot.get_channel(int(os.getenv('NOTIFICATIONS')))
+        urgent = bot.get_channel(int(os.getenv('URGENT')))
+        alerts = bot.get_channel(int(os.getenv('alerts')))
         await self.timer.start(channel, urgent, alerts)
 
     @tasks.loop(seconds=60)
