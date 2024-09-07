@@ -31,7 +31,7 @@ palworldCommands = ["info", "status", "players", "backup", "start", "restart", "
 minecraftCommands = ["info", "status", "players", "whitelist [minecraft_username]", "start", "stop\*"]
 sotfCommands = ["info", "status", "backup", "start\* [force]", "restart\*", "stop\*"]
 valheimCommands = ["info", "status", "start", "stop\*"]
-beamCommands = ["info, status, start, stop\*"]
+beamCommands = ["info, status, start, stop\*", "restart\*"]
 rustCommands = ["info, status, start, stop\*"]
 serverCommands = ["uptime", "load", "memory", "mdadm", "gpu_pwr"]
 botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
@@ -414,6 +414,14 @@ async def on_message(message):
                                 return
                             os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml down >> /dev/null 2>&1")
                             await message.channel.send("Stopping the BeamNG server")
+                    case "restart":
+                        if isTrusted(message.author):
+                            if not isRunning(servicePorts["Beam"]): 
+                                await message.channel.send("The BeamNG server is not running")
+                                return
+                            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml down >> /dev/null 2>&1")
+                            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml up -d >> /dev/null 2>&1")
+                            await message.channel.send("Restarting the BeamNG server")
                     case _:
                         await message.channel.send(commandError("beam"))
 
