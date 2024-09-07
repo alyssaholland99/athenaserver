@@ -28,7 +28,7 @@ class MyClient(commands.Bot):
     async def on_ready(self):
         channel = bot.get_channel(int(os.getenv('NOTIFICATIONS')))
         urgent = bot.get_channel(int(os.getenv('URGENT')))
-        alerts = bot.get_channel(int(os.getenv('alerts')))
+        alerts = bot.get_channel(int(os.getenv('ALERTS')))
         await self.timer.start(channel, urgent, alerts)
 
     @tasks.loop(seconds=60)
