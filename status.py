@@ -24,6 +24,8 @@ class MyClient(commands.Bot):
         self.isloadAverageAlerting = False
         self.isMemoryAlerting = False
         self.sshClients = []
+        self.isStorageAlerting = False
+        self.isUrgentStorageAlerting = False
 
     async def on_ready(self):
         channel = bot.get_channel(int(os.getenv('NOTIFICATIONS')))
@@ -49,6 +51,7 @@ class MyClient(commands.Bot):
         await self.memory_usage(channel, urgent, alerts, allowed_memory_percentage)
         await self.transmissionCheck(alerts)
         await self.sshConnectionCheck(alerts)
+        await self.bootDriveStorageCheck(alerts, urgent)
 
         ### Checks at specific times ###
         match getCurrentTime():
@@ -216,6 +219,19 @@ class MyClient(commands.Bot):
                 await alerts.send("{} has just closed their SSH session".format(ip))
         self.sshClients = currentSshClients
 
+    async def bootDriveStorageCheck(self, alerts, urgent):
+        storageCheck = os.popen("df -h / | awk '{print $5}' | tail -n +2").read()
+        storageCheck = int(storageCheck.replace("%", ""))
+        if storageCheck >= 20:
+            if not self.isStorageAlerting:
+                await alerts.send("Boot drive is at {}% usage".format(storageCheck))
+                self.isStorageAlerting = True
+        if storageCheck >= 90:
+            if not self.isUrgentStorageAlerting:
+                await urgent.send("Boot drive is at {}% usage".format(storageCheck))
+                self.isUrgentStorageAlerting = True
+        if storageCheck >= 95:
+            await urgent.send("Boot drive is at {}% usage".format(storageCheck))
 
 bot = MyClient(command_prefix='.!.!.!', intents=discord.Intents().all())
 
