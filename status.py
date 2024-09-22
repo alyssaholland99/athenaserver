@@ -222,7 +222,7 @@ class MyClient(commands.Bot):
     async def bootDriveStorageCheck(self, alerts, urgent):
         storageCheck = os.popen("df -h / | awk '{print $5}' | tail -n +2").read()
         storageCheck = int(storageCheck.replace("%", ""))
-        if storageCheck >= 20:
+        if storageCheck >= 80:
             if not self.isStorageAlerting:
                 await alerts.send("Boot drive is at {}% usage".format(storageCheck))
                 self.isStorageAlerting = True
