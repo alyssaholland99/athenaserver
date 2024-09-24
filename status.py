@@ -216,13 +216,13 @@ class MyClient(commands.Bot):
                 local = "REMOTE"
                 if "192.168.0." in ip:
                     local = "LOCAL"
-                await alerts.send("{} ({}) has just started an SSH session".format(local, ip))
+                await alerts.send("{} ({}) has just started an SSH session".format(ip, local))
         if len(clientDifferenceDisconnected) >= 1:
             for ip in clientDifferenceDisconnected:
                 local = "REMOTE"
                 if "192.168.0." in ip:
                     local = "LOCAL"
-                await alerts.send("{} ({}) has just closed their SSH session".format(local, ip))
+                await alerts.send("{} ({}) has just closed their SSH session".format(ip, local))
         self.sshClients = currentSshClients
 
     async def bootDriveStorageCheck(self, alerts, urgent):
