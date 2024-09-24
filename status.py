@@ -211,14 +211,17 @@ class MyClient(commands.Bot):
             currentSshClients.remove('-')
         clientDifferenceConnected = list(set(currentSshClients) - set(self.sshClients))
         clientDifferenceDisconnected = list(set(self.sshClients) - set(currentSshClients))
-        local = "REMOTE"
-        if "192.168.0." in ip:
-            local = "LOCAL"
         if len(clientDifferenceConnected) >= 1:
             for ip in clientDifferenceConnected:
+                local = "REMOTE"
+                if "192.168.0." in ip:
+                    local = "LOCAL"
                 await alerts.send("{} ({}) has just started an SSH session".format(local, ip))
         if len(clientDifferenceDisconnected) >= 1:
             for ip in clientDifferenceDisconnected:
+                local = "REMOTE"
+                if "192.168.0." in ip:
+                    local = "LOCAL"
                 await alerts.send("{} ({}) has just closed their SSH session".format(local, ip))
         self.sshClients = currentSshClients
 
