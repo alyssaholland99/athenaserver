@@ -256,7 +256,7 @@ class MyClient(commands.Bot):
         if "%" in storageCheck:
             storageCheck = storageCheck.splitlines()
             storageCheck = int(storageCheck[0].replace("%", ""))
-            if storageCheck >= 90:
+            if storageCheck >= 90 and storageCheck < 95:
                 await alerts.send("Offsite drive is at {}% usage".format(storageCheck))
             if storageCheck >= 95:
                 await urgent.send("Offsite drive is at {}% usage".format(storageCheck))
