@@ -52,7 +52,6 @@ class MyClient(commands.Bot):
         await self.transmissionCheck(alerts)
         await self.sshConnectionCheck(alerts)
         await self.bootDriveStorageCheck(alerts, urgent)
-        await self.offsiteDriveStorageCheck(alerts, urgent)
 
         ### Checks at specific times ###
         match getCurrentTime():
@@ -80,6 +79,7 @@ class MyClient(commands.Bot):
             case [12, 0]: #12:00
                 if self.msg_sent:
                     return
+                await self.offsiteDriveStorageCheck(alerts, urgent)
                 day = datetime.datetime.today().weekday()
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
