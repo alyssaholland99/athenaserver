@@ -252,7 +252,7 @@ class MyClient(commands.Bot):
             await urgent.send("Boot drive is at {}% usage".format(storageCheck))
 
     async def offsiteDriveStorageCheck(self, alerts, urgent):
-        storageCheck = os.popen('/bin/ssh root@offsitebackup -tt "/root/checkStorage.sh').read()
+        storageCheck = os.popen('/bin/ssh root@offsitebackup -tt "/root/checkStorage.sh"').read()
         if "%" in storageCheck:
             storageCheck = storageCheck.splitlines()
             storageCheck = int(storageCheck[0].replace("%", ""))
