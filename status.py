@@ -257,15 +257,10 @@ class MyClient(commands.Bot):
             storageCheck = storageCheck.splitlines()
             storageCheck = int(storageCheck[0].replace("%", ""))
             if storageCheck >= 90:
-                if not self.isStorageAlerting:
-                    await alerts.send("Offsite drive is at {}% usage".format(storageCheck))
-                    self.isStorageAlerting = True
+                await alerts.send("Offsite drive is at {}% usage".format(storageCheck))
             if storageCheck >= 95:
-                if not self.isUrgentStorageAlerting:
-                    await urgent.send("Offsite drive is at {}% usage".format(storageCheck))
-                    self.isUrgentStorageAlerting = True
-            if storageCheck >= 98:
                 await urgent.send("Offsite drive is at {}% usage".format(storageCheck))
+                
 
 bot = MyClient(command_prefix='.!.!.!', intents=discord.Intents().all())
 
