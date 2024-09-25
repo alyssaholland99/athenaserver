@@ -253,7 +253,7 @@ class MyClient(commands.Bot):
 
     async def offsiteDriveStorageCheck(self, alerts, urgent):
         storageCheck = os.popen('ssh root@offsitebackup -tt "/root/checkStorage.sh').read()
-        storageCheck = storageCheck.splitlines()[0]
+        #storageCheck = storageCheck.splitlines()[0]
         storageCheck = int(storageCheck.replace("%", ""))
         if storageCheck >= 90:
             if not self.isStorageAlerting:
