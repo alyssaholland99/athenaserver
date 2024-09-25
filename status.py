@@ -66,10 +66,15 @@ class MyClient(commands.Bot):
                     return
                 await self.smart(channel, urgent, alerts)
 
-            case [18, 30]: #10:30
+            case [18, 30]: #18:30
                 if self.msg_sent:
                     return
                 await self.offsite_backup_check(channel, urgent, alerts)
+
+            case [17, 30]: #17:30
+                if self.msg_sent:
+                    return
+                await self.offite_cleanup_check(channel)
 
             case [12, 0]: #12:00
                 if self.msg_sent:
@@ -98,6 +103,12 @@ class MyClient(commands.Bot):
         else:
             await urgent.send("FAILURE: Unable to get status for offsite backup\n\nOutput Log:\n{}".format(backupLogs))
         self.msg_sent = True
+
+    async def offite_cleanup_check(self, channel):
+        modifiedTime = os.path.getmtime('/root/athenaserver/syslogs/duplicityRemoval')
+        if (modifiedTime // 3600) <= 24:
+            cleanupLogs = os.popen('cat /root/athenaserver/syslogs/duplicityRemoval').read()
+            await channel.send("Backup files appear to have been cleaned\n\nOutput Log:\n{}".format(cleanupLogs))
             
     async def raid_status(self, channel, urgent, alerts):
         # RAID status
