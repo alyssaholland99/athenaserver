@@ -52,6 +52,7 @@ class MyClient(commands.Bot):
         await self.transmissionCheck(alerts)
         await self.sshConnectionCheck(alerts)
         await self.bootDriveStorageCheck(alerts, urgent)
+        await self.offsiteDriveStorageCheck(alerts, urgent)
 
         ### Checks at specific times ###
         match getCurrentTime():
@@ -249,6 +250,21 @@ class MyClient(commands.Bot):
                 self.isUrgentStorageAlerting = True
         if storageCheck >= 95:
             await urgent.send("Boot drive is at {}% usage".format(storageCheck))
+
+    async def offsiteDriveStorageCheck(self, alerts, urgent):
+        storageCheck = os.popen('ssh root@offsitebackup -tt "/root/checkStorage.sh').read()
+        storageCheck = storageCheck.splitlines()[0]
+        storageCheck = int(storageCheck.replace("%", ""))
+        if storageCheck >= 90:
+            if not self.isStorageAlerting:
+                await alerts.send("Offsite drive is at {}% usage".format(storageCheck))
+                self.isStorageAlerting = True
+        if storageCheck >= 95:
+            if not self.isUrgentStorageAlerting:
+                await urgent.send("Offsite drive is at {}% usage".format(storageCheck))
+                self.isUrgentStorageAlerting = True
+        if storageCheck >= 98:
+            await urgent.send("Offsite drive is at {}% usage".format(storageCheck))
 
 bot = MyClient(command_prefix='.!.!.!', intents=discord.Intents().all())
 
