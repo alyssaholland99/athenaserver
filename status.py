@@ -256,10 +256,13 @@ class MyClient(commands.Bot):
         if "%" in storageCheck:
             storageCheck = storageCheck.splitlines()
             storageCheck = int(storageCheck[0].replace("%", ""))
-            if storageCheck >= 90 and storageCheck < 95:
+            day = datetime.datetime.today().weekday()
+            if day == 4: # Friday
                 await alerts.send("Offsite drive is at {}% usage".format(storageCheck))
+            if storageCheck >= 90 and storageCheck < 95:
+                await alerts.send("ALERT: Offsite drive is at {}% usage".format(storageCheck))
             if storageCheck >= 95:
-                await urgent.send("Offsite drive is at {}% usage".format(storageCheck))
+                await urgent.send("URGENT: Offsite drive is at {}% usage".format(storageCheck))
                 
 
 bot = MyClient(command_prefix='.!.!.!', intents=discord.Intents().all())
