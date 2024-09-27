@@ -69,7 +69,7 @@ class MyClient(commands.Bot):
             case [18, 30]: #18:30
                 if self.msg_sent:
                     return
-                await self.offsite_backup_check(channel, urgent, alerts)
+                await self.offsite_backup_check(channel, urgent, alerts, channel)
 
             case [17, 30]: #17:30
                 if self.msg_sent:
@@ -251,14 +251,14 @@ class MyClient(commands.Bot):
         if storageCheck >= 95:
             await urgent.send("Boot drive is at {}% usage".format(storageCheck))
 
-    async def offsiteDriveStorageCheck(self, alerts, urgent):
+    async def offsiteDriveStorageCheck(self, alerts, urgent, channel):
         storageCheck = os.popen('/bin/ssh root@offsitebackup -tt "/root/checkStorage.sh"').read()
         if "%" in storageCheck:
             storageCheck = storageCheck.splitlines()
             storageCheck = int(storageCheck[0].replace("%", ""))
             day = datetime.datetime.today().weekday()
             if day == 4: # Friday
-                await alerts.send("Offsite drive is at {}% usage".format(storageCheck))
+                await channel.send("Offsite drive is at {}% usage".format(storageCheck))
             if storageCheck >= 90 and storageCheck < 95:
                 await alerts.send("ALERT: Offsite drive is at {}% usage".format(storageCheck))
             if storageCheck >= 95:
