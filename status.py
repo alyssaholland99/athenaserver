@@ -69,17 +69,17 @@ class MyClient(commands.Bot):
             case [18, 30]: #18:30
                 if self.msg_sent:
                     return
-                await self.offsite_backup_check(channel, urgent, alerts, channel)
+                await self.offsite_backup_check(channel, urgent, alerts)
 
             case [17, 30]: #17:30
                 if self.msg_sent:
                     return
                 await self.offite_cleanup_check(channel)
 
-            case [12, 0]: #12:00
+            case [22, 0]: #12:00
                 if self.msg_sent:
                     return
-                await self.offsiteDriveStorageCheck(alerts, urgent)
+                await self.offsiteDriveStorageCheck(alerts, urgent, channel)
                 day = datetime.datetime.today().weekday()
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
