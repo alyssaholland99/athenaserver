@@ -76,13 +76,15 @@ class MyClient(commands.Bot):
                     return
                 await self.offite_cleanup_check(channel)
 
-            case [22, 0]: #12:00
+            case [12, 0]: #12:00
                 if self.msg_sent:
                     return
-                await self.offsiteDriveStorageCheck(alerts, urgent, channel)
                 day = datetime.datetime.today().weekday()
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
+
+            case [16, 0]: #12:00
+                await self.offsiteDriveStorageCheck(alerts, urgent, channel)
 
             case _:
                 self.msg_sent = False
@@ -257,8 +259,8 @@ class MyClient(commands.Bot):
             storageCheck = storageCheck.splitlines()
             storageCheck = int(storageCheck[0].replace("%", ""))
             day = datetime.datetime.today().weekday()
-            if day == 4: # Friday
-                await channel.send("Offsite drive is at {}% usage".format(storageCheck))
+            #if day == 4: # Friday
+            await channel.send("Offsite drive is at {}% usage".format(storageCheck))
             if storageCheck >= 90 and storageCheck < 95:
                 await alerts.send("ALERT: Offsite drive is at {}% usage".format(storageCheck))
             if storageCheck >= 95:
