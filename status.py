@@ -221,7 +221,7 @@ class MyClient(commands.Bot):
                 await alerts.send("Transmission is unreachable. Restarting...", delete_after=60)
             self.isTransmissionAlerting = True
             os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
-        elif self.isTransmssionAlerting == True:
+        elif self.isTransmissionAlerting == True:
             await alerts.send("Transmission restarted successfully")
             self.isTransmissionAlerting = False
 
