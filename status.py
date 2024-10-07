@@ -26,6 +26,7 @@ class MyClient(commands.Bot):
         self.sshClients = []
         self.isStorageAlerting = False
         self.isUrgentStorageAlerting = False
+        self.isTransmissionAlerting = False
 
     async def on_ready(self):
         channel = bot.get_channel(int(os.getenv('NOTIFICATIONS')))
@@ -214,9 +215,15 @@ class MyClient(commands.Bot):
     async def transmissionCheck(self, alerts):
         transmissionStatusCheck = os.popen("curl server.alyssaserver.co.uk:9091").read()
         if "401" not in transmissionStatusCheck:
-            await alerts.send("Transmission is unreachable. Restarting...")
+            if self.isTransmissionAlerting == True:
+                await alerts.send("Transmission failed to restart successfully. Retrying restart...", delete_after=60)
+            else:
+                await alerts.send("Transmission is unreachable. Restarting...", delete_after=60)
+            self.isTransmissionAlerting = True
             os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
-            await alerts.send("Transmission restarted")
+        elif self.isTransmssionAlerting == True:
+            await alerts.send("Transmission restarted successfully")
+            self.isTransmissionAlerting = False
 
     async def sshConnectionCheck(self, alerts):
         sshClientCheck = os.popen("w -ih | awk '{print $2}'").read()
