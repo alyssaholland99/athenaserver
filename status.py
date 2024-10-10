@@ -268,9 +268,9 @@ class MyClient(commands.Bot):
             tb = storageCheck[1]+"B"
             percentage = int(storageCheck[0].replace("%", ""))
             await channel.send("Offsite drive is at {}% usage ({})".format(percentage, tb))
-            if storageCheck >= 90 and storageCheck < 95:
+            if percentage >= 90 and storageCheck < 95:
                 await alerts.send("ALERT: Offsite drive is at {}% usage ({})".format(percentage, tb))
-            if storageCheck >= 95:
+            if percentage >= 95:
                 await urgent.send("URGENT: Offsite drive is at {}% usage ({})".format(percentage, tb))
                 
 
