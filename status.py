@@ -67,7 +67,7 @@ class MyClient(commands.Bot):
                     return
                 await self.smart(channel, urgent, alerts)
 
-            case [18, 30]: #18:30
+            case [12, 20]: #12:20
                 if self.msg_sent:
                     return
                 await self.offsite_backup_check(channel, urgent, alerts)
@@ -84,7 +84,7 @@ class MyClient(commands.Bot):
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
 
-            case [11, 40]: #12:00
+            case [12, 15]: #12:15
                 await self.offsiteDriveStorageCheck(alerts, urgent, channel)
 
             case _:
