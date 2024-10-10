@@ -84,7 +84,7 @@ class MyClient(commands.Bot):
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
 
-            case [16, 0]: #12:00
+            case [11, 40]: #12:00
                 await self.offsiteDriveStorageCheck(alerts, urgent, channel)
 
             case _:
@@ -264,14 +264,14 @@ class MyClient(commands.Bot):
         storageCheck = os.popen('/bin/ssh root@offsitebackup -tt "/root/checkStorage.sh"').read()
         if "%" in storageCheck:
             storageCheck = storageCheck.splitlines()
-            storageCheck = int(storageCheck[0].replace("%", ""))
-            day = datetime.datetime.today().weekday()
-            #if day == 4: # Friday
-            await channel.send("Offsite drive is at {}% usage".format(storageCheck))
+            storageCheck = storageCheck[0].split(" ")
+            tb = storageCheck[1]+"B"
+            percentage = int(storageCheck[0].replace("%", ""))
+            await channel.send("Offsite drive is at {}% usage ({})".format(percentage, tb))
             if storageCheck >= 90 and storageCheck < 95:
-                await alerts.send("ALERT: Offsite drive is at {}% usage".format(storageCheck))
+                await alerts.send("ALERT: Offsite drive is at {}% usage ({})".format(percentage, tb))
             if storageCheck >= 95:
-                await urgent.send("URGENT: Offsite drive is at {}% usage".format(storageCheck))
+                await urgent.send("URGENT: Offsite drive is at {}% usage ({})".format(percentage, tb))
                 
 
 bot = MyClient(command_prefix='.!.!.!', intents=discord.Intents().all())
