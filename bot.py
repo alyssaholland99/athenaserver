@@ -225,22 +225,21 @@ async def on_message(message):
                         else:
                             await message.channel.send("There are currently no players online")
                     case "start":
-                        if isRunning(servicePorts["Minecraft"]):
-                            await message.channel.send("The Minecraft server is already running")
-                            return
-                        os.system("/bin/systemctl start minecraft")
-                        await message.channel.send("Starting Minecraft server")
+                        start("Minecraft", message)
                     case "stop":
                         if isTrusted(message.author):
-                            if not isRunning(servicePorts["Minecraft"]):
-                                await message.channel.send("The Minecraft server is already stopped")
-                                return
-                            status = minecraft.status()
-                            if status.players.online == 0:
-                                restartStatus = os.system("/bin/systemctl stop minecraft")
-                                await message.channel.send("Stopping the minecraft server")
+                            if not minecraftPlayersOnline(minecraft):
+                                stop("Minecraft", message)
                             else: 
                                 await message.channel.send("There are players currently on the world, not stopped")
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
+                    case "restart":
+                        if isTrusted(message.author):
+                            if not minecraftPlayersOnline(minecraft):
+                                restart("Minecraft", message)
+                            else: 
+                                await message.channel.send("There are players currently on the world, not restarted")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "whitelist":
@@ -269,19 +268,7 @@ async def on_message(message):
                             wltxt.write(json.dumps(newWhitelist))
                         
                         await message.channel.send("Added {} to the whitelist".format(message.content[1:].split(" ")[2]))
-                    case "restart":
-                        if isTrusted(message.author):
-                            if not isRunning(servicePorts["Minecraft"]):
-                                await message.channel.send("The Minecraft server is not running, use `.minecraft start` to start it")
-                                return
-                            status = minecraft.status()
-                            if status.players.online == 0:
-                                restartStatus = os.system("/bin/systemctl restart minecraft")
-                                await message.channel.send("Restarting the minecraft server")
-                            else: 
-                                await message.channel.send("There are players currently on the world, not restarted")
-                        else:
-                            await message.channel.send(getInsufficentPermissionMessage())
+                    
                     case _:
                         await message.channel.send(commandError("minecraft"))
                 return
@@ -302,26 +289,17 @@ async def on_message(message):
                         #TODO
                         await message.channel.send("This command is currently WIP")
                     case "start":
-                        if isRunning(servicePorts["Valheim"]):
-                            await message.channel.send("The Valheim server is already running")
-                            return
-                        os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
+                        start("Valheim", message)
                         await message.channel.send("Starting the Valheim server")
                     case "stop":
                         if isTrusted(message.author):
-                            if not isRunning(servicePorts["Valheim"]):
-                                await message.channel.send("The Valheim server is already stopped")
-                                return
-                            restartStatus = os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1")
+                            stop("Valheim", message)
                             await message.channel.send("Stopping the Valheim server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "restart":
                         if isTrusted(message.author):
-                            if not isRunning(servicePorts["Valheim"]):
-                                await message.channel.send("The Valheim server is not running, use `.valheim start` to start it")
-                                return
-                            restartStatus = os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
+                            restart("Valheim", message)
                             await message.channel.send("Restarting the Valheim server")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
@@ -605,6 +583,10 @@ async def on_message(message):
             case _:
                 await message.channel.send(getInvalidServiceMessage())
 
+def minecraftPlayersOnline(minecraft):
+    status = minecraft.status()
+    return status.players.online != 0
+
 def backupSotF():
     os.system("tar -zcvf /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/backups/\"$(date '+%Y-%m-%d_%H:%M:%S')_sotf.tar.gz\" /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/game/userdata/Saves >> /dev/null 2>&1")
     return "Backing up the Sons of the Forest server"
@@ -717,5 +699,59 @@ async def logCommand(msg):
     now = datetime.now()
     ch = client.get_channel(1213120151361429594)
     await ch.send("{} | User: `{}` - Command: `{}`".format(now.strftime("%d/%m/%Y %H:%M:%S"), msg.author, msg.content))
+
+async def start(service, message):
+    if isRunning(servicePorts[service]):
+        await message.channel.send("The {} server is already running".format(service))
+        return
+    await message.channel.send("Starting the {} server...".format(service))
+    match (service.lower()):
+        case "minecraft":
+            os.system("/bin/systemctl start minecraft")
+        case "palworld":
+            print("") 
+        case "valheim":
+            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml up -d >> /dev/null 2>&1")
+        case "sotf":
+            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml up -d >> /dev/null 2>&1")
+        case "beam":
+            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml up -d >> /dev/null 2>&1")
+        case "rust":
+            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/rust/docker-compose.yml up -d >> /dev/null 2>&1")
+        case "immich":
+            os.system("/bin/docker compose -f /root/immich/docker-compose.yml up -d >> /dev/null 2>&1")
+        case "transmission":
+            os.system(" /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml up -d >> /dev/null 2>&1 && /root/Transmission/vpn/proxy.sh")
+
+async def stop(service, message):
+    if not isRunning(servicePorts[service]):
+        await message.channel.send("The {} server is already stopped".format(service))
+        return
+    match (service.lower()):
+        case "minecraft":
+            await message.channel.send("Stopping the Minecraft server")
+            os.system("/bin/systemctl stop minecraft")
+        case "palworld":
+            print("") 
+        case "valheim":
+            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/valheim/docker-compose.yml down >> /dev/null 2>&1")
+        case "sotf":
+            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/sons_of_the_forest/docker-compose.yml down >> /dev/null 2>&1")
+        case "beam":
+            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/beammp/docker-compose.yml down >> /dev/null 2>&1")
+        case "rust":
+            os.system("/bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/rust/docker-compose.yml down >> /dev/null 2>&1")
+        case "immich":
+            os.system("/bin/docker compose -f /root/immich/docker-compose.yml down >> /dev/null 2>&1")
+        case "transmission":
+            os.system("/bin/docker stop transmission-openvpn-proxy && /bin/docker rm transmission-openvpn-proxy && /bin/docker compose -f /root/Transmission/vpn/docker-compose.yml down >> /dev/null 2>&1")
+
+async def restart(service, message):
+    if not isRunning(servicePorts[service]):
+        await message.channel.send("The {} server is not running, starting now...".format(service))
+        start(service)
+        return
+    await stop(service, message)
+    await start(service, message)
 
 client.run(TOKEN)
