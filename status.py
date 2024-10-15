@@ -4,12 +4,12 @@ import discord
 from dotenv import load_dotenv
 from discord.ext import commands, tasks
 from requests import get
-import datetime
+import datetime, time
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-time = datetime.datetime.now
+currentTime = datetime.datetime.now
 
 class MyClient(commands.Bot):
 
@@ -72,7 +72,7 @@ class MyClient(commands.Bot):
                     return
                 await self.offsite_backup_check(channel, urgent, alerts)
 
-            case [17, 30]: #17:30
+            case [11, 00]: #17:30
                 if self.msg_sent:
                     return
                 await self.offite_cleanup_check(channel)
@@ -110,7 +110,8 @@ class MyClient(commands.Bot):
 
     async def offite_cleanup_check(self, channel):
         modifiedTime = os.path.getmtime('/root/athenaserver/syslogs/duplicityRemoval')
-        if (modifiedTime // 3600) <= 24:
+        age = time.time() - modifiedTime
+        if (age // 3600) <= 24:
             cleanupLogs = os.popen('cat /root/athenaserver/syslogs/duplicityRemoval').read()
             await channel.send("Backup files appear to have been cleaned\n\nOutput Log:\n{}".format(cleanupLogs))
             
@@ -277,6 +278,6 @@ class MyClient(commands.Bot):
 bot = MyClient(command_prefix='.!.!.!', intents=discord.Intents().all())
 
 def getCurrentTime():
-    return [time().hour, time().minute]
+    return [currentTime().hour, currentTime().minute]
 
 bot.run(TOKEN)
