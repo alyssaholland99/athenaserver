@@ -87,7 +87,7 @@ class MyClient(commands.Bot):
             case [12, 15]: #12:15
                 await self.offsiteDriveStorageCheck(alerts, urgent, channel)
 
-            case [16, 20]:
+            case [16, 23]:
                 await self.photoBackupCheck(alerts, channel)
 
             case _:
@@ -286,10 +286,10 @@ class MyClient(commands.Bot):
             user = user.replace("Alastair", "Alyssa")
             modifyDate = modifyCheck.split(" ")[1]
             modifyDelta = datetime.datetime.strptime(modifyDate, "%Y-%m-%d") - datetime.datetime.now()
-            if modifyDelta % 7 == 0 and modifyDelta != 0:
-                await alerts.send("{}'s photos folder was last modifed on {}".format(user, modifyDate))
+            if modifyDelta.days % 7 == 0 and modifyDelta.days != 0:
+                await alerts.send("{}'s photos folder was last modifed on {} ({} days ago)".format(user, modifyDate, modifyDelta.days))
             else:
-                await channel.send("{}'s photos folder was last modifed on {}".format(user, modifyDate))
+                await channel.send("{}'s photos folder was last modifed on {} ({} days ago)".format(user, modifyDate, modifyDelta.days))
 
                 
 
