@@ -87,6 +87,9 @@ class MyClient(commands.Bot):
             case [12, 15]: #12:15
                 await self.offsiteDriveStorageCheck(alerts, urgent, channel)
 
+            case [16, 10]:
+                await self.photoBackupCheck(alerts)
+
             case _:
                 self.msg_sent = False
 
@@ -273,6 +276,16 @@ class MyClient(commands.Bot):
                 await alerts.send("ALERT: Offsite drive is at {}% usage ({})".format(percentage, tb))
             if percentage >= 95:
                 await urgent.send("URGENT: Offsite drive is at {}% usage ({})".format(percentage, tb))
+
+    async def photoBackupCheck(self, alerts):
+        nextcloudBase = "/srv/dev-disk-by-uuid-0901e9da-0191-4a3f-b7ff-d8cc98c9c617/16TB/.Cloud/"
+        photoPath = "/files/Photos/AutomaticBackup/"
+        users = ["Alastair", "Kevin", "Gill"]
+        for user in users:
+            modifyCheck = os.popen("stat {}{}{} | grep Modify".format(nextcloudBase, user, photoPath)).read()
+            modifyDate = modifyCheck.split(" ")[1]
+            await alerts.send("{}'s photos file was last modifed on {}".format(user, modifyDate))
+
                 
 
 bot = MyClient(command_prefix='.!.!.!', intents=discord.Intents().all())
