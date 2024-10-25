@@ -87,8 +87,8 @@ class MyClient(commands.Bot):
             case [12, 15]: #12:15
                 await self.offsiteDriveStorageCheck(alerts, urgent, channel)
 
-            case [16, 10]:
-                await self.photoBackupCheck(alerts)
+            case [16, 20]:
+                await self.photoBackupCheck(alerts, channel)
 
             case _:
                 self.msg_sent = False
@@ -277,14 +277,19 @@ class MyClient(commands.Bot):
             if percentage >= 95:
                 await urgent.send("URGENT: Offsite drive is at {}% usage ({})".format(percentage, tb))
 
-    async def photoBackupCheck(self, alerts):
+    async def photoBackupCheck(self, alerts, channel):
         nextcloudBase = "/srv/dev-disk-by-uuid-0901e9da-0191-4a3f-b7ff-d8cc98c9c617/16TB/.Cloud/"
         photoPath = "/files/Photos/AutomaticBackup/"
         users = ["Alastair", "Kevin", "Gill"]
         for user in users:
             modifyCheck = os.popen("stat {}{}{} | grep Modify".format(nextcloudBase, user, photoPath)).read()
+            user = user.replace("Alastair", "Alyssa")
             modifyDate = modifyCheck.split(" ")[1]
-            await alerts.send("{}'s photos file was last modifed on {}".format(user, modifyDate))
+            modifyDelta = datetime.datetime.strptime(modifyDate, "%Y-%m-%d") - datetime.datetime.now()
+            if modifyDelta % 7 == 0 and modifyDelta != 0:
+                await alerts.send("{}'s photos folder was last modifed on {}".format(user, modifyDate))
+            else:
+                await channel.send("{}'s photos folder was last modifed on {}".format(user, modifyDate))
 
                 
 
