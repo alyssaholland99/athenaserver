@@ -87,7 +87,7 @@ class MyClient(commands.Bot):
             case [12, 15]: #12:15
                 await self.offsiteDriveStorageCheck(alerts, urgent, channel)
 
-            case [16, 23]:
+            case [16, 30]:
                 await self.photoBackupCheck(alerts, channel)
 
             case _:
@@ -285,7 +285,7 @@ class MyClient(commands.Bot):
             modifyCheck = os.popen("stat {}{}{} | grep Modify".format(nextcloudBase, user, photoPath)).read()
             user = user.replace("Alastair", "Alyssa")
             modifyDate = modifyCheck.split(" ")[1]
-            modifyDelta = datetime.datetime.strptime(modifyDate, "%Y-%m-%d") - datetime.datetime.now()
+            modifyDelta = datetime.datetime.now() - datetime.datetime.strptime(modifyDate, "%Y-%m-%d")
             if modifyDelta.days % 7 == 0 and modifyDelta.days != 0:
                 await alerts.send("{}'s photos folder was last modifed on {} ({} days ago)".format(user, modifyDate, modifyDelta.days))
             else:
