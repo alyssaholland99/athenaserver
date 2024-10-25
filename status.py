@@ -288,8 +288,7 @@ class MyClient(commands.Bot):
             modifyDelta = datetime.datetime.now() - datetime.datetime.strptime(modifyDate, "%Y-%m-%d")
             if modifyDelta.days % 7 == 0 and modifyDelta.days != 0:
                 await alerts.send("{}'s photos folder was last modifed on {} ({} days ago)".format(user, modifyDate, modifyDelta.days))
-            else:
-                await channel.send("{}'s photos folder was last modifed on {} ({} days ago)".format(user, modifyDate, modifyDelta.days))
+            await channel.send("{}'s photos folder was last modifed on {} ({} days ago)".format(user, modifyDate, modifyDelta.days))
 
                 
 
