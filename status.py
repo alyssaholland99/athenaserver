@@ -286,9 +286,10 @@ class MyClient(commands.Bot):
             user = user.replace("Alastair", "Alyssa")
             modifyDate = modifyCheck.split(" ")[1]
             modifyDelta = datetime.datetime.now() - datetime.datetime.strptime(modifyDate, "%Y-%m-%d")
+            photoString = "{}'s photos folder was last modifed on {} ({} days ago)".format(user, modifyDate, modifyDelta.days)
             if modifyDelta.days % 7 == 0 and modifyDelta.days != 0:
-                await alerts.send("{}'s photos folder was last modifed on {} ({} days ago)".format(user, modifyDate, modifyDelta.days))
-            await channel.send("{}'s photos folder was last modifed on {} ({} days ago)".format(user, modifyDate, modifyDelta.days))
+                await alerts.send(photoString)
+            await channel.send(photoString)
 
                 
 
