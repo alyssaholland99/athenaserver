@@ -75,7 +75,7 @@ class MyClient(commands.Bot):
             case [11, 00]: #17:30
                 if self.msg_sent:
                     return
-                await self.offite_cleanup_check(channel)
+                #await self.offite_cleanup_check(channel)
 
             case [12, 0]: #12:00
                 if self.msg_sent:
