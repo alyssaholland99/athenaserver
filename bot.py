@@ -473,6 +473,7 @@ async def on_message(message):
                         await message.channel.send("Stopping Immich")
                     case "update":
                         os.system("cd /root/immich && docker compose pull && docker compose up -d")
+                        await message.channel.send("Updated Immich")
                     case _:
                         await message.channel.send(commandError("immich"))
 
