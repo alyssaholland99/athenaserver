@@ -37,7 +37,7 @@ serverCommands = ["uptime", "load", "memory", "mdadm", "gpu_pwr"]
 botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
 trustCommands = ["add\*", "remove\*", "list"]
 serviceCommands = ["status"]
-immichCommands = ["start\*", "stop\*", "restart\*"]
+immichCommands = ["start\*", "stop\*", "restart\*", "update\*"]
 transmissionCommands = ["start\*", "stop\*", "restart\*", "ip\*"]
 helpCommands = [{
     "minecraft" : minecraftCommands,
