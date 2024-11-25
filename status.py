@@ -67,7 +67,8 @@ class MyClient(commands.Bot):
                     return
                 await self.smart(channel, urgent, alerts)
 
-            case [12, 20]: #12:20
+            #case [12, 20]: #12:20
+            case [13, 20]: #12:20
                 if self.msg_sent:
                     return
                 await self.offsite_backup_check(channel, urgent, alerts)
@@ -97,13 +98,14 @@ class MyClient(commands.Bot):
         # Offsite backup status
         
         date = datetime.datetime.today()
-        checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
-        checkBackup = checkBackup.splitlines()
+        #checkBackup = os.popen('/bin/ssh root@offsitebackup "stat /srv/dev-disk-by-uuid-e6501278-3541-4943-b633-30d3a773bd97/OffsiteBackup"').read()
+        #checkBackup = checkBackup.splitlines()
+        checkBackup = os.popen('/root/restic/getSnapshots.sh | grep athenaserver').read()
         backupLogs = os.popen('cat /root/athenaserver/syslogs/duplicityBackup').read()
         if len(checkBackup) > 1:
-            lastBackup = checkBackup[5].split(" ")[1]
+            #lastBackup = checkBackup[5].split(" ")[1]
             currentDate = str(date).split(" ")[0]
-            if lastBackup == currentDate:
+            if currentDate in checkBackup:
                 await channel.send("SUCCESS: Offsite server was backed up to successfully overnight\n\nOutput Log:\n{}".format(backupLogs))
             else:
                 await urgent.send("FAILURE: Backup date and current date do not match; server may not have backed up last night\n\nOutput Log:\n{}".format(backupLogs))
