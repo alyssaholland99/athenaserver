@@ -33,7 +33,7 @@ sotfCommands = ["info", "status", "backup", "start\* [force]", "restart\*", "sto
 valheimCommands = ["info", "status", "start", "stop\*"]
 beamCommands = ["info", "status", "start", "stop\*", "restart\*"]
 rustCommands = ["info", "status", "start", "stop\*"]
-serverCommands = ["uptime", "load", "memory", "mdadm", "gpu_pwr"]
+serverCommands = ["uptime", "load", "memory", "mdadm", "gpu_pwr", "backups"]
 botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
 trustCommands = ["add\*", "remove\*", "list"]
 serviceCommands = ["status"]
@@ -134,7 +134,7 @@ async def on_message(message):
                         power3 = int(power2) - int(power1)
                         await message.channel.send("Current GPU power: {} watts".format(round(power3/1000000), 3))
                     case "backups":
-                        await message.channel.send(os.popen('/root/restic/getSnapshots.sh').read())
+                        await message.channel.send("```{}```".format(os.popen('/root/restic/getSnapshots.sh').read()))
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
