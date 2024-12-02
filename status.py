@@ -283,9 +283,9 @@ class MyClient(commands.Bot):
         photoPath = "/files/Photos/AutomaticBackup/"
         users = ["Alastair", "Kevin", "Gill"]
         for user in users:
+            modifyCheck = os.popen("stat {}{}{} | grep Modify".format(nextcloudBase, user, photoPath)).read()
             if user == "Alastair":
                 modifyCheck = os.popen("stat {}{}/files/Immich | grep Modify".format(nextcloudBase, user)).read()
-            modifyCheck = os.popen("stat {}{}{} | grep Modify".format(nextcloudBase, user, photoPath)).read()
             user = user.replace("Alastair", "Alyssa")
             modifyDate = modifyCheck.split(" ")[1]
             modifyDelta = datetime.datetime.now() - datetime.datetime.strptime(modifyDate, "%Y-%m-%d")
