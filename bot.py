@@ -34,7 +34,7 @@ valheimCommands = ["info", "status", "start", "stop\*"]
 beamCommands = ["info", "status", "start", "stop\*", "restart\*"]
 rustCommands = ["info", "status", "start", "stop\*"]
 serverCommands = ["uptime", "load", "memory", "mdadm", "gpu_pwr", "backups"]
-botCommands = ["add", "info", "code", "delete [channel_id] [message_id]*"]
+botCommands = ["add", "info", "code", "update", "delete [channel_id] [message_id]*"]
 trustCommands = ["add\*", "remove\*", "list"]
 serviceCommands = ["status"]
 immichCommands = ["start\*", "stop\*", "restart\*", "update\*"]
@@ -576,7 +576,7 @@ async def on_message(message):
                             await message.channel.send(getInsufficentPermissionMessage())
                     case "update":
                         if isTrusted(message.author):
-                            os.system("cd /root/athenaserver && ./pull.sh")
+                            os.system("cd /root/athenaserver && ./pull.sh &")
                             await message.channel.send("Updated the athenaserver bot")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
