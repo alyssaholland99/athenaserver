@@ -574,6 +574,12 @@ async def on_message(message):
                                 await message.channel.send("Incorrect syntax - Usage `bot delete [channel_id] [message_id]")
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
+                    case "update":
+                        if isTrusted(message.author):
+                            os.system("cd /root/athenaserver && ./pull.sh")
+                            await message.channel.send("Updated the athenaserver bot")
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 
