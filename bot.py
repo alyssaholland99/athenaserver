@@ -474,7 +474,10 @@ async def on_message(message):
                         os.system("/bin/docker compose -f /root/immich/docker-compose.yml down >> /dev/null 2>&1 && /bin/docker compose -f /root/immich/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Stopping Immich")
                     case "update":
-                        os.system("cd /root/immich && docker compose pull && docker compose up -d")
+                        await message.channel.send("Pulling images...")
+                        os.system("cd /root/immich && docker compose pull")
+                        await message.channel.send("Restarting Immich...")
+                        os.system("cd /root/immich && docker compose up -d")
                         await message.channel.send("Updated Immich")
                     case _:
                         await message.channel.send(commandError("immich"))
