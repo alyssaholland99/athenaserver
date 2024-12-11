@@ -218,8 +218,8 @@ class MyClient(commands.Bot):
             self.isMemoryAlerting = False
 
     async def transmissionCheck(self, alerts):
-        transmissionStatusCheck = os.popen("curl transmission.alyssaserver.co.uk").read()
-        if "301" not in transmissionStatusCheck:
+        transmissionStatusCheck = os.popen("curl -sSf https://transmission.alyssaserver.co.uk/").read()
+        if "401" not in transmissionStatusCheck:
             if self.isTransmissionAlerting == True:
                 await alerts.send("Transmission failed to restart successfully. Retrying restart...", delete_after=60)
             else:
