@@ -3,7 +3,7 @@ import os
 import discord
 from dotenv import load_dotenv
 from discord.ext import commands, tasks
-from requests import get
+import requests
 import datetime, time
 
 load_dotenv()
@@ -218,9 +218,12 @@ class MyClient(commands.Bot):
             self.isMemoryAlerting = False
 
     async def transmissionCheck(self, alerts):
-        transmissionStatusCheck = os.popen("curl -sSf https://transmission.alyssaserver.co.uk/").read()
-        await alerts.send(transmissionStatusCheck, delete_after=60)
-        if "401" not in transmissionStatusCheck:
+        #transmissionStatusCheck = os.popen("curl -sSf https://transmission.alyssaserver.co.uk/").read()
+        try:
+            transmissionStatusCheck = requests.head("https://stackoverflow.com")
+        except requests.ConnectionError:
+            transmissionStatusCheck = 502
+        if 401 == transmissionStatusCheck:
             if self.isTransmissionAlerting == True:
                 await alerts.send("Transmission failed to restart successfully. Retrying restart...", delete_after=60)
             else:
