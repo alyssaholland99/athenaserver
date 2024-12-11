@@ -219,6 +219,7 @@ class MyClient(commands.Bot):
 
     async def transmissionCheck(self, alerts):
         transmissionStatusCheck = os.popen("curl -sSf https://transmission.alyssaserver.co.uk/").read()
+        await alerts.send(transmissionStatusCheck, delete_after=60)
         if "401" not in transmissionStatusCheck:
             if self.isTransmissionAlerting == True:
                 await alerts.send("Transmission failed to restart successfully. Retrying restart...", delete_after=60)
