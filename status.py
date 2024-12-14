@@ -50,7 +50,7 @@ class MyClient(commands.Bot):
         await self.cpu_temp(channel, urgent, alerts, allowed_cpu_temp)
         await self.cpu_load_average(channel, urgent, alerts, allowed_cpu_load)
         await self.memory_usage(channel, urgent, alerts, allowed_memory_percentage)
-        #await self.transmissionCheck(alerts)
+        await self.transmissionCheck(alerts)
         await self.sshConnectionCheck(alerts)
         await self.bootDriveStorageCheck(alerts, urgent)
 
@@ -218,13 +218,12 @@ class MyClient(commands.Bot):
             self.isMemoryAlerting = False
 
     async def transmissionCheck(self, alerts):
-        #transmissionStatusCheck = os.popen("curl -sSf https://transmission.alyssaserver.co.uk/").read()
-        transmissionStatusCheck = 502
+        url = "https://transmission.alyssaserver.co.uk"
         try:
-            transmissionStatusCheck = requests.head("https://transmission.alyssaserver.co.uk/")
+            transmissionStatusCheck = requests.get(url).status_code
         except:
-            transmissionStatusCheck = 502
-        if 401 == transmissionStatusCheck:
+            transmissionStatusCheck = 000
+        if 401 != transmissionStatusCheck:
             if self.isTransmissionAlerting == True:
                 await alerts.send("Transmission failed to restart successfully. Retrying restart...", delete_after=60)
             else:
