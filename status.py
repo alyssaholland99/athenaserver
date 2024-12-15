@@ -90,7 +90,7 @@ class MyClient(commands.Bot):
             case [16, 30]:
                 await self.photoBackupCheck(alerts, channel)
 
-            case [18, 32]:
+            case [18, 35]:
                 await self.nextcloudLogRotate(channel)
 
             case _:
@@ -309,7 +309,7 @@ class MyClient(commands.Bot):
                 os.system("cp {}/{}_{} {}/{}_{}".format(nextcloudBase, i, f, nextcloudBase, i+1, f))
             os.system("cp {}/{} {}/1_{}".format(nextcloudBase, f, nextcloudBase, f))
             os.system("truncate {}/{} --size 0".format(nextcloudBase, f))
-        await channel.send("Nextcloud log rotate successful\nFile sizes:\n{}".format(os.popen("cd {} && du -sh *.log").read()))
+        await channel.send("Nextcloud log rotate successful\nFile sizes:\n{}".format(os.popen("cd {} && du -sh *.log".format(nextcloudBase)).read()))
 
                 
 
