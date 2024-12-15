@@ -90,6 +90,9 @@ class MyClient(commands.Bot):
             case [16, 30]:
                 await self.photoBackupCheck(alerts, channel)
 
+            case [18, 30]:
+                await self.nextcloudLogRotate(channel)
+
             case _:
                 self.msg_sent = False
 
