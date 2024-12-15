@@ -70,7 +70,7 @@ class MyClient(commands.Bot):
             case [12, 20]: #12:20
                 if self.msg_sent:
                     return
-                await self.offsite_backup_check(channel, urgent, alerts)
+                #await self.offsite_backup_check(channel, urgent, alerts)
 
             case [11, 00]: #17:30
                 if self.msg_sent:
