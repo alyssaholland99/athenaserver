@@ -87,10 +87,10 @@ class MyClient(commands.Bot):
             case [12, 15]: #12:15
                 await self.offsiteDriveStorageCheck(alerts, urgent, channel)
 
-            case [16, 30]:
-                await self.photoBackupCheck(alerts, channel)
+            #case [16, 30]:
+                #await self.photoBackupCheck(alerts, channel)
 
-            case [18, 40]:
+            case [00, 45]:
                 await self.nextcloudLogRotate(channel)
 
             case _:
