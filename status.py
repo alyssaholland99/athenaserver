@@ -249,12 +249,16 @@ class MyClient(commands.Bot):
                 local = "REMOTE"
                 if "192.168.0." in ip:
                     local = "LOCAL"
+                if "tty" in ip:
+                    local = "KVM"
                 await alerts.send("{} ({}) has just started an SSH session".format(ip, local))
         if len(clientDifferenceDisconnected) >= 1:
             for ip in clientDifferenceDisconnected:
                 local = "REMOTE"
                 if "192.168.0." in ip:
                     local = "LOCAL"
+                if "tty" in ip:
+                    local = "KVM"
                 await alerts.send("{} ({}) has just closed their SSH session".format(ip, local))
         self.sshClients = currentSshClients
 
