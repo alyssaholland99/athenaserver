@@ -310,7 +310,7 @@ class MyClient(commands.Bot):
         files = ["nextcloud.log", "flow.log"]
         for f in files:
             for i in range(7, 0, -1):
-                os.system("cp {}/{}_{} {}/{}_{}".format(nextcloudBase, i, f, nextcloudBase, i+1, f))
+                os.system("mv {}/{}_{} {}/{}_{}".format(nextcloudBase, i, f, nextcloudBase, i+1, f))
             os.system("cp {}/{} {}/1_{}".format(nextcloudBase, f, nextcloudBase, f))
             os.system("truncate {}/{} --size 0".format(nextcloudBase, f))
         fileSizes = os.popen("cd {} && du -sh *.log".format(nextcloudBase)).read()
