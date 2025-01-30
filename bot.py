@@ -113,10 +113,10 @@ async def on_message(message):
                             await message.channel.send("AWS: " + os.popen('/bin/ssh -i "/root/aws/us.pem" ec2-user@aws.alyssaserver.co.uk "uptime -p"').read())
                         else: 
                             await message.channel.send("AWS: Offline")
-                        if not "100% packet loss" in os.popen("ping -c 1 192.168.0.100").read():
-                            await message.channel.send("Amelia (Cold storage): Online - Unable to get uptime due to security constraints")
+                        if not "100% packet loss" in os.popen("ping -c 1 192.168.0.110").read():
+                            await message.channel.send("Aphrodite: " + os.popen('/bin/ssh aphrodite "uptime -p"').read())
                         else:
-                            await message.channel.send("Amelia (Cold storage): Offline")
+                            await message.channel.send("Aphrodite: Offline")
                     case "load":
                         load = (os.popen("/bin/cat /proc/loadavg").read()).split(" ")[0]
                         load = (float(load)/12)*100
