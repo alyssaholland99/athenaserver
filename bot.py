@@ -114,7 +114,7 @@ async def on_message(message):
                         else: 
                             await message.channel.send("AWS: Offline")
                         if not "100% packet loss" in os.popen("ping -c 1 192.168.0.110").read():
-                            await message.channel.send("Aphrodite: " + os.popen('/bin/ssh aphrodite "uptime -p"').read())
+                            await message.channel.send("Aphrodite: up " + os.popen('/bin/ssh aphrodite "uptime -p"').read().split('up ')[1].split(',')[0])
                         else:
                             await message.channel.send("Aphrodite: Offline")
                     case "load":
