@@ -84,7 +84,7 @@ class MyClient(commands.Bot):
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
 
-            case [4, 46]: #12:15
+            case [12, 15]: #12:15
                 await self.offsiteDriveStorageCheck(alerts, urgent, channel)
 
             #case [16, 30]:
@@ -288,11 +288,11 @@ class MyClient(commands.Bot):
                 storageCheck = storageCheck[0].split(" ")
                 tb = storageCheck[1]+"B"
                 percentage = int(storageCheck[0].replace("%", ""))
-                await channel.send("{} drive is at {}% usage ({})".format(server, percentage, tb))
+                await channel.send("{} server is at {}% usage ({})".format(server, percentage, tb))
                 if percentage >= 90 and percentage < 95:
-                    await alerts.send("ALERT: {} drive is at {}% usage ({})".format(server, percentage, tb))
+                    await alerts.send("ALERT: {} server is at {}% usage ({})".format(server, percentage, tb))
                 if percentage >= 95:
-                    await urgent.send("URGENT: {} drive is at {}% usage ({})".format(server, percentage, tb))
+                    await urgent.send("URGENT: {} server is at {}% usage ({})".format(server, percentage, tb))
 
     async def photoBackupCheck(self, alerts, channel):
         nextcloudBase = "/srv/dev-disk-by-uuid-0901e9da-0191-4a3f-b7ff-d8cc98c9c617/16TB/.Cloud/"
