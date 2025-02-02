@@ -114,7 +114,7 @@ async def on_message(message):
                         else: 
                             await message.channel.send("AWS: Offline")
                         if not "100% packet loss" in os.popen("ping -c 1 192.168.0.110").read():
-                            await message.channel.send("Aphrodite: up " + os.popen('/bin/ssh aphrodite "uptime -p"').read().split('up ')[1].split(',')[0])
+                            await message.channel.send("Aphrodite: " + os.popen('/bin/ssh aphrodite "uptime -p"').read())
                         else:
                             await message.channel.send("Aphrodite: Offline")
                     case "load":
@@ -135,7 +135,7 @@ async def on_message(message):
                         await message.channel.send("Current GPU power: {} watts".format(round(power3/1000000), 3))
                     case "backups":
                         await message.channel.send("Offsite:```{}```".format(os.popen('/root/restic/discordSnapshots.sh').read()))
-                        await message.channel.send("Local:```{}```".format(os.popen('/root/restic/discordSnapshotsLocal.sh').read()))
+                        await message.channel.send("Aphrodite:```{}```".format(os.popen('/root/restic/discordSnapshotsLocal.sh').read()))
                     case _:
                         await message.channel.send(commandError(msg.split(" ")[0]))
 

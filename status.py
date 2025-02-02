@@ -277,17 +277,22 @@ class MyClient(commands.Bot):
             await urgent.send("Boot drive is at {}% usage".format(storageCheck))
 
     async def offsiteDriveStorageCheck(self, alerts, urgent, channel):
-        storageCheck = os.popen('/bin/ssh root@offsitebackup -tt "/root/checkStorage.sh"').read()
-        if "%" in storageCheck:
-            storageCheck = storageCheck.splitlines()
-            storageCheck = storageCheck[0].split(" ")
-            tb = storageCheck[1]+"B"
-            percentage = int(storageCheck[0].replace("%", ""))
-            await channel.send("Offsite drive is at {}% usage ({})".format(percentage, tb))
-            if percentage >= 90 and percentage < 95:
-                await alerts.send("ALERT: Offsite drive is at {}% usage ({})".format(percentage, tb))
-            if percentage >= 95:
-                await urgent.send("URGENT: Offsite drive is at {}% usage ({})".format(percentage, tb))
+        servers = {
+            "Offsite" : "offsitebackup",
+            "Aphrodite" : "aphrodite"
+        }
+        for server in servers:
+            storageCheck = os.popen('/bin/ssh {} -tt "/root/checkStorage.sh"'.format(servers[server])).read()
+            if "%" in storageCheck:
+                storageCheck = storageCheck.splitlines()
+                storageCheck = storageCheck[0].split(" ")
+                tb = storageCheck[1]+"B"
+                percentage = int(storageCheck[0].replace("%", ""))
+                await channel.send("{} drive is at {}% usage ({})".format(server, percentage, tb))
+                if percentage >= 90 and percentage < 95:
+                    await alerts.send("ALERT: {} drive is at {}% usage ({})".format(server, percentage, tb))
+                if percentage >= 95:
+                    await urgent.send("URGENT: {} drive is at {}% usage ({})".format(server, percentage, tb))
 
     async def photoBackupCheck(self, alerts, channel):
         nextcloudBase = "/srv/dev-disk-by-uuid-0901e9da-0191-4a3f-b7ff-d8cc98c9c617/16TB/.Cloud/"
