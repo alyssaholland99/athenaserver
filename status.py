@@ -84,7 +84,7 @@ class MyClient(commands.Bot):
                 if day == 0:
                     await self.raid_status(channel, urgent, alerts)
 
-            case [12, 15]: #12:15
+            case [4, 46]: #12:15
                 await self.offsiteDriveStorageCheck(alerts, urgent, channel)
 
             #case [16, 30]:
