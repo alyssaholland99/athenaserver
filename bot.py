@@ -231,7 +231,8 @@ async def on_message(message):
                         if isRunning(servicePorts["Minecraft"]):
                             await message.channel.send("The Minecraft server is already running")
                             return
-                        os.system("/bin/systemctl start minecraft")
+                        os.system("/bin/systemctl start minecraft")#
+                        os.system(" /bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/docker-compose.yml up -d >> /dev/null 2>&1")
                         await message.channel.send("Starting Minecraft server")
                     case "stop":
                         if isTrusted(message.author):
@@ -241,6 +242,7 @@ async def on_message(message):
                             status = minecraft.status()
                             if status.players.online == 0:
                                 restartStatus = os.system("/bin/systemctl stop minecraft")
+                                os.system(" /bin/docker compose -f /srv/dev-disk-by-uuid-8479d8ee-6385-4a78-bdaf-0a485ac3d4c7/minecraft_servers/java/1.20/docker-compose.yml down >> /dev/null 2>&1")
                                 await message.channel.send("Stopping the minecraft server")
                             else: 
                                 await message.channel.send("There are players currently on the world, not stopped")
