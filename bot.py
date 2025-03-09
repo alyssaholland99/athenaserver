@@ -43,6 +43,7 @@ immichCommands = ["start\*", "stop\*", "restart\*", "update\*"]
 transmissionCommands = ["start\*", "stop\*", "restart\*", "ip\*"]
 helpCommands = [{
     "minecraft" : minecraftCommands,
+    "ftb" : ftbCommands,
     "palworld" : palworldCommands,
     "valheim" : valheimCommands,
     "forest/sotf" : sotfCommands,
