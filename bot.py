@@ -329,7 +329,7 @@ async def on_message(message):
                                 return
                             status = minecraft.status()
                             if status.players.online == 0:
-                                restartStatus = os.system("/bin/systemctl stop minecraft")
+                                restartStatus = os.system("/bin/systemctl stop ftb")
                                 await message.channel.send("Stopping the FTB server")
                             else: 
                                 await message.channel.send("There are players currently on the world, not stopped")
