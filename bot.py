@@ -21,6 +21,7 @@ client = discord.Client(intents=intents)
 servicePorts = {
     "Palworld" : "8211",
     "Minecraft" : "25565",
+    "FTB" : "25565",
     "Valheim" : "2456",
     "Sons of the Forest" : "8766",
     "Beam" : "30814",
@@ -29,6 +30,7 @@ servicePorts = {
 
 palworldCommands = ["info", "status", "players", "backup", "start", "restart", "stop\*"]
 minecraftCommands = ["info", "status", "players", "whitelist [minecraft_username]", "start", "stop\*"]
+ftbCommands = ["info", "status", "players", "start", "stop\*"]
 sotfCommands = ["info", "status", "backup", "start\* [force]", "restart\*", "stop\*"]
 valheimCommands = ["info", "status", "start", "stop\*"]
 beamCommands = ["info", "status", "start", "stop\*", "restart\*"]
@@ -283,6 +285,65 @@ async def on_message(message):
                             if status.players.online == 0:
                                 restartStatus = os.system("/bin/systemctl restart minecraft")
                                 await message.channel.send("Restarting the minecraft server")
+                            else: 
+                                await message.channel.send("There are players currently on the world, not restarted")
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
+                    case _:
+                        await message.channel.send(commandError("minecraft"))
+                return
+            
+            case "ftb":
+                minecraft = JavaServer.lookup("192.168.0.120:{}".format(servicePorts["FTB"]))
+                if len(msg.split(" ")) == 1:
+                    await message.channel.send(commandError("ftb"))
+                    return
+                match (msg.split(" ")[1]):
+                    case "info":
+                        await message.channel.send("Server address for FTB: `server.alyssaserver.co.uk:{}`\nOnline Map: <http://server.alyssaserver.co.uk:8000>".format(servicePorts["Minecraft"]))
+                    case "status":
+                        if isRunning(servicePorts["Minecraft"]): 
+                            await message.channel.send("The FTB server is running")
+                        else:
+                            await message.channel.send("The FTB server is not running")
+                    case "players":
+                        if not isRunning(servicePorts["FTB"]):
+                            await message.channel.send("The FTB server is not running, use `.ftb start` to start it")
+                            return
+                        query = minecraft.query()
+                        status = minecraft.status()
+                        if status.players.online > 0:
+                            await message.channel.send("Players currently online: \n- {}".format("\n- ".join(query.players.names)))
+                        else:
+                            await message.channel.send("There are currently no players online")
+                    case "start":
+                        if isRunning(servicePorts["FTB"]):
+                            await message.channel.send("The FTB server is already running")
+                            return
+                        os.system("/bin/systemctl start ftb")
+                        await message.channel.send("Starting the FTB server")
+                    case "stop":
+                        if isTrusted(message.author):
+                            if not isRunning(servicePorts["FTB"]):
+                                await message.channel.send("The FTB server is already stopped")
+                                return
+                            status = minecraft.status()
+                            if status.players.online == 0:
+                                restartStatus = os.system("/bin/systemctl stop minecraft")
+                                await message.channel.send("Stopping the FTB server")
+                            else: 
+                                await message.channel.send("There are players currently on the world, not stopped")
+                        else:
+                            await message.channel.send(getInsufficentPermissionMessage())
+                    case "restart":
+                        if isTrusted(message.author):
+                            if not isRunning(servicePorts["FTB"]):
+                                await message.channel.send("The FTB server is not running, use `.ftb start` to start it")
+                                return
+                            status = minecraft.status()
+                            if status.players.online == 0:
+                                restartStatus = os.system("/bin/systemctl restart ftb")
+                                await message.channel.send("Restarting the FTB server")
                             else: 
                                 await message.channel.send("There are players currently on the world, not restarted")
                         else:
