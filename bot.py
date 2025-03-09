@@ -349,7 +349,7 @@ async def on_message(message):
                         else:
                             await message.channel.send(getInsufficentPermissionMessage())
                     case _:
-                        await message.channel.send(commandError("minecraft"))
+                        await message.channel.send(commandError("ftb"))
                 return
 
             case "valheim" | "val":
